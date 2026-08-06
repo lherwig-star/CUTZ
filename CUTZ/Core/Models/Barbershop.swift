@@ -64,7 +64,7 @@ struct Barbershop: Identifiable, Codable, Hashable {
         CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
 
-    /// z. B. "Schanzenstraße 12, 20357 Hamburg"
+    /// z. B. "Königsstraße 42, 34117 Kassel"
     var fullAddress: String {
         "\(street), \(postalCode) \(city)"
     }

@@ -12,12 +12,15 @@ struct MapScreen: View {
     @Environment(AppModel.self) private var appModel
     @State private var locationManager = LocationManager()
 
-    /// Der sichtbare Kartenausschnitt. Startet über Hamburg.
+    /// Der sichtbare Kartenausschnitt. Startet über Kassel.
     /// Falls ihr in einer anderen Stadt testet: Koordinaten hier anpassen.
+    ///
+    /// `span` bestimmt den Zoom — 0.05 Grad sind grob 5 km und decken
+    /// das Kasseler Stadtgebiet mit allen Shops ab.
     @State private var cameraPosition: MapCameraPosition = .region(
         MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 53.5540, longitude: 9.9600),
-            span: MKCoordinateSpan(latitudeDelta: 0.09, longitudeDelta: 0.09)
+            center: CLLocationCoordinate2D(latitude: 51.3150, longitude: 9.4800),
+            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
         )
     )
 

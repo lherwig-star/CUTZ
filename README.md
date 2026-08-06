@@ -32,16 +32,26 @@ Der komplette Fahrplan steht in **[PLAN.md](PLAN.md)**.
 
 Ohne Xcode geht gar nichts — Swift-Apps lassen sich nur damit bauen.
 
-1. **macOS aktualisieren.** Xcode 16 braucht mindestens macOS 14.5,
-   Xcode 26 mindestens macOS 15.6.
+**Wir nutzen Xcode 16.** Das ist die kleinste Änderung, die funktioniert:
+Es reicht ein macOS-Update innerhalb von Sonoma (14.5+), kein Sprung auf
+eine neue Hauptversion. Für alles, was CUTZ macht — SwiftUI, MapKit,
+EventKit, iOS 17 als Ziel — bringt ein neueres Xcode nichts.
+
+1. **macOS aktualisieren** auf 14.5 oder neuer
    → Systemeinstellungen › Allgemein › Softwareupdate
 2. **Xcode aus dem App Store laden** (kostenlos, ca. 10 GB, dauert eine Weile).
+   Der App Store bietet automatisch die neueste Version an, die zu eurem
+   macOS passt.
 3. Xcode einmal öffnen und die Zusatzkomponenten installieren lassen.
 4. Im Terminal die Entwicklerumgebung umstellen:
 
 ```bash
 sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 ```
+
+> Falls der App Store Xcode als "nicht kompatibel" meldet: ältere Versionen
+> gibt es unter [developer.apple.com/download/all](https://developer.apple.com/download/all/)
+> (kostenlose Apple-ID genügt). Gesucht ist dann **Xcode 16.2**.
 
 ### 2. Projekt klonen und öffnen
 

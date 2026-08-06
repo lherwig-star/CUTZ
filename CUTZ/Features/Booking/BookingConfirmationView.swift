@@ -86,8 +86,8 @@ struct BookingConfirmationView: View {
         booking: Booking(
             id: UUID(),
             shopID: MockData.shopID1,
-            shopName: "Schanzen Barbers",
-            shopAddress: "Schanzenstraße 41, 20357 Hamburg",
+            shopName: "Königs Barbershop",
+            shopAddress: "Königsstraße 42, 34117 Kassel",
             serviceID: UUID(),
             serviceName: "Herrenhaarschnitt",
             startsAt: .now.addingTimeInterval(86_400),

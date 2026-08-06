@@ -2,8 +2,11 @@ import Foundation
 
 /// Erfundene Beispieldaten für die Entwicklung.
 ///
-/// Alle Shops liegen in Hamburg. Wenn ihr in einer anderen Stadt testen
-/// wollt: einfach Koordinaten und Adressen hier austauschen — und in
+/// Alle Shops liegen in Kassel. Die Adressen und Koordinaten sind echt
+/// gewählt (Königsstraße, Wilhelmshöher Allee usw.), die Shops selbst
+/// aber ausgedacht — es sind keine realen Betriebe gemeint.
+///
+/// Andere Stadt zum Testen? Hier die Koordinaten austauschen und in
 /// `MapScreen.swift` die Standard-Kartenposition anpassen.
 enum MockData {
 
@@ -32,71 +35,71 @@ enum MockData {
     static let shops: [Barbershop] = [
         Barbershop(
             id: shopID1,
-            name: "Schanzen Barbers",
-            description: "Klassischer Herrenschnitt mit heißem Handtuch und Nassrasur. Seit 2014 im Schanzenviertel.",
-            street: "Schanzenstraße 41",
-            postalCode: "20357",
-            city: "Hamburg",
-            latitude: 53.5629,
-            longitude: 9.9648,
-            phone: "+49 40 12345678",
+            name: "Königs Barbershop",
+            description: "Klassischer Herrenschnitt mit heißem Handtuch und Nassrasur. Mitten auf der Königsstraße.",
+            street: "Königsstraße 42",
+            postalCode: "34117",
+            city: "Kassel",
+            latitude: 51.3155,
+            longitude: 9.4930,
+            phone: "+49 561 1234567",
             imageURL: nil,
             priceLevel: 2,
             averageRating: 4.7,
             reviewCount: 3,
             services: [
                 BarberService(id: UUID(uuidString: "a1000000-0000-0000-0000-000000000001")!,
-                              name: "Herrenhaarschnitt", durationMinutes: 30, priceCents: 2800),
+                              name: "Herrenhaarschnitt", durationMinutes: 30, priceCents: 2600),
                 BarberService(id: UUID(uuidString: "a1000000-0000-0000-0000-000000000002")!,
-                              name: "Bart trimmen", durationMinutes: 20, priceCents: 1800),
+                              name: "Bart trimmen", durationMinutes: 20, priceCents: 1600),
                 BarberService(id: UUID(uuidString: "a1000000-0000-0000-0000-000000000003")!,
-                              name: "Schnitt & Bart", durationMinutes: 60, priceCents: 4200)
+                              name: "Schnitt & Bart", durationMinutes: 60, priceCents: 3900)
             ],
             openingHours: standardHours
         ),
 
         Barbershop(
             id: shopID2,
-            name: "Fade & Co.",
+            name: "Fade Lounge Nord",
             description: "Spezialisiert auf Fades, Skin Fades und moderne Styles. Junges Team, laute Musik.",
-            street: "Reeperbahn 112",
-            postalCode: "20359",
-            city: "Hamburg",
-            latitude: 53.5497,
-            longitude: 9.9600,
-            phone: "+49 40 23456789",
+            street: "Holländische Straße 74",
+            postalCode: "34127",
+            city: "Kassel",
+            latitude: 51.3262,
+            longitude: 9.4878,
+            phone: "+49 561 2345678",
             imageURL: nil,
             priceLevel: 3,
             averageRating: 4.9,
             reviewCount: 2,
             services: [
                 BarberService(id: UUID(uuidString: "a2000000-0000-0000-0000-000000000001")!,
-                              name: "Skin Fade", durationMinutes: 45, priceCents: 3500),
+                              name: "Skin Fade", durationMinutes: 45, priceCents: 3300),
                 BarberService(id: UUID(uuidString: "a2000000-0000-0000-0000-000000000002")!,
-                              name: "Buzz Cut", durationMinutes: 15, priceCents: 1500),
+                              name: "Buzz Cut", durationMinutes: 15, priceCents: 1400),
                 BarberService(id: UUID(uuidString: "a2000000-0000-0000-0000-000000000003")!,
-                              name: "Komplettpaket", durationMinutes: 75, priceCents: 5900)
+                              name: "Komplettpaket", durationMinutes: 75, priceCents: 5500)
             ],
             openingHours: standardHours
         ),
 
         Barbershop(
             id: shopID3,
-            name: "Altona Cuts",
-            description: "Familienbetrieb in dritter Generation. Auch Kinderhaarschnitte, ohne Termin möglich.",
-            street: "Ottenser Hauptstraße 8",
-            postalCode: "22765",
-            city: "Hamburg",
-            latitude: 53.5510,
-            longitude: 9.9350,
-            phone: "+49 40 34567890",
+            name: "Westend Cuts",
+            description: "Familienbetrieb in dritter Generation. Auch Kinderhaarschnitte, oft auch ohne Termin.",
+            street: "Friedrich-Ebert-Straße 88",
+            postalCode: "34119",
+            city: "Kassel",
+            latitude: 51.3106,
+            longitude: 9.4788,
+            phone: "+49 561 3456789",
             imageURL: nil,
             priceLevel: 1,
             averageRating: 4.2,
             reviewCount: 2,
             services: [
                 BarberService(id: UUID(uuidString: "a3000000-0000-0000-0000-000000000001")!,
-                              name: "Herrenhaarschnitt", durationMinutes: 30, priceCents: 1900),
+                              name: "Herrenhaarschnitt", durationMinutes: 30, priceCents: 1800),
                 BarberService(id: UUID(uuidString: "a3000000-0000-0000-0000-000000000002")!,
                               name: "Kinderhaarschnitt", durationMinutes: 20, priceCents: 1200)
             ],
@@ -105,46 +108,46 @@ enum MockData {
 
         Barbershop(
             id: shopID4,
-            name: "Eppendorf Grooming",
-            description: "Gehobenes Ambiente, Espresso inklusive. Termin empfohlen.",
-            street: "Eppendorfer Landstraße 77",
-            postalCode: "20249",
-            city: "Hamburg",
-            latitude: 53.5920,
-            longitude: 9.9880,
-            phone: "+49 40 45678901",
+            name: "Wilhelmshöhe Grooming",
+            description: "Gehobenes Ambiente nahe dem Bergpark, Espresso inklusive. Termin empfohlen.",
+            street: "Wilhelmshöher Allee 259",
+            postalCode: "34131",
+            city: "Kassel",
+            latitude: 51.3124,
+            longitude: 9.4571,
+            phone: "+49 561 4567890",
             imageURL: nil,
             priceLevel: 3,
             averageRating: 4.5,
             reviewCount: 1,
             services: [
                 BarberService(id: UUID(uuidString: "a4000000-0000-0000-0000-000000000001")!,
-                              name: "Signature Cut", durationMinutes: 60, priceCents: 6500),
+                              name: "Signature Cut", durationMinutes: 60, priceCents: 5900),
                 BarberService(id: UUID(uuidString: "a4000000-0000-0000-0000-000000000002")!,
-                              name: "Nassrasur", durationMinutes: 45, priceCents: 4500)
+                              name: "Nassrasur", durationMinutes: 45, priceCents: 4200)
             ],
             openingHours: standardHours
         ),
 
         Barbershop(
             id: shopID5,
-            name: "St. Pauli Razor",
-            description: "Walk-ins willkommen. Tattoos, Barbier-Handwerk und Kiez-Atmosphäre.",
-            street: "Talstraße 20",
-            postalCode: "20359",
-            city: "Hamburg",
-            latitude: 53.5505,
-            longitude: 9.9640,
-            phone: "+49 40 56789012",
+            name: "Südstadt Razor",
+            description: "Walk-ins willkommen. Barbier-Handwerk ohne Schnickschnack, seit 2011.",
+            street: "Frankfurter Straße 55",
+            postalCode: "34121",
+            city: "Kassel",
+            latitude: 51.3052,
+            longitude: 9.4906,
+            phone: "+49 561 5678901",
             imageURL: nil,
             priceLevel: 2,
             averageRating: 4.0,
             reviewCount: 1,
             services: [
                 BarberService(id: UUID(uuidString: "a5000000-0000-0000-0000-000000000001")!,
-                              name: "Classic Cut", durationMinutes: 30, priceCents: 2500),
+                              name: "Classic Cut", durationMinutes: 30, priceCents: 2300),
                 BarberService(id: UUID(uuidString: "a5000000-0000-0000-0000-000000000002")!,
-                              name: "Bart-Styling", durationMinutes: 30, priceCents: 2200)
+                              name: "Bart-Styling", durationMinutes: 30, priceCents: 2000)
             ],
             openingHours: standardHours
         )
@@ -162,7 +165,7 @@ enum MockData {
                createdAt: .now.addingTimeInterval(-25 * 86_400)),
 
         Review(id: UUID(), shopID: shopID2, authorName: "Deniz Y.", rating: 5,
-               comment: "Die besten Fades in Hamburg, kein Vergleich.",
+               comment: "Die besten Fades in Kassel, kein Vergleich.",
                createdAt: .now.addingTimeInterval(-2 * 86_400)),
         Review(id: UUID(), shopID: shopID2, authorName: "Marc B.", rating: 5,
                comment: "Preis ist gehoben, aber das Ergebnis stimmt jedes Mal.",

@@ -172,6 +172,8 @@ im Simulator ansehen. Erst danach aufteilen.
 |---|---|---|
 | Sprache | Swift / SwiftUI | Native App, beste Integration von Karte und Kalender |
 | Mindest-iOS | 17.0 | `@Observable` und die neue Map-API; deckt fast alle iPhones ab |
+| Xcode | 16 | Kleinstes nötiges macOS-Update (14.5). Neuer bringt uns nichts |
+| Testdaten | Kassel | 5 erfundene Shops an echten Adressen |
 | Architektur | Feature-Ordner + MVVM | Klare Trennung → wenig Merge-Konflikte zu zweit |
 | Projektdatei | XcodeGen (`project.yml`) | `.xcodeproj` im Git bedeutet ständige Merge-Konflikte |
 | Backend | Supabase (ab Phase 2) | Normales PostgreSQL, später auch von Android/Web nutzbar |
