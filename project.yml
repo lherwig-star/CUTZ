@@ -1,0 +1,101 @@
+# ─────────────────────────────────────────────────────────────
+#  CUTZ — XcodeGen Projektdefinition
+#
+#  Diese Datei IST das Xcode-Projekt. Die eigentliche `CUTZ.xcodeproj`
+#  wird daraus erzeugt und liegt bewusst nicht im Git.
+#
+#  Warum? Die Datei `project.pbxproj` in einer .xcodeproj ist eine
+#  riesige, unlesbare Datei. Wenn zwei Leute gleichzeitig eine neue
+#  Swift-Datei anlegen, gibt es dort garantiert einen Merge-Konflikt,
+#  den man von Hand kaum auflösen kann. Mit XcodeGen bearbeiten wir
+#  stattdessen diese kleine, lesbare YAML-Datei.
+#
+#  Neu erzeugen:  ./scripts/setup.sh   (oder einfach: xcodegen generate)
+# ─────────────────────────────────────────────────────────────
+
+name: CUTZ
+
+options:
+  bundleIdPrefix: de.cutz
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+# Globale Build-Einstellungen für alle Targets
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    # Damit Xcode beim Bauen auf dem eigenen iPhone automatisch
+    # ein kostenloses Entwickler-Profil zieht.
+    CODE_SIGN_STYLE: Automatic
+
+targets:
+  CUTZ:
+    type: application
+    platform: iOS
+
+    # Alle Swift-Dateien unter CUTZ/ werden automatisch eingesammelt.
+    # Neue Datei anlegen -> xcodegen generate -> fertig.
+    sources:
+      - path: CUTZ
+
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: de.cutz.app
+        PRODUCT_NAME: CUTZ
+        INFOPLIST_FILE: CUTZ/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        TARGETED_DEVICE_FAMILY: "1"          # 1 = nur iPhone
+        SUPPORTS_MACCATALYST: NO
+        ENABLE_PREVIEWS: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+
+    # Aus diesem Block erzeugt XcodeGen die Info.plist.
+    # Die Usage-Descriptions MÜSSEN drinstehen, sonst stürzt iOS ab,
+    # sobald die App nach Standort oder Kalender fragt.
+    info:
+      path: CUTZ/Info.plist
+      properties:
+        CFBundleDisplayName: CUTZ
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        UILaunchScreen:
+          UIColorName: ""
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        ITSAppUsesNonExemptEncryption: false
+
+        NSLocationWhenInUseUsageDescription: >-
+          CUTZ zeigt dir Barbershops in deiner Nähe auf der Karte.
+
+        NSCalendarsWriteOnlyAccessUsageDescription: >-
+          CUTZ trägt deinen gebuchten Termin direkt in deinen Kalender ein.
+
+  # Unit-Tests. Bleiben erst mal fast leer, wachsen aber mit.
+  CUTZTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: CUTZTests
+    dependencies:
+      - target: CUTZ
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: de.cutz.app.tests
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  CUTZ:
+    build:
+      targets:
+        CUTZ: all
+        CUTZTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - CUTZTests

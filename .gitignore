@@ -1,0 +1,32 @@
+# ── Xcode ────────────────────────────────────────────────
+# Das Xcode-Projekt wird aus project.yml erzeugt (siehe README).
+# Es gehört NICHT ins Git, sonst gibt es ständig Merge-Konflikte.
+*.xcodeproj/
+*.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
+
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Info.plist wird ebenfalls aus project.yml generiert
+CUTZ/Info.plist
+
+# ── Swift Package Manager ────────────────────────────────
+.swiftpm/
+.build/
+Packages/
+
+# ── Geheimnisse ──────────────────────────────────────────
+# Echte Schlüssel NIEMALS committen. Vorlage: Secrets.example.xcconfig
+Secrets.xcconfig
+.env
+
+# ── macOS ────────────────────────────────────────────────
+.DS_Store
