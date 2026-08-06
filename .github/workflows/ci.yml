@@ -1,0 +1,110 @@
+# ─────────────────────────────────────────────────────────────
+#  CUTZ — Automatischer Build- und Test-Lauf
+#
+#  Bei jedem Push leiht GitHub uns kurz einen echten Mac, baut dort
+#  die App und lässt die Tests laufen. Das Ergebnis steht danach im
+#  Tab "Actions" auf GitHub: grüner Haken oder rotes Kreuz.
+#
+#  Warum? Lukas entwickelt unter Windows und hat keinen Mac. So sieht
+#  er trotzdem sofort, ob sein Code kompiliert und die Tests grün sind.
+#  Was der Lauf NICHT ersetzt: die App wirklich anzuschauen und zu
+#  bedienen — das passiert weiterhin auf Finns Mac im Simulator.
+# ─────────────────────────────────────────────────────────────
+
+name: Build & Tests
+
+on:
+  push:
+    branches: ["**"]        # jeder Branch, damit Lukas immer Rückmeldung bekommt
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}     # erlaubt das Starten von Hand im Actions-Tab
+
+# Läuft für denselben Branch schon ein älterer Durchgang, wird der
+# abgebrochen. Spart Wartezeit und Minuten, wenn man mehrmals hintereinander
+# pusht.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Bauen und testen
+    # macOS ist Pflicht: Xcode gibt es nur dort. Die Version ist bewusst
+    # festgenagelt und nicht "macos-latest", damit uns ein Update der
+    # GitHub-Rechner nicht unangekündigt den Build zerlegt.
+    runs-on: macos-15
+    timeout-minutes: 30
+
+    steps:
+      - name: Code holen
+        uses: actions/checkout@v4
+
+      - name: Xcode 16 auswählen
+        run: |
+          # Auf den GitHub-Macs liegen mehrere Xcode-Versionen nebeneinander.
+          # Wir nehmen die neueste 16er, passend zum README.
+          XCODE=$(ls -d /Applications/Xcode_16*.app 2>/dev/null | sort -V | tail -1)
+          if [ -n "$XCODE" ]; then
+            sudo xcode-select -s "$XCODE/Contents/Developer"
+          else
+            echo "::warning::Kein Xcode 16 gefunden — nehme die Standardversion."
+          fi
+          xcodebuild -version
+
+      - name: Werkzeuge installieren
+        # xcodegen erzeugt das Projekt, xcbeautify macht aus der sehr
+        # geschwätzigen Ausgabe von xcodebuild etwas Lesbares.
+        run: brew install xcodegen xcbeautify
+
+      - name: CUTZ.xcodeproj erzeugen
+        # Genau dasselbe Skript, das Finn lokal aufruft. Dadurch testen wir
+        # nebenbei mit, dass project.yml und setup.sh in Ordnung sind.
+        run: ./scripts/setup.sh
+
+      - name: Simulator aussuchen
+        id: sim
+        run: |
+          # Bevorzugt das iPhone 16 (so steht es im README). Falls GitHub
+          # dieses Modell irgendwann nicht mehr bereitstellt, nehmen wir
+          # einfach ein anderes verfügbares iPhone, statt rot zu laufen.
+          if xcrun simctl list devices available | grep -q "iPhone 16 ("; then
+            SIM="iPhone 16"
+          else
+            SIM=$(xcrun simctl list devices available \
+              | grep -oE "iPhone [0-9]+[^(]*" | tail -1 | sed 's/ *$//')
+          fi
+          if [ -z "$SIM" ]; then
+            echo "::error::Kein iPhone-Simulator verfügbar."
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "Verwende Simulator: $SIM"
+          echo "name=$SIM" >> "$GITHUB_OUTPUT"
+
+      - name: Bauen und Tests laufen lassen
+        run: |
+          set -o pipefail
+          # CODE_SIGNING_ALLOWED=NO: Im Simulator braucht es keine
+          # Entwickler-Signatur — und GitHub hat auch keine.
+          # derivedDataPath: legt die Bauergebnisse an einen bekannten Ort,
+          # damit der nächste Schritt die Testprotokolle findet.
+          xcodebuild test \
+            -project CUTZ.xcodeproj \
+            -scheme CUTZ \
+            -destination "platform=iOS Simulator,name=${{ steps.sim.outputs.name }}" \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcbeautify
+
+      - name: Testprotokolle sichern
+        # Läuft auch, wenn der Schritt davor rot war — gerade dann sind
+        # die Protokolle ja interessant. Finn kann sie herunterladen und
+        # in Xcode öffnen.
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: testprotokolle
+          path: build/DerivedData/Logs/Test/*.xcresult
+          retention-days: 7
+          if-no-files-found: ignore

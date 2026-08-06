@@ -4,6 +4,8 @@ Barbershops finden, bewerten und Termine buchen — wie Neotaste, aber für Fris
 
 Native iOS-App in **Swift / SwiftUI**.
 
+[![Build & Tests](https://github.com/lherwig-star/CUTZ/actions/workflows/ci.yml/badge.svg)](https://github.com/lherwig-star/CUTZ/actions/workflows/ci.yml)
+
 ---
 
 ## Was die App aktuell kann (Phase 1)
@@ -160,3 +162,27 @@ Oder in Xcode einfach **⌘U**.
 Getestet wird gezielt die Logik, bei der Fehler nicht auffallen —
 vor allem `SlotCalculator` (Terminberechnung, Doppelbuchungen).
 Views testen wir nicht, die sieht man ja.
+
+### Automatischer Lauf bei jedem Push
+
+Nach jedem `git push` leiht GitHub uns für ein paar Minuten einen echten Mac,
+erzeugt dort das Projekt und lässt Build und Tests laufen. Das Ergebnis steht
+im Tab **[Actions](https://github.com/lherwig-star/CUTZ/actions)** und oben im
+Abzeichen in dieser Datei.
+
+**Wofür das gut ist:** Lukas entwickelt unter Windows und hat keinen Mac. So
+sieht er trotzdem nach wenigen Minuten, ob sein Code kompiliert und die Tests
+grün sind.
+
+**Wofür es nicht reicht:** Die App wirklich *anzusehen* und zu bedienen. Ob ein
+Screen gut aussieht oder sich die Buchung rund anfühlt, sagt kein Testlauf —
+das passiert weiterhin bei Finn im Simulator.
+
+Bei Rot: im Actions-Tab auf den fehlgeschlagenen Lauf klicken, dort steht die
+Fehlermeldung. Die ausführlichen Testprotokolle hängen als Download
+(*testprotokolle*) am Lauf und lassen sich in Xcode öffnen.
+
+> GitHub stellt Mac-Rechner für private Projekte nur begrenzt kostenlos
+> bereit — die Minuten zählen dort zehnfach. Für unser Tempo reicht das
+> locker; falls es doch mal knapp wird, hilft ein Blick unter
+> *Settings › Billing*.
