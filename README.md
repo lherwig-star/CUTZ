@@ -5,6 +5,7 @@ Barbershops finden, bewerten und Termine buchen — wie Neotaste, aber für Fris
 Native iOS-App in **Swift / SwiftUI**.
 
 [![Build & Tests](https://github.com/lherwig-star/CUTZ/actions/workflows/ci.yml/badge.svg)](https://github.com/lherwig-star/CUTZ/actions/workflows/ci.yml)
+[![Syntax](https://github.com/lherwig-star/CUTZ/actions/workflows/syntax.yml/badge.svg)](https://github.com/lherwig-star/CUTZ/actions/workflows/syntax.yml)
 
 ---
 
@@ -182,7 +183,25 @@ Bei Rot: im Actions-Tab auf den fehlgeschlagenen Lauf klicken, dort steht die
 Fehlermeldung. Die ausführlichen Testprotokolle hängen als Download
 (*testprotokolle*) am Lauf und lassen sich in Xcode öffnen.
 
-> GitHub stellt Mac-Rechner für private Projekte nur begrenzt kostenlos
-> bereit — die Minuten zählen dort zehnfach. Für unser Tempo reicht das
-> locker; falls es doch mal knapp wird, hilft ein Blick unter
-> *Settings › Billing*.
+### Zwei Läufe, zwei Aussagekraft-Stufen
+
+Es gibt absichtlich zwei getrennte Prüfungen:
+
+| Lauf | Rechner | Dauer | Sagt aus |
+|---|---|---|---|
+| **Syntax** | Linux | < 1 Min | Keine groben Schnitzer im Code |
+| **Build & Tests** | Mac | 5–10 Min | Kompiliert wirklich, Tests grün |
+
+**Warum zwei?** Mac-Rechner sind bei GitHub knapp. Es kommt vor, dass ein Job
+keinen freien Mac bekommt und nach 15 Minuten kommentarlos abgebrochen wird —
+dann steht man ohne jede Rückmeldung da. Der Linux-Lauf funktioniert immer und
+fängt wenigstens fehlende Klammern und vertippte Schlüsselwörter ab.
+
+**Wichtig:** Ein grüner *Syntax*-Lauf heißt **nicht**, dass der Code baut. Falsche
+Typen, erfundene Funktionsnamen oder unpassende Argumente sieht er nicht — dafür
+bräuchte er SwiftUI und MapKit, und die gibt es nur auf einem Mac. Verlass dich
+für das echte Urteil auf *Build & Tests*.
+
+> Bleibt *Build & Tests* länger in der Warteschlange hängen, liegt das an
+> fehlenden Mac-Rechnern bei GitHub, nicht an eurem Code. Einfach später über
+> *Run workflow* erneut anstoßen.

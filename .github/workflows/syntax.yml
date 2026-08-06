@@ -1,0 +1,80 @@
+# ─────────────────────────────────────────────────────────────
+#  CUTZ — Schnelle Syntaxprüfung
+#
+#  Der große Lauf in ci.yml braucht einen Mac, und Mac-Rechner sind bei
+#  GitHub knapp — manchmal wartet ein Job vergeblich und wird abgebrochen.
+#  Dieser Lauf hier ist die Rückfallebene: Er läuft auf Linux, wovon es
+#  reichlich gibt, und ist in einer knappen Minute durch.
+#
+#  Was er prüft:  Ist die Syntax in Ordnung? Fehlende Klammern, kaputte
+#                 Zeilen, vertippte Schlüsselwörter.
+#  Was NICHT:     Ob die Typen stimmen, ob es Funktionen wirklich gibt,
+#                 ob die Argumente passen. Dafür braucht es SwiftUI und
+#                 MapKit — und die gibt es nur auf einem Mac.
+#
+#  Grün heißt hier also nicht "läuft", sondern nur "keine groben Schnitzer".
+#  Das echte Urteil fällt weiterhin ci.yml (oder Finn im Simulator).
+# ─────────────────────────────────────────────────────────────
+
+name: Syntax
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: syntax-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  parse:
+    name: Swift-Syntax prüfen
+    runs-on: ubuntu-latest
+    # Fertiges Swift-Abbild von Apple. Damit braucht es kein Xcode und
+    # keinen Mac — der Swift-Compiler allein genügt zum Parsen.
+    container: swift:6.0
+    timeout-minutes: 10
+
+    steps:
+      - name: Code holen
+        uses: actions/checkout@v4
+
+      - name: Swift-Version anzeigen
+        run: swift --version
+
+      - name: Alle Swift-Dateien parsen
+        shell: bash
+        run: |
+          fehlerhaft=0
+          geprueft=0
+
+          # "swiftc -parse" liest die Datei und prüft nur den Aufbau.
+          # Es versucht dabei nicht, SwiftUI oder MapKit zu laden — deshalb
+          # funktioniert das auch auf Linux, wo es diese Frameworks nicht gibt.
+          for datei in $(find CUTZ CUTZTests -name '*.swift' | sort); do
+              geprueft=$((geprueft + 1))
+              if ausgabe=$(swiftc -parse "$datei" 2>&1); then
+                  echo "  ok   $datei"
+              else
+                  echo "  FEHLER $datei"
+                  echo "$ausgabe"
+                  # Markiert die Stelle direkt in der GitHub-Oberfläche
+                  echo "::error file=$datei::Syntaxfehler — siehe Protokoll"
+                  fehlerhaft=$((fehlerhaft + 1))
+              fi
+          done
+
+          echo ""
+          echo "$geprueft Dateien geprüft, $fehlerhaft mit Fehlern."
+
+          # Sicherheitsnetz: Findet der Lauf gar keine Dateien, stimmt etwas
+          # nicht — dann soll er rot werden statt fälschlich grün.
+          if [ "$geprueft" -eq 0 ]; then
+              echo "::error::Keine Swift-Dateien gefunden."
+              exit 1
+          fi
+
+          exit $((fehlerhaft > 0 ? 1 : 0))
