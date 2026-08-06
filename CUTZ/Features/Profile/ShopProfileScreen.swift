@@ -149,7 +149,7 @@ struct ShopProfileScreen: View {
                 .foregroundStyle(.secondary)
 
             // Kleine, nicht bedienbare Karte als Vorschau.
-            Map(initialViewport: .region(
+            Map(initialPosition: .region(
                 MKCoordinateRegion(
                     center: shop.coordinate,
                     span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
