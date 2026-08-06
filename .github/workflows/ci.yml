@@ -30,10 +30,13 @@ concurrency:
 jobs:
   build-and-test:
     name: Bauen und testen
-    # macOS ist Pflicht: Xcode gibt es nur dort. Die Version ist bewusst
-    # festgenagelt und nicht "macos-latest", damit uns ein Update der
-    # GitHub-Rechner nicht unangekündigt den Build zerlegt.
-    runs-on: macos-15
+    # macOS ist Pflicht: Xcode gibt es nur dort.
+    #
+    # Bewusst "macos-latest" statt einer festen Nummer: GitHub mustert alte
+    # Rechner-Images irgendwann aus. Fragt man dann eine Version an, die es
+    # nicht mehr gibt, wartet der Job endlos und wird nach 15 Minuten
+    # kommentarlos abgebrochen — ein Fehler, den man kaum als solchen erkennt.
+    runs-on: macos-latest
     timeout-minutes: 30
 
     steps:
@@ -44,11 +47,15 @@ jobs:
         run: |
           # Auf den GitHub-Macs liegen mehrere Xcode-Versionen nebeneinander.
           # Wir nehmen die neueste 16er, passend zum README.
+          echo "Vorhandene Xcode-Versionen:"
+          ls -d /Applications/Xcode*.app 2>/dev/null || echo "  (keine gefunden)"
+
           XCODE=$(ls -d /Applications/Xcode_16*.app 2>/dev/null | sort -V | tail -1)
           if [ -n "$XCODE" ]; then
             sudo xcode-select -s "$XCODE/Contents/Developer"
           else
-            echo "::warning::Kein Xcode 16 gefunden — nehme die Standardversion."
+            echo "::warning::Kein Xcode 16 vorhanden — nehme die Standardversion. \
+          Wenn der Build gleich an Swift- oder SDK-Fehlern scheitert, liegt es vermutlich daran."
           fi
           xcodebuild -version
 
