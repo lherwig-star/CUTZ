@@ -335,3 +335,42 @@
 "Art" = "النوع";
 "Dauer" = "المدة";
 "Die Dauer bestimmt, wie viel Zeit im Kalender blockiert wird." = "المدة تحدد مقدار الوقت المحجوز في التقويم.";
+
+/* ── Friseurseite: Kalender und Sperrzeiten ── */
+"Zeit sperren" = "حجب وقت";
+"Gesperrte Zeiten" = "الأوقات المحجوبة";
+"Grund" = "السبب";
+"Ganzer Tag" = "يوم كامل";
+"Von" = "من";
+"Bis" = "إلى";
+"Ende" = "ينتهي";
+"Das Ende muss nach dem Beginn liegen." = "يجب أن تكون النهاية بعد البداية.";
+"In dieser Zeit bietet CUTZ deinen Kunden keine Termine an." = "خلال هذا الوقت لن يعرض CUTZ أي مواعيد على زبائنك.";
+"Notiz" = "ملاحظة";
+"Optional, z. B. Fortbildung" = "اختياري، مثال: يوم تدريب";
+"Sperren" = "حجب";
+
+/* ── Friseurseite: Buchungen ── */
+"Kommende" = "القادمة";
+"Abgesagt" = "ملغاة";
+"Zeitraum" = "الفترة";
+"Name oder Leistung" = "الاسم أو الخدمة";
+"Ohne Namen" = "بدون اسم";
+"Keine Buchungen" = "لا توجد حجوزات";
+"Hier stehen alle Termine deines Ladens." = "تظهر هنا جميع مواعيد صالونك.";
+"Zu dieser Suche gibt es nichts." = "لا توجد نتائج لهذا البحث.";
+"Absagen" = "إلغاء";
+"Termin absagen?" = "إلغاء الموعد؟";
+
+/* ── Friseurseite: Kunden ── */
+"Noch keine Kunden" = "لا يوجد زبائن بعد";
+"Sobald jemand bei dir war, steht er hier." = "بمجرد أن يزورك أحدهم سيظهر هنا.";
+"Zu dieser Suche gibt es niemanden." = "لا أحد يطابق هذا البحث.";
+"Neuer Kunde" = "زبون جديد";
+"Nächster" = "التالي";
+"Besuche" = "الزيارات";
+"Zuletzt" = "آخر مرة";
+"Meistens" = "عادةً";
+"Nächster Termin" = "الموعد القادم";
+/* Erste Zahl: Anzahl der Besuche. Zweiter Wert: Datum des letzten. */
+"customer.visitsAndLast" = "%1$lld زيارة · آخرها %2$@";

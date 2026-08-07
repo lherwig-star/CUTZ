@@ -27,6 +27,25 @@ enum BarberSearch {
         }
     }
 
+    /// Passt die Eingabe auf eine Handvoll Textfelder?
+    ///
+    /// Dieselben Regeln wie oben — alle Wörter müssen vorkommen,
+    /// Groß- und Kleinschreibung sowie Umlaute sind egal.
+    ///
+    /// Herausgezogen, weil die Friseurseite ihre Buchungen nach
+    /// Kundenname und Leistung durchsucht. Eine zweite Suche mit
+    /// leicht anderen Regeln wäre genau die Sorte Unterschied, über
+    /// die sich später jemand wundert.
+    static func matches(_ query: String, in fields: [String]) -> Bool {
+        let needle = normalize(query)
+        guard !needle.isEmpty else { return true }
+
+        let haystack = normalize(fields.joined(separator: " "))
+        return needle
+            .split(separator: " ")
+            .allSatisfy { haystack.contains($0) }
+    }
+
     /// Alles, worin gesucht wird — bereits kleingeschrieben.
     ///
     /// Hier später erweitern:

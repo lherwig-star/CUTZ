@@ -340,3 +340,42 @@
 "Art" = "Art";
 "Dauer" = "Dauer";
 "Die Dauer bestimmt, wie viel Zeit im Kalender blockiert wird." = "Die Dauer bestimmt, wie viel Zeit im Kalender blockiert wird.";
+
+/* ── Friseurseite: Kalender und Sperrzeiten ── */
+"Zeit sperren" = "Zeit sperren";
+"Gesperrte Zeiten" = "Gesperrte Zeiten";
+"Grund" = "Grund";
+"Ganzer Tag" = "Ganzer Tag";
+"Von" = "Von";
+"Bis" = "Bis";
+"Ende" = "Ende";
+"Das Ende muss nach dem Beginn liegen." = "Das Ende muss nach dem Beginn liegen.";
+"In dieser Zeit bietet CUTZ deinen Kunden keine Termine an." = "In dieser Zeit bietet CUTZ deinen Kunden keine Termine an.";
+"Notiz" = "Notiz";
+"Optional, z. B. Fortbildung" = "Optional, z. B. Fortbildung";
+"Sperren" = "Sperren";
+
+/* ── Friseurseite: Buchungen ── */
+"Kommende" = "Kommende";
+"Abgesagt" = "Abgesagt";
+"Zeitraum" = "Zeitraum";
+"Name oder Leistung" = "Name oder Leistung";
+"Ohne Namen" = "Ohne Namen";
+"Keine Buchungen" = "Keine Buchungen";
+"Hier stehen alle Termine deines Ladens." = "Hier stehen alle Termine deines Ladens.";
+"Zu dieser Suche gibt es nichts." = "Zu dieser Suche gibt es nichts.";
+"Absagen" = "Absagen";
+"Termin absagen?" = "Termin absagen?";
+
+/* ── Friseurseite: Kunden ── */
+"Noch keine Kunden" = "Noch keine Kunden";
+"Sobald jemand bei dir war, steht er hier." = "Sobald jemand bei dir war, steht er hier.";
+"Zu dieser Suche gibt es niemanden." = "Zu dieser Suche gibt es niemanden.";
+"Neuer Kunde" = "Neuer Kunde";
+"Nächster" = "Nächster";
+"Besuche" = "Besuche";
+"Zuletzt" = "Zuletzt";
+"Meistens" = "Meistens";
+"Nächster Termin" = "Nächster Termin";
+/* Erste Zahl: Anzahl der Besuche. Zweiter Wert: Datum des letzten. */
+"customer.visitsAndLast" = "%1$lld× da · zuletzt %2$@";

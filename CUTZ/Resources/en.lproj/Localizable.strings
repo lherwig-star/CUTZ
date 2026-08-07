@@ -327,3 +327,42 @@
 "Art" = "Type";
 "Dauer" = "Duration";
 "Die Dauer bestimmt, wie viel Zeit im Kalender blockiert wird." = "The duration decides how much time is blocked in the calendar.";
+
+/* ── Friseurseite: Kalender und Sperrzeiten ── */
+"Zeit sperren" = "Block time";
+"Gesperrte Zeiten" = "Blocked times";
+"Grund" = "Reason";
+"Ganzer Tag" = "All day";
+"Von" = "From";
+"Bis" = "To";
+"Ende" = "Ends";
+"Das Ende muss nach dem Beginn liegen." = "The end must be after the start.";
+"In dieser Zeit bietet CUTZ deinen Kunden keine Termine an." = "During this time CUTZ won't offer your customers any appointments.";
+"Notiz" = "Note";
+"Optional, z. B. Fortbildung" = "Optional, e.g. training day";
+"Sperren" = "Block";
+
+/* ── Friseurseite: Buchungen ── */
+"Kommende" = "Upcoming";
+"Abgesagt" = "Cancelled";
+"Zeitraum" = "Period";
+"Name oder Leistung" = "Name or service";
+"Ohne Namen" = "No name";
+"Keine Buchungen" = "No bookings";
+"Hier stehen alle Termine deines Ladens." = "Every appointment in your shop shows up here.";
+"Zu dieser Suche gibt es nichts." = "Nothing matches this search.";
+"Absagen" = "Cancel";
+"Termin absagen?" = "Cancel appointment?";
+
+/* ── Friseurseite: Kunden ── */
+"Noch keine Kunden" = "No customers yet";
+"Sobald jemand bei dir war, steht er hier." = "As soon as someone has been in, they show up here.";
+"Zu dieser Suche gibt es niemanden." = "Nobody matches this search.";
+"Neuer Kunde" = "New customer";
+"Nächster" = "Next";
+"Besuche" = "Visits";
+"Zuletzt" = "Last time";
+"Meistens" = "Usually";
+"Nächster Termin" = "Next appointment";
+/* Erste Zahl: Anzahl der Besuche. Zweiter Wert: Datum des letzten. */
+"customer.visitsAndLast" = "%1$lld visits · last %2$@";

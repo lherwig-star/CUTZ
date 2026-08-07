@@ -79,4 +79,35 @@ final class BarberSearchTests: XCTestCase {
     func testUnknownQueryFindsNothing() {
         XCTAssertTrue(BarberSearch.match(query: "Zahnarzt", in: shops).isEmpty)
     }
+
+    // MARK: - Suche in einzelnen Feldern
+    //
+    // Diese Fassung benutzt die Friseurseite, um Buchungen nach
+    // Kundenname und Leistung zu durchsuchen. Sie muss sich genauso
+    // verhalten wie die Ladensuche — sonst wundert sich später jemand,
+    // warum dieselbe Eingabe an zwei Stellen verschieden wirkt.
+
+    func testMatchesIgnoresCaseAndUmlauts() {
+        XCTAssertTrue(BarberSearch.matches("muller", in: ["Tim Müller"]))
+        XCTAssertTrue(BarberSearch.matches("MÜLLER", in: ["tim müller"]))
+    }
+
+    func testMatchesNeedsAllWords() {
+        XCTAssertTrue(BarberSearch.matches("tim fade", in: ["Tim Müller", "Skin Fade"]))
+        XCTAssertFalse(BarberSearch.matches("tim beard", in: ["Tim Müller", "Skin Fade"]))
+    }
+
+    func testEmptyQueryMatchesEverything() {
+        // Anders als bei der Ladensuche: Ein leeres Suchfeld soll die
+        // Liste nicht leeren, sondern alles stehen lassen.
+        XCTAssertTrue(BarberSearch.matches("", in: ["Irgendwas"]))
+    }
+
+    func testMatchesSearchesAcrossAllFields() {
+        XCTAssertTrue(BarberSearch.matches("schnitt", in: ["Tim", "Herrenhaarschnitt"]))
+    }
+
+    func testUnknownQueryDoesNotMatch() {
+        XCTAssertFalse(BarberSearch.matches("hamburg", in: ["Tim", "Herrenhaarschnitt"]))
+    }
 }
