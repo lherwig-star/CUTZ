@@ -237,3 +237,32 @@
 "Buchungen" = "Bookings";
 "Kunden" = "Customers";
 "Dieser Bereich wird gerade gebaut." = "This area is still being built.";
+
+/* ── Friseurseite: Sperrzeiten ── */
+"Pause" = "Break";
+"Urlaub" = "Holiday";
+"Geschlossen" = "Closed";
+
+/* ── Friseurseite: Laden anmelden ── */
+"Laden eintragen" = "List your shop";
+"Dein Laden" = "Your shop";
+"Name des Salons" = "Shop name";
+"Straße und Hausnummer" = "Street and number";
+"PLZ" = "Postcode";
+"Stadt" = "City";
+"Wir rufen unter dieser Nummer an, um zu prüfen, dass der Laden wirklich dir gehört." = "We'll call this number to check that the shop really is yours.";
+"Zur Prüfung einreichen" = "Submit for review";
+"Als Kunde nutzen" = "Use as a customer";
+"In Prüfung" = "Under review";
+"Wir prüfen deinen Laden" = "We're reviewing your shop";
+"Das dauert meistens einen Werktag. Wir melden uns telefonisch bei dir." = "This usually takes one working day. We'll give you a call.";
+"Noch ohne Server — es kann niemand freigeben." = "No server yet — nobody can approve this.";
+"Zum Ausprobieren selbst freigeben" = "Approve it yourself to try it out";
+"Eintrag zurückziehen" = "Withdraw entry";
+"Eintrag abgelehnt" = "Entry rejected";
+"Möglicherweise ist der Laden schon eingetragen. Melde dich bei uns, dann klären wir das." = "The shop may already be listed. Get in touch and we'll sort it out.";
+"Erneut versuchen" = "Try again";
+
+/* ── Friseurseite: Fehlermeldungen ── */
+"Diese Sperrzeit existiert nicht mehr." = "This blocked time no longer exists.";
+"Dieser Laden existiert nicht mehr." = "This shop no longer exists.";

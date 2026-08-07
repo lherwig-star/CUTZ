@@ -28,6 +28,13 @@ final class AppModel {
     // ─────────────────────────────────────────────────────────
     let repository: BarbershopRepository = MockBarbershopRepository()
 
+    /// Dasselbe für die Friseurseite. Eigenes Protokoll, weil ein
+    /// Friseur ganz andere Dinge tut als ein Kunde — Begründung steht
+    /// bei `ShopRepository`.
+    ///
+    /// In Phase 2 wird auch hier genau eine Zeile getauscht.
+    let shopRepository: ShopRepository = MockShopRepository()
+
     /// Favoriten. Eigene Klasse, weil sie sich selbst um das Speichern
     /// kümmert und nichts mit dem Laden der Shops zu tun hat.
     let favorites = FavoritesStore()
@@ -42,6 +49,9 @@ final class AppModel {
     /// Kunde oder Friseur. Beim allerersten Start noch `nil`, dann
     /// fragt `RootView` nach.
     let role = RoleStore()
+
+    /// Welchen Laden ein Friseur verwaltet und ob er freigegeben ist.
+    let partner = PartnerStore()
 
     /// Alle geladenen Shops.
     private(set) var shops: [Barbershop] = []

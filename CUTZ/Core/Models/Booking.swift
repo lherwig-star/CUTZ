@@ -37,6 +37,15 @@ struct Booking: Identifiable, Codable, Hashable {
     var employeeID: UUID? = nil
     var employeeName: String? = nil
 
+    /// Wer kommt. Auf der Kundenseite braucht das niemand — man weiß
+    /// ja, dass man selbst gemeint ist. Auf der Friseurseite ist es
+    /// die wichtigste Angabe im ganzen Termin.
+    ///
+    /// Leer, solange es keine Nutzerkonten gibt (Phase 3). Bei
+    /// Laufkundschaft trägt der Friseur den Namen selbst ein, oft nur
+    /// als Vorname — mehr braucht er auch nicht.
+    var customerName: String = ""
+
     var startsAt: Date
     var durationMinutes: Int
 

@@ -29,7 +29,14 @@ struct RootView: View {
             CustomerRootView()
 
         case .barber:
-            PartnerRootView()
+            // Die Tab-Leiste gibt es erst nach der Freigabe. Davor
+            // steht das Formular oder der Wartezustand — sonst würde
+            // ein Kalender angezeigt, den es noch gar nicht gibt.
+            if appModel.partner.status == .approved {
+                PartnerRootView()
+            } else {
+                PartnerRegistrationScreen()
+            }
         }
     }
 }

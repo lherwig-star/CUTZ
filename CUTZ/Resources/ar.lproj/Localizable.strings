@@ -245,3 +245,32 @@
 "Buchungen" = "الحجوزات";
 "Kunden" = "الزبائن";
 "Dieser Bereich wird gerade gebaut." = "هذا القسم قيد الإنشاء.";
+
+/* ── Friseurseite: Sperrzeiten ── */
+"Pause" = "استراحة";
+"Urlaub" = "إجازة";
+"Geschlossen" = "مغلق";
+
+/* ── Friseurseite: Laden anmelden ── */
+"Laden eintragen" = "سجّل صالونك";
+"Dein Laden" = "صالونك";
+"Name des Salons" = "اسم الصالون";
+"Straße und Hausnummer" = "الشارع ورقم المبنى";
+"PLZ" = "الرمز البريدي";
+"Stadt" = "المدينة";
+"Wir rufen unter dieser Nummer an, um zu prüfen, dass der Laden wirklich dir gehört." = "سنتصل بهذا الرقم للتأكد من أن الصالون يخصك فعلًا.";
+"Zur Prüfung einreichen" = "إرسال للمراجعة";
+"Als Kunde nutzen" = "الاستخدام كزبون";
+"In Prüfung" = "قيد المراجعة";
+"Wir prüfen deinen Laden" = "نراجع صالونك";
+"Das dauert meistens einen Werktag. Wir melden uns telefonisch bei dir." = "يستغرق ذلك عادةً يوم عمل واحد. سنتصل بك هاتفيًا.";
+"Noch ohne Server — es kann niemand freigeben." = "لا يوجد خادم بعد — لا يمكن لأحد الموافقة.";
+"Zum Ausprobieren selbst freigeben" = "وافق بنفسك للتجربة";
+"Eintrag zurückziehen" = "سحب الطلب";
+"Eintrag abgelehnt" = "تم رفض الطلب";
+"Möglicherweise ist der Laden schon eingetragen. Melde dich bei uns, dann klären wir das." = "ربما تم تسجيل الصالون مسبقًا. تواصل معنا وسنوضح الأمر.";
+"Erneut versuchen" = "حاول مرة أخرى";
+
+/* ── Friseurseite: Fehlermeldungen ── */
+"Diese Sperrzeit existiert nicht mehr." = "لم تعد فترة الحجب هذه موجودة.";
+"Dieser Laden existiert nicht mehr." = "لم يعد هذا الصالون موجودًا.";

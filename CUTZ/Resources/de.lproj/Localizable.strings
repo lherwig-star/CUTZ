@@ -250,3 +250,32 @@
 "Buchungen" = "Buchungen";
 "Kunden" = "Kunden";
 "Dieser Bereich wird gerade gebaut." = "Dieser Bereich wird gerade gebaut.";
+
+/* ── Friseurseite: Sperrzeiten ── */
+"Pause" = "Pause";
+"Urlaub" = "Urlaub";
+"Geschlossen" = "Geschlossen";
+
+/* ── Friseurseite: Laden anmelden ── */
+"Laden eintragen" = "Laden eintragen";
+"Dein Laden" = "Dein Laden";
+"Name des Salons" = "Name des Salons";
+"Straße und Hausnummer" = "Straße und Hausnummer";
+"PLZ" = "PLZ";
+"Stadt" = "Stadt";
+"Wir rufen unter dieser Nummer an, um zu prüfen, dass der Laden wirklich dir gehört." = "Wir rufen unter dieser Nummer an, um zu prüfen, dass der Laden wirklich dir gehört.";
+"Zur Prüfung einreichen" = "Zur Prüfung einreichen";
+"Als Kunde nutzen" = "Als Kunde nutzen";
+"In Prüfung" = "In Prüfung";
+"Wir prüfen deinen Laden" = "Wir prüfen deinen Laden";
+"Das dauert meistens einen Werktag. Wir melden uns telefonisch bei dir." = "Das dauert meistens einen Werktag. Wir melden uns telefonisch bei dir.";
+"Noch ohne Server — es kann niemand freigeben." = "Noch ohne Server — es kann niemand freigeben.";
+"Zum Ausprobieren selbst freigeben" = "Zum Ausprobieren selbst freigeben";
+"Eintrag zurückziehen" = "Eintrag zurückziehen";
+"Eintrag abgelehnt" = "Eintrag abgelehnt";
+"Möglicherweise ist der Laden schon eingetragen. Melde dich bei uns, dann klären wir das." = "Möglicherweise ist der Laden schon eingetragen. Melde dich bei uns, dann klären wir das.";
+"Erneut versuchen" = "Erneut versuchen";
+
+/* ── Friseurseite: Fehlermeldungen ── */
+"Diese Sperrzeit existiert nicht mehr." = "Diese Sperrzeit existiert nicht mehr.";
+"Dieser Laden existiert nicht mehr." = "Dieser Laden existiert nicht mehr.";

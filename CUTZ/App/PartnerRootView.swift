@@ -23,6 +23,16 @@ import SwiftUI
 /// Licht. Ein weißer Bildschirm blendet dabei.
 struct PartnerRootView: View {
 
+    @Environment(AppModel.self) private var appModel
+
+    /// Der Zustand der Friseurseite. Wird hier angelegt und nicht in
+    /// `AppModel`, weil ihn nur dieser Teil der App braucht — ein Kunde
+    /// soll die fremden Termine gar nicht erst laden.
+    ///
+    /// `@State` sorgt dafür, dass das Objekt nicht bei jedem
+    /// Neuzeichnen neu entsteht.
+    @State private var partnerModel: PartnerModel?
+
     @State private var selection: Tab = .overview
 
     enum Tab {
@@ -34,6 +44,27 @@ struct PartnerRootView: View {
     }
 
     var body: some View {
+        // Solange das Modell noch nicht steht, zeigen wir eine
+        // Ladeanzeige. Das dauert nur einen Zeichendurchgang — die
+        // Alternative wäre, `AppModel` schon im `init` zu lesen, und
+        // das geht in SwiftUI nicht sauber.
+        if let partnerModel {
+            tabs
+                .environment(partnerModel)
+                .task { await partnerModel.load() }
+        } else {
+            ProgressView()
+                .preferredColorScheme(.dark)
+                .onAppear {
+                    partnerModel = PartnerModel(
+                        repository: appModel.shopRepository,
+                        partner: appModel.partner
+                    )
+                }
+        }
+    }
+
+    private var tabs: some View {
         TabView(selection: $selection) {
             PartnerOverviewScreen()
                 .tabItem { Label("Übersicht", systemImage: "house") }
