@@ -57,31 +57,46 @@ final class AvailabilityTextTests: XCTestCase {
     }
 
     func testWithinTheWeekUsesWeekday() {
-        // Drei Tage später: Wochentag statt Datum.
+        // Bezugstag ist Montag, der 10.8.2026. Drei Tage später ist
+        // Donnerstag — es muss der Wochentag stehen, kein Datum.
         let text = AvailabilityText.short(for: at(dayOffset: 3, hour: 14),
                                           now: now, calendar: calendar)
 
-        XCTAssertTrue(
-            text.hasSuffix(" 14:00"),
-            "Die Uhrzeit muss hinten stehen, war: \(text)"
-        )
-        XCTAssertFalse(text.hasPrefix("Heute"))
-        XCTAssertFalse(text.hasPrefix("Morgen"))
-        XCTAssertFalse(
-            text.contains("."),
-            "Innerhalb einer Woche soll der Wochentag stehen, kein Datum. War: \(text)"
-        )
+        XCTAssertEqual(text, "Do 14:00")
+    }
+
+    func testSixDaysAheadStillUsesWeekday() {
+        // Genau an der Grenze: 6 Tage sind noch "diese Woche".
+        let text = AvailabilityText.short(for: at(dayOffset: 6, hour: 10),
+                                          now: now, calendar: calendar)
+
+        XCTAssertEqual(text, "So 10:00")
     }
 
     func testBeyondAWeekUsesDate() {
+        // 10 Tage nach dem 10.8. ist der 20.8.
         let text = AvailabilityText.short(for: at(dayOffset: 10, hour: 11),
                                           now: now, calendar: calendar)
 
-        XCTAssertTrue(
-            text.contains("."),
-            "Ab einer Woche soll ein Datum stehen. War: \(text)"
+        XCTAssertEqual(text, "20.08. 11:00")
+    }
+
+    func testFormattingDoesNotDependOnSystemLanguage() {
+        // Der entscheidende Test: Auf einem englisch eingestellten Gerät
+        // lieferte `.formatted()` früher "Thu" und "08/20" mitten im
+        // deutschen Text. Jetzt schreiben wir die Namen selbst.
+        XCTAssertEqual(
+            AvailabilityText.shortWeekday(of: at(dayOffset: 0, hour: 12), calendar: calendar),
+            "Mo"
         )
-        XCTAssertTrue(text.hasSuffix(" 11:00"))
+        XCTAssertEqual(
+            AvailabilityText.longWeekday(of: at(dayOffset: 0, hour: 12), calendar: calendar),
+            "Montag"
+        )
+        XCTAssertEqual(
+            AvailabilityText.dayAndMonth(of: at(dayOffset: 0, hour: 12), calendar: calendar),
+            "10.08."
+        )
     }
 
     // MARK: - Uhrzeit
@@ -104,11 +119,18 @@ final class AvailabilityTextTests: XCTestCase {
         XCTAssertEqual(text, "Heute · 14:00")
     }
 
-    func testLongFormForLaterDayContainsWeekdayAndTime() {
+    func testLongFormForLaterDay() {
+        // 4 Tage nach Montag, dem 10.8., ist Freitag, der 14.8.
         let text = AvailabilityText.long(for: at(dayOffset: 4, hour: 16, minute: 30),
                                          now: now, calendar: calendar)
 
-        XCTAssertTrue(text.hasSuffix("· 16:30"), "War: \(text)")
-        XCTAssertFalse(text.hasPrefix("Heute"))
+        XCTAssertEqual(text, "Freitag, 14.08. · 16:30")
+    }
+
+    func testLongFormForTomorrow() {
+        let text = AvailabilityText.long(for: at(dayOffset: 1, hour: 9, minute: 15),
+                                         now: now, calendar: calendar)
+
+        XCTAssertEqual(text, "Morgen · 09:15")
     }
 }

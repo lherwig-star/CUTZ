@@ -8,6 +8,16 @@ struct ReviewsSection: View {
     let reviews: [Review]
     let isLoading: Bool
 
+    /// Gesamtnote und Anzahl aus dem Shop.
+    ///
+    /// Bewusst NICHT aus `reviews` gerechnet: Die Datenbank liefert den
+    /// Durchschnitt über ALLE Bewertungen, während wir hier nur die
+    /// zuletzt geladenen anzeigen. Selbst rechnen ergäbe eine andere
+    /// Zahl als auf der Karte in der Liste — und nichts wirkt unseriöser
+    /// als zwei verschiedene Noten für denselben Laden.
+    var averageRating: Double?
+    var totalReviewCount: Int?
+
     // Filter und Sortierung stehen bewusst HIER und nicht im
     // `ShopProfileScreen` darüber.
     //
@@ -30,6 +40,7 @@ struct ReviewsSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             header
+            summary
 
             if isLoading {
                 ProgressView()
@@ -59,6 +70,28 @@ struct ReviewsSection: View {
     }
 
     // MARK: - Bereiche
+
+    /// Die große Note oben — die Antwort auf "sind andere zufrieden?".
+    /// Man soll sie erfassen, ohne eine einzige Rezension zu lesen.
+    @ViewBuilder
+    private var summary: some View {
+        if let averageRating {
+            HStack(alignment: .center, spacing: 14) {
+                Text(averageRating.formatted(.number.precision(.fractionLength(1))))
+                    .font(.system(size: 44, weight: .semibold, design: .rounded))
+
+                VStack(alignment: .leading, spacing: 4) {
+                    RatingStars(rating: averageRating, showsNumber: false)
+                    if let totalReviewCount {
+                        Text("\(totalReviewCount) Bewertungen")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .padding(.bottom, 4)
+        }
+    }
 
     private var header: some View {
         HStack {

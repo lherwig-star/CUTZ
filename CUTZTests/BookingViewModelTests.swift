@@ -97,11 +97,84 @@ final class BookingViewModelTests: XCTestCase {
         )
     }
 
-    func testFirstServiceIsPreselected() {
+    func testNoServiceIsPreselected() {
+        // Schritt 1 des Ablaufs IST die Wahl der Leistung. Eine
+        // Vorauswahl würde so aussehen, als hätte man schon entschieden.
+        let viewModel = makeViewModel(shop: makeShop(openWeekdays: [2]))
+
+        XCTAssertNil(viewModel.selectedService)
+    }
+
+    // MARK: - Schrittsteuerung
+
+    func testCannotAdvanceWithoutAService() {
+        let viewModel = makeViewModel(shop: makeShop(openWeekdays: [2]))
+
+        XCTAssertEqual(viewModel.step, .service)
+        XCTAssertFalse(viewModel.canGoForward)
+    }
+
+    func testAnyBarberIsAValidChoice() async {
         let shop = makeShop(openWeekdays: [2])
         let viewModel = makeViewModel(shop: shop)
+        viewModel.selectedService = shop.services.first
 
-        XCTAssertEqual(viewModel.selectedService, shop.services.first)
+        await viewModel.goForward()
+
+        XCTAssertEqual(viewModel.step, .employee)
+        XCTAssertNil(viewModel.selectedEmployee)
+        XCTAssertTrue(
+            viewModel.canGoForward,
+            "\"Egal welcher Barber\" ist eine gültige Wahl, kein fehlender Wert."
+        )
+    }
+
+    func testCannotAdvanceFromTimeWithoutASlot() async {
+        let shop = makeShop(openWeekdays: [2])
+        let viewModel = makeViewModel(shop: shop)
+        viewModel.selectedService = shop.services.first
+
+        await viewModel.goForward()   // -> employee
+        await viewModel.goForward()   // -> time
+
+        XCTAssertEqual(viewModel.step, .time)
+        XCTAssertNil(viewModel.selectedSlot)
+        XCTAssertFalse(viewModel.canGoForward)
+    }
+
+    func testGoBackReturnsToPreviousStep() async {
+        let shop = makeShop(openWeekdays: [2])
+        let viewModel = makeViewModel(shop: shop)
+        viewModel.selectedService = shop.services.first
+
+        await viewModel.goForward()
+        viewModel.goBack()
+
+        XCTAssertEqual(viewModel.step, .service)
+    }
+
+    func testGoBackOnFirstStepDoesNothing() {
+        let viewModel = makeViewModel(shop: makeShop(openWeekdays: [2]))
+
+        viewModel.goBack()
+
+        XCTAssertEqual(viewModel.step, .service, "Vor dem ersten Schritt gibt es nichts.")
+    }
+
+    func testJumpOnlyGoesBackwards() async {
+        let shop = makeShop(openWeekdays: [2])
+        let viewModel = makeViewModel(shop: shop)
+        viewModel.selectedService = shop.services.first
+
+        await viewModel.goForward()   // -> employee
+
+        // Vorwärts springen ist nicht erlaubt: Dort fehlen die Angaben.
+        viewModel.jump(to: .summary)
+        XCTAssertEqual(viewModel.step, .employee)
+
+        // Zurück schon.
+        viewModel.jump(to: .service)
+        XCTAssertEqual(viewModel.step, .service)
     }
 
     // MARK: - Begründung für leere Liste

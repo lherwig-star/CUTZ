@@ -1,20 +1,43 @@
 import Foundation
 import Observation
 
-/// Die Logik hinter dem Buchungs-Bildschirm.
+/// Die Logik hinter dem Buchungsablauf.
 ///
 /// ─── Zuständig: Lukas ──────────────────────────────────────
 ///
 /// Warum eine eigene Klasse und nicht alles in der View?
-/// Die View soll nur zeigen, wie etwas AUSSIEHT. Was passiert, wenn man
-/// auf "Buchen" tippt — Slots laden, Termin anlegen, Kalendereintrag
-/// schreiben, Fehler behandeln — steht hier. So bleibt die View kurz
-/// und die Logik ist testbar.
+/// Die View soll nur zeigen, wie etwas AUSSIEHT. Was passiert — Schritt
+/// weiterschalten, Slots laden, Termin anlegen, Kalendereintrag schreiben,
+/// Fehler behandeln — steht hier. So bleibt die View kurz und die Logik
+/// ist testbar.
 @MainActor
 @Observable
 final class BookingViewModel {
 
-    // MARK: - Auswahl des Nutzers
+    /// Die vier Schritte des Ablaufs.
+    ///
+    /// Bewusst als Aufzählung und nicht als Zahl: `.employee` sagt beim
+    /// Lesen, worum es geht, `2` nicht. Und man kann keinen Schritt
+    /// erfinden, den es nicht gibt.
+    enum Step: Int, CaseIterable {
+        case service
+        case employee
+        case time
+        case summary
+
+        var title: String {
+            switch self {
+            case .service:  return "Was möchtest du?"
+            case .employee: return "Wer soll dich schneiden?"
+            case .time:     return "Wann passt es dir?"
+            case .summary:  return "Passt alles?"
+            }
+        }
+    }
+
+    // MARK: - Zustand des Ablaufs
+
+    private(set) var step: Step = .service
 
     var selectedService: BarberService?
 
@@ -25,7 +48,7 @@ final class BookingViewModel {
     var selectedDay: Date = .now
     var selectedSlot: Date?
 
-    // MARK: - Zustand
+    // MARK: - Ladezustand
 
     private(set) var availableSlots: [Date] = []
     private(set) var isLoadingSlots = false
@@ -47,42 +70,50 @@ final class BookingViewModel {
 
     // MARK: - Abhängigkeiten
 
-    private let shop: Barbershop
+    let shop: Barbershop
     private let repository: BarbershopRepository
 
     init(shop: Barbershop, repository: BarbershopRepository) {
         self.shop = shop
         self.repository = repository
-        // Die erste Leistung ist vorausgewählt, damit der Nutzer
-        // sofort Zeiten sieht, statt vor einer leeren Liste zu stehen.
-        self.selectedService = shop.services.first
-        // Aus demselben Grund starten wir am ersten Tag, an dem der Shop
-        // überhaupt öffnet. Sonst landet man an einem Ruhetag und sieht
-        // erst mal nichts.
+        // Am ersten Tag starten, an dem der Shop überhaupt öffnet.
+        // Sonst landet man an einem Ruhetag und sieht erst mal nichts.
         self.selectedDay = Self.firstOpenDay(for: shop) ?? .now
     }
 
-    /// Sucht den nächsten Tag innerhalb der Auswahl, an dem geöffnet ist.
-    ///
-    /// `static`, weil das schon im `init` gebraucht wird — dort gibt es
-    /// das fertige Objekt noch nicht, also kann man keine normale
-    /// Methode aufrufen.
-    private static func firstOpenDay(
-        for shop: Barbershop,
-        calendar: Calendar = .current,
-        now: Date = .now
-    ) -> Date? {
-        let today = calendar.startOfDay(for: now)
-        for offset in 0..<14 {
-            guard let day = calendar.date(byAdding: .day, value: offset, to: today) else {
-                continue
-            }
-            let weekday = calendar.component(.weekday, from: day)
-            if shop.openingHour(forWeekday: weekday) != nil {
-                return day
-            }
+    // MARK: - Schritte
+
+    /// Darf man vom aktuellen Schritt aus weiter?
+    var canGoForward: Bool {
+        switch step {
+        case .service:  return selectedService != nil
+        case .employee: return true          // "egal welcher" ist eine gültige Wahl
+        case .time:     return selectedSlot != nil
+        case .summary:  return !isBooking
         }
-        return nil
+    }
+
+    func goForward() async {
+        guard canGoForward, let next = Step(rawValue: step.rawValue + 1) else { return }
+        step = next
+
+        // Beim Betreten des Zeit-Schritts gleich Termine laden, damit
+        // niemand vor einer leeren Liste sitzt und sich fragt, was fehlt.
+        if step == .time {
+            await loadSlots()
+        }
+    }
+
+    func goBack() {
+        guard let previous = Step(rawValue: step.rawValue - 1) else { return }
+        step = previous
+    }
+
+    /// Springt direkt zu einem Schritt — für die Punkte in der Kopfzeile.
+    /// Nur rückwärts erlaubt, vorwärts fehlen ja die Angaben.
+    func jump(to target: Step) {
+        guard target.rawValue < step.rawValue else { return }
+        step = target
     }
 
     // MARK: - Aktionen
@@ -147,11 +178,6 @@ final class BookingViewModel {
 
     // MARK: - Abgeleitete Werte für die View
 
-    /// Kann der Buchen-Button gedrückt werden?
-    var canConfirm: Bool {
-        selectedService != nil && selectedSlot != nil && !isBooking
-    }
-
     /// Die nächsten 14 Tage zur Auswahl.
     var selectableDays: [Date] {
         let calendar = Calendar.current
@@ -191,5 +217,35 @@ final class BookingViewModel {
             return "Der Shop hat an diesem Tag geschlossen."
         }
         return "An diesem Tag sind keine Termine mehr frei."
+    }
+
+    /// Gesamtpreis der Auswahl — aktuell genau der Servicepreis.
+    var totalPriceText: String? {
+        selectedService?.priceShort
+    }
+
+    // MARK: - Privat
+
+    /// Sucht den nächsten Tag innerhalb der Auswahl, an dem geöffnet ist.
+    ///
+    /// `static`, weil das schon im `init` gebraucht wird — dort gibt es
+    /// das fertige Objekt noch nicht, also kann man keine normale
+    /// Methode aufrufen.
+    private static func firstOpenDay(
+        for shop: Barbershop,
+        calendar: Calendar = .current,
+        now: Date = .now
+    ) -> Date? {
+        let today = calendar.startOfDay(for: now)
+        for offset in 0..<14 {
+            guard let day = calendar.date(byAdding: .day, value: offset, to: today) else {
+                continue
+            }
+            let weekday = calendar.component(.weekday, from: day)
+            if shop.openingHour(forWeekday: weekday) != nil {
+                return day
+            }
+        }
+        return nil
     }
 }
