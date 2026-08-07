@@ -97,6 +97,40 @@ final class BookingViewModelTests: XCTestCase {
         )
     }
 
+    // MARK: - Starttag
+
+    func testStartsTomorrowWhenTodayIsAlreadyOver() {
+        // Täglich 9–18 Uhr geöffnet, es ist 21 Uhr.
+        // Heute geht nichts mehr, also muss morgen dran sein.
+        let shop = makeShop(openWeekdays: [1, 2, 3, 4, 5, 6, 7])
+        let evening = calendar.date(
+            from: DateComponents(year: 2026, month: 8, day: 10, hour: 21)
+        )!
+
+        let day = BookingViewModel.firstOpenDay(
+            for: shop, calendar: calendar, now: evening
+        )
+
+        let expected = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: evening))
+        XCTAssertEqual(
+            day, expected,
+            "Nach Ladenschluss darf der Ablauf nicht auf einem leeren heutigen Tag starten."
+        )
+    }
+
+    func testStartsTodayWhileTheShopIsStillOpen() {
+        let shop = makeShop(openWeekdays: [1, 2, 3, 4, 5, 6, 7])
+        let morning = calendar.date(
+            from: DateComponents(year: 2026, month: 8, day: 10, hour: 10)
+        )!
+
+        let day = BookingViewModel.firstOpenDay(
+            for: shop, calendar: calendar, now: morning
+        )
+
+        XCTAssertEqual(day, calendar.startOfDay(for: morning))
+    }
+
     func testNoServiceIsPreselected() {
         // Schritt 1 des Ablaufs IST die Wahl der Leistung. Eine
         // Vorauswahl würde so aussehen, als hätte man schon entschieden.

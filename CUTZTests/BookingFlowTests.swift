@@ -56,6 +56,25 @@ final class BookingFlowTests: XCTestCase {
         return viewModel
     }
 
+    /// Führt bis zur Zeitauswahl und stellt auf MORGEN.
+    ///
+    /// Warum morgen? Der `SlotCalculator` bietet keine vergangenen
+    /// Zeiten an. Bliebe der Test auf heute, hinge sein Ergebnis an der
+    /// Uhrzeit des Testlaufs: Um 19 Uhr war noch etwas frei, um 21 Uhr
+    /// nichts mehr — genau daran ist dieser Test schon einmal
+    /// gescheitert. Morgen liegt immer vollständig in der Zukunft.
+    private func advanceToTimeStep(
+        _ viewModel: BookingViewModel,
+        service: BarberService
+    ) async {
+        viewModel.selectedService = service
+        await viewModel.goForward()   // -> Barber
+        await viewModel.goForward()   // -> Termin
+
+        viewModel.selectedDay = calendar.date(byAdding: .day, value: 1, to: .now)!
+        await viewModel.loadSlots()
+    }
+
     // MARK: - Der ganze Weg
 
     func testFullFlowProducesABooking() async {
@@ -72,11 +91,14 @@ final class BookingFlowTests: XCTestCase {
         viewModel.selectedEmployee = shop.employees.first
         await viewModel.goForward()
 
-        // Schritt 3: Termin — die Zeiten werden beim Betreten geladen.
+        // Schritt 3: Termin
         XCTAssertEqual(viewModel.step, .time)
+        viewModel.selectedDay = calendar.date(byAdding: .day, value: 1, to: .now)!
+        await viewModel.loadSlots()
+
         XCTAssertFalse(
             viewModel.availableSlots.isEmpty,
-            "Beim Betreten des Zeit-Schritts müssen die Zeiten schon da sein."
+            "Für morgen muss es freie Zeiten geben."
         )
         viewModel.selectedSlot = viewModel.availableSlots.first
         await viewModel.goForward()
@@ -97,10 +119,8 @@ final class BookingFlowTests: XCTestCase {
         let shop = makeShop()
         let viewModel = makeViewModel(shop: shop)
 
-        viewModel.selectedService = shop.services[0]
-        await viewModel.goForward()
-        // Schritt 2 einfach überspringen — "egal welcher Barber".
-        await viewModel.goForward()
+        // Schritt 2 wird einfach übersprungen — "egal welcher Barber".
+        await advanceToTimeStep(viewModel, service: shop.services[0])
         viewModel.selectedSlot = viewModel.availableSlots.first
         await viewModel.goForward()
         await viewModel.confirmBooking()
@@ -115,9 +135,7 @@ final class BookingFlowTests: XCTestCase {
         let shop = makeShop(withEmployees: false)
         let viewModel = makeViewModel(shop: shop)
 
-        viewModel.selectedService = shop.services[0]
-        await viewModel.goForward()
-        await viewModel.goForward()
+        await advanceToTimeStep(viewModel, service: shop.services[0])
         viewModel.selectedSlot = viewModel.availableSlots.first
         await viewModel.goForward()
         await viewModel.confirmBooking()
@@ -135,12 +153,10 @@ final class BookingFlowTests: XCTestCase {
         let repository = MockBarbershopRepository()
         let viewModel = makeViewModel(shop: shop, repository: repository)
 
-        viewModel.selectedService = shop.services[0]
-        await viewModel.goForward()
-        await viewModel.goForward()
+        await advanceToTimeStep(viewModel, service: shop.services[0])
 
         guard let chosen = viewModel.availableSlots.first else {
-            return XCTFail("Es muss freie Zeiten geben.")
+            return XCTFail("Für morgen muss es freie Zeiten geben.")
         }
         viewModel.selectedSlot = chosen
         await viewModel.goForward()

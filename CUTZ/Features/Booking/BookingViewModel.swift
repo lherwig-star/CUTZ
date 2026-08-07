@@ -236,25 +236,39 @@ final class BookingViewModel {
 
     // MARK: - Privat
 
-    /// Sucht den nächsten Tag innerhalb der Auswahl, an dem geöffnet ist.
+    /// Sucht den nächsten Tag innerhalb der Auswahl, an dem noch etwas
+    /// gehen kann.
+    ///
+    /// Heute zählt nur mit, solange der Laden nicht schon zu hat. Wer
+    /// abends um neun die Buchung öffnet, soll nicht auf einem leeren
+    /// heutigen Tag landen und sich fragen, ob die App kaputt ist —
+    /// er will ohnehin morgen.
     ///
     /// `static`, weil das schon im `init` gebraucht wird — dort gibt es
     /// das fertige Objekt noch nicht, also kann man keine normale
     /// Methode aufrufen.
-    private static func firstOpenDay(
+    static func firstOpenDay(
         for shop: Barbershop,
         calendar: Calendar = .current,
         now: Date = .now
     ) -> Date? {
         let today = calendar.startOfDay(for: now)
+        let minuteNow = calendar.component(.hour, from: now) * 60
+                      + calendar.component(.minute, from: now)
+
         for offset in 0..<14 {
             guard let day = calendar.date(byAdding: .day, value: offset, to: today) else {
                 continue
             }
             let weekday = calendar.component(.weekday, from: day)
-            if shop.openingHour(forWeekday: weekday) != nil {
-                return day
+            guard let hours = shop.openingHour(forWeekday: weekday) else {
+                continue
             }
+            // Nur heute muss man auf die Uhr schauen.
+            if offset == 0 && minuteNow >= hours.closesAtMinute {
+                continue
+            }
+            return day
         }
         return nil
     }
