@@ -88,7 +88,7 @@ in der Startgröße.
 
 - [ ] Supabase-Projekt anlegen, **beide** als Mitglieder einladen
 - [ ] `supabase/schema.sql` einspielen (liegt fertig im Repo)
-- [ ] Die 5 Testshops als echte Datensätze anlegen
+- [x] Die 5 Testshops als echte Datensätze anlegen → `supabase/seed.sql`
 - [ ] `supabase-swift` als Paket einbinden
 - [ ] `SupabaseBarbershopRepository` schreiben
 - [ ] In `AppModel` eine Zeile tauschen → fertig
@@ -96,6 +96,42 @@ in der Startgröße.
 
 > Die Umstellung ist deshalb so klein, weil die ganze App nur das Protokoll
 > `BarbershopRepository` kennt und nicht, woher die Daten kommen.
+
+**Beide Dateien sind gegen ein echtes PostgreSQL 16 geprüft**, nicht nur
+gelesen: Schema angelegt, Seed zweimal eingespielt (läuft ohne Fehler
+und ohne Dubletten durch), Sperre gegen Doppelbuchungen ausgelöst.
+
+Drei Dinge, die man beim Einspielen wissen sollte:
+
+1. **Die Textwerte sind camelCase** — `'skinFade'`, nicht `'skin_fade'`.
+   Sie müssen zeichengenau den `rawValue`s der Swift-Enums entsprechen.
+   Schreibt man sie in SQL-Schreibweise, schlägt kein Constraint an;
+   stattdessen scheitert später der `JSONDecoder` und die Liste in der
+   App bleibt einfach leer. Die `check`-Bedingungen fangen das ab.
+2. **Die Bewertungen sehen danach anders aus.** In `MockData` steht bei
+   Shop 1 „4,7 ★ · 184 Bewertungen" — von Hand gesetzt. Die Datenbank
+   rechnet selbst, und zu den 14 eingespielten Bewertungen gibt es auch
+   einen Text. Shop 1 steht dann bei 4,25 ★ aus 4 Bewertungen. Kein
+   Fehler, sondern der ehrliche Wert.
+3. **`reviews.user_id` darf jetzt leer sein.** Vorher `not null` — damit
+   ließe sich keine einzige übernommene Bewertung einspielen, denn die
+   gehört zu keinem Konto. `author_name` steht jetzt direkt dabei, so
+   wie im Swift-Modell auch.
+
+> ⚠️ **Offene Produktfrage: Ein Shop gilt als EIN Stuhl.**
+>
+> Die Sperre gegen Doppelbuchungen greift pro Shop, nicht pro
+> Mitarbeiter — ein Laden mit fünf Barbern kann also nur einen Termin
+> um 14:00 annehmen. Die App macht denselben Fehler:
+> `MockBarbershopRepository` filtert belegte Zeiten ebenfalls nur über
+> `shopID`.
+>
+> Datenbank und App sagen also dasselbe, nur beide dasselbe Falsche.
+> Zu ändern ist das nur gemeinsam, und der schwierige Teil ist nicht
+> das SQL: Buchungen ohne festen Barber („egal welcher") müssten beim
+> Speichern trotzdem einem Stuhl zugewiesen werden, und der
+> `SlotCalculator` müsste wissen, wie viele es davon gibt. Details
+> stehen im Kommentar bei `bookings_no_overlap`.
 
 ---
 

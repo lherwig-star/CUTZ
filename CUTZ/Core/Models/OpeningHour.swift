@@ -27,13 +27,18 @@ struct OpeningHour: Identifiable, Codable, Hashable {
     var id: Int { weekday }
 
     /// z. B. "Montag"
+    ///
+    /// Kommt aus `AvailabilityText` und nicht aus
+    /// `Calendar.current.weekdaySymbols`. Letzteres richtet sich nach
+    /// der REGION des Geräts: Wer sein iPhone auf "Deutschland" hat,
+    /// CUTZ aber im Profil auf Englisch gestellt hat, bekäme mitten im
+    /// englischen Text "Montag" zu lesen.
     var weekdayName: String {
-        // `veryShortWeekdaySymbols` wäre "M", `weekdaySymbols` ist ausgeschrieben.
         // Der Array-Index beginnt bei 0, unser `weekday` bei 1 — daher das -1.
-        let symbols = Calendar.current.weekdaySymbols
+        let names = AvailabilityText.longWeekdayNames
         let index = weekday - 1
-        guard symbols.indices.contains(index) else { return "" }
-        return symbols[index]
+        guard names.indices.contains(index) else { return "" }
+        return names[index]
     }
 
     /// z. B. "09:00 – 18:30"
