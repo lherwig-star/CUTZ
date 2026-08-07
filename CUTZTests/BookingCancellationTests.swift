@@ -11,11 +11,15 @@ import XCTest
 /// Ausführen in Xcode mit ⌘U.
 final class BookingCancellationTests: XCTestCase {
 
-    private var calendar: Calendar {
-        var cal = Calendar(identifier: .gregorian)
-        cal.timeZone = TimeZone(identifier: "Europe/Berlin")!
-        return cal
-    }
+    // Hier bewusst `Calendar.current` statt eines festen Berlin-Kalenders.
+    //
+    // Grund: `MockBarbershopRepository` reicht keinen Kalender an den
+    // `SlotCalculator` durch, benutzt also ebenfalls `Calendar.current`.
+    // Rechnete der Test mit einer anderen Zeitzone, lägen Testtag und
+    // Berechnung auf verschiedenen Kalendertagen — auf dem GitHub-Rechner
+    // (UTC) wäre unser "Montag" plötzlich ein Sonntag, und der Shop hätte
+    // geschlossen.
+    private let calendar = Calendar.current
 
     /// Ein Tag weit in der Zukunft, damit die Termine nicht als
     /// "vergangen" herausgefiltert werden.
@@ -23,8 +27,14 @@ final class BookingCancellationTests: XCTestCase {
         var components = DateComponents()
         components.year = 2027
         components.month = 8
-        components.day = 9   // Montag
+        components.day = 9
         return calendar.date(from: components)!
+    }
+
+    /// Der Wochentag unseres Testtages — im selben Kalender gerechnet,
+    /// den auch das Repository verwendet.
+    private var testWeekday: Int {
+        calendar.component(.weekday, from: futureDay())
     }
 
     private func makeShop() -> Barbershop {
@@ -43,7 +53,9 @@ final class BookingCancellationTests: XCTestCase {
             averageRating: 4.5,
             reviewCount: 10,
             services: [service],
-            openingHours: [OpeningHour(weekday: 2, from: 9, to: 18)]
+            // Der Shop hat genau an dem Wochentag offen, auf den unser
+            // Testtag fällt — egal in welcher Zeitzone der Rechner steht.
+            openingHours: [OpeningHour(weekday: testWeekday, from: 9, to: 18)]
         )
     }
 
@@ -116,6 +128,18 @@ final class BookingCancellationTests: XCTestCase {
         let repository = MockBarbershopRepository()
         let shop = makeShop()
         let start = calendar.date(bySettingHour: 10, minute: 0, second: 0, of: futureDay())!
+
+        // Erst nachsehen, dass es an dem Tag überhaupt Termine gibt.
+        // Ohne diese Prüfung wäre eine leere Liste stillschweigend ein
+        // bestandener Test — beide Prüfungen unten fragen ja nur, ob eine
+        // bestimmte Zeit NICHT enthalten ist.
+        let beforeBooking = try await repository.availableSlots(
+            shop: shop, service: service, on: futureDay()
+        )
+        XCTAssertTrue(
+            beforeBooking.contains(start),
+            "Vorbedingung: 10:00 muss zunächst frei sein."
+        )
 
         let booking = try await repository.createBooking(
             shop: shop, service: service, startsAt: start
