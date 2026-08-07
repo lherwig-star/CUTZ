@@ -59,10 +59,11 @@ struct BookingFlowScreen: View {
 
     // MARK: - Der Ablauf
 
-    @ViewBuilder
+    /// Rahmen des Ablaufs: Fortschrittspunkte, Überschrift, Inhalt, Knopf.
+    ///
+    /// Hier wird nur GELESEN — die schreibenden Bindungen (`$`) braucht
+    /// allein `stepContent`. Deshalb steht `@Bindable` auch nur dort.
     private func flow(_ viewModel: BookingViewModel) -> some View {
-        @Bindable var viewModel = viewModel
-
         VStack(spacing: 0) {
             StepIndicator(current: viewModel.step) { target in
                 withAnimation(.snappy) { viewModel.jump(to: target) }
@@ -100,9 +101,15 @@ struct BookingFlowScreen: View {
         }
     }
 
+    /// Der Inhalt des aktuellen Schritts.
+    ///
+    /// `@Bindable` steht nur HIER einmal, nicht zusätzlich in `flow`.
+    /// Zweimal dieselbe Variable so zu überdecken ist zwar erlaubt,
+    /// gibt Swifts Typprüfung aber unnötig viel zu tun — und die
+    /// Bauzeit war schon einmal aus dem Ruder gelaufen.
     @ViewBuilder
-    private func stepContent(_ viewModel: BookingViewModel) -> some View {
-        @Bindable var viewModel = viewModel
+    private func stepContent(_ model: BookingViewModel) -> some View {
+        @Bindable var viewModel = model
 
         switch viewModel.step {
         case .service:

@@ -90,19 +90,22 @@ jobs:
           echo "Verwende Simulator: $SIM"
           echo "name=$SIM" >> "$GITHUB_OUTPUT"
 
-      - name: Bauen und Tests laufen lassen
+      # Bauen und Testen sind bewusst GETRENNT.
+      #
+      # Zusammen in einem Schritt sieht man nur "dauert lang", aber nicht
+      # wovon. Getrennt verraten die Schrittzeiten sofort, ob der
+      # Compiler bremst oder die Tests hängen.
+      - name: Bauen
         run: |
           set -o pipefail
           # CODE_SIGNING_ALLOWED=NO: Im Simulator braucht es keine
           # Entwickler-Signatur — und GitHub hat auch keine.
           # derivedDataPath: legt die Bauergebnisse an einen bekannten Ort,
-          # damit der nächste Schritt die Testprotokolle findet.
+          # damit die folgenden Schritte sie finden.
           # OTHER_SWIFT_FLAGS: DIAGNOSE, vorübergehend.
-          # Der Compiler meldet jeden Ausdruck und jeden Funktionskörper,
-          # der länger als 300 ms zum Typprüfen braucht — mit Datei und
-          # Zeile. So sieht man, welche View die Bauzeit hochtreibt,
-          # statt es zu erraten.
-          xcodebuild test \
+          # Der Compiler meldet jeden Ausdruck und Funktionskörper, der
+          # länger als 300 ms zum Typprüfen braucht — mit Datei und Zeile.
+          xcodebuild build-for-testing \
             -project CUTZ.xcodeproj \
             -scheme CUTZ \
             -destination "platform=iOS Simulator,name=${{ steps.sim.outputs.name }}" \
@@ -123,10 +126,20 @@ jobs:
                 | sort -u \
                 | head -40
               echo ""
-              echo "Gesamtzahl: $(grep -c 'to type-check' build.log || true)"
+              echo "Gesamtzahl: $(grep -c 'to type-check' build.log || echo 0)"
           else
               echo "  (keine build.log gefunden)"
           fi
+
+      - name: Tests laufen lassen
+        run: |
+          set -o pipefail
+          xcodebuild test-without-building \
+            -project CUTZ.xcodeproj \
+            -scheme CUTZ \
+            -destination "platform=iOS Simulator,name=${{ steps.sim.outputs.name }}" \
+            -derivedDataPath build/DerivedData \
+            2>&1 | xcbeautify
 
       - name: Testprotokolle sichern
         # Läuft auch, wenn der Schritt davor rot war — gerade dann sind

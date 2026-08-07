@@ -105,23 +105,19 @@ struct ShopProfileScreen: View {
                 .font(.title)
                 .fontWeight(.bold)
 
+            // Bewertung, Entfernung und Preisniveau in einer Zeile.
+            // Der Text wird vorher zusammengesetzt statt aus mehreren
+            // bedingten `Text`-Bausteinen — das hält die Übersetzungszeit
+            // niedrig und liest sich einfacher.
             HStack(spacing: 6) {
                 Image(systemName: "star.fill")
                     .font(.caption)
                     .foregroundStyle(.orange)
 
-                Text(shop.averageRating.formatted(.number.precision(.fractionLength(1))))
+                Text(ratingText)
                     .fontWeight(.semibold)
 
-                Text("(\(shop.reviewCount))")
-                    .foregroundStyle(.secondary)
-
-                if let distanceText {
-                    Text("· \(distanceText)")
-                        .foregroundStyle(.secondary)
-                }
-
-                Text("· \(shop.priceLevelText)")
+                Text(metaText)
                     .foregroundStyle(.secondary)
             }
             .font(.subheadline)
@@ -304,6 +300,20 @@ struct ShopProfileScreen: View {
 
     private var sectionDivider: some View {
         Divider().padding(.horizontal, 20)
+    }
+
+    private var ratingText: String {
+        shop.averageRating.formatted(.number.precision(.fractionLength(1)))
+    }
+
+    /// "(231) · 1,2 km · €€" — Entfernung fehlt, wenn kein Standort da ist.
+    private var metaText: String {
+        var parts = ["(\(shop.reviewCount))"]
+        if let distanceText {
+            parts.append(distanceText)
+        }
+        parts.append(shop.priceLevelText)
+        return parts.joined(separator: " · ")
     }
 
     private var distanceText: String? {

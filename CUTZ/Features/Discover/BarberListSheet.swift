@@ -177,25 +177,11 @@ struct BarberListSheet: View {
                     emptyState
                 } else {
                     ForEach(shops) { shop in
-                        Button {
-                            onSelectShop(shop)
-                        } label: {
-                            BarberCard(
-                                shop: shop,
-                                distanceInMeters: appModel.distance(to: shop),
-                                nextSlot: appModel.nextSlots[shop.id]
-                            )
-                            .overlay {
-                                // Der auf der Karte gewählte Shop wird auch
-                                // in der Liste hervorgehoben, damit klar ist,
-                                // dass beides zusammengehört.
-                                if selectedShopID == shop.id {
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .strokeBorder(Color.accentColor, lineWidth: 2)
-                                }
-                            }
-                        }
-                        .buttonStyle(.plain)
+                        BarberListRow(
+                            shop: shop,
+                            isHighlighted: selectedShopID == shop.id,
+                            onTap: { onSelectShop(shop) }
+                        )
                         .id(shop.id)
                     }
                 }
@@ -222,5 +208,45 @@ struct BarberListSheet: View {
 
     private func clamp(_ value: CGFloat, min lower: CGFloat, max upper: CGFloat) -> CGFloat {
         Swift.min(Swift.max(value, lower), upper)
+    }
+}
+
+/// Eine Zeile in der Liste.
+///
+/// Als eigener Baustein und nicht direkt im `ForEach` — verschachtelte
+/// Views mit Bedingungen darin treiben Swifts Typprüfung stark hoch,
+/// und die Bauzeit war schon einmal von vier auf über zwanzig Minuten
+/// gestiegen. Kleine Bausteine halten sie niedrig und sind nebenbei
+/// leichter zu lesen.
+private struct BarberListRow: View {
+
+    let shop: Barbershop
+    /// Ist dieser Shop gerade auf der Karte ausgewählt?
+    let isHighlighted: Bool
+    let onTap: () -> Void
+
+    @Environment(AppModel.self) private var appModel
+
+    var body: some View {
+        Button(action: onTap) {
+            BarberCard(
+                shop: shop,
+                distanceInMeters: appModel.distance(to: shop),
+                nextSlot: appModel.nextSlots[shop.id]
+            )
+            .overlay {
+                // Der auf der Karte gewählte Shop wird auch in der Liste
+                // hervorgehoben, damit klar ist, dass beides zusammengehört.
+                RoundedRectangle(cornerRadius: 16)
+                    .strokeBorder(borderColor, lineWidth: 2)
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
+    /// Durchsichtig statt gar kein Rahmen — so ist es ein einziger
+    /// Ausdruck ohne Bedingung im View-Aufbau.
+    private var borderColor: Color {
+        isHighlighted ? Color.accentColor : Color.clear
     }
 }
