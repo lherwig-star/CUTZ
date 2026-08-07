@@ -51,6 +51,33 @@ final class BookingViewModel {
         // Die erste Leistung ist vorausgewählt, damit der Nutzer
         // sofort Zeiten sieht, statt vor einer leeren Liste zu stehen.
         self.selectedService = shop.services.first
+        // Aus demselben Grund starten wir am ersten Tag, an dem der Shop
+        // überhaupt öffnet. Sonst landet man an einem Ruhetag und sieht
+        // erst mal nichts.
+        self.selectedDay = Self.firstOpenDay(for: shop) ?? .now
+    }
+
+    /// Sucht den nächsten Tag innerhalb der Auswahl, an dem geöffnet ist.
+    ///
+    /// `static`, weil das schon im `init` gebraucht wird — dort gibt es
+    /// das fertige Objekt noch nicht, also kann man keine normale
+    /// Methode aufrufen.
+    private static func firstOpenDay(
+        for shop: Barbershop,
+        calendar: Calendar = .current,
+        now: Date = .now
+    ) -> Date? {
+        let today = calendar.startOfDay(for: now)
+        for offset in 0..<14 {
+            guard let day = calendar.date(byAdding: .day, value: offset, to: today) else {
+                continue
+            }
+            let weekday = calendar.component(.weekday, from: day)
+            if shop.openingHour(forWeekday: weekday) != nil {
+                return day
+            }
+        }
+        return nil
     }
 
     // MARK: - Aktionen
@@ -126,5 +153,37 @@ final class BookingViewModel {
         return (0..<14).compactMap {
             calendar.date(byAdding: .day, value: $0, to: today)
         }
+    }
+
+    /// Die Tage aus `selectableDays`, an denen der Shop geöffnet hat.
+    ///
+    /// Die Tagesauswahl graut alles andere aus. Ohne das tippt man sich
+    /// durch Ruhetage und liest jedes Mal nur "keine Termine frei" —
+    /// ohne zu erfahren, dass schlicht geschlossen ist.
+    var openDays: Set<Date> {
+        let calendar = Calendar.current
+        var result: Set<Date> = []
+        for day in selectableDays {
+            let weekday = calendar.component(.weekday, from: day)
+            if shop.openingHour(forWeekday: weekday) != nil {
+                result.insert(day)
+            }
+        }
+        return result
+    }
+
+    /// Warum gerade keine Zeiten dastehen.
+    ///
+    /// "Geschlossen" und "alles ausgebucht" sind zwei verschiedene
+    /// Nachrichten — im ersten Fall braucht man einen anderen Tag,
+    /// im zweiten eine andere Uhrzeit.
+    var noSlotsReason: String {
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: selectedDay)
+
+        if shop.openingHour(forWeekday: weekday) == nil {
+            return "Der Shop hat an diesem Tag geschlossen."
+        }
+        return "An diesem Tag sind keine Termine mehr frei."
     }
 }

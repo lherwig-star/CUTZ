@@ -81,6 +81,7 @@ struct BookingScreen: View {
             Section("Tag") {
                 DayPicker(
                     days: viewModel.selectableDays,
+                    openDays: viewModel.openDays,
                     selection: $viewModel.selectedDay
                 )
             }
@@ -117,7 +118,7 @@ struct BookingScreen: View {
                 .padding(.vertical, 8)
 
         } else if viewModel.availableSlots.isEmpty {
-            Text("An diesem Tag sind keine Termine mehr frei.")
+            Text(viewModel.noSlotsReason)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .padding(.vertical, 4)
@@ -179,9 +180,14 @@ struct BookingScreen: View {
 }
 
 /// Waagerechte Leiste zur Tagesauswahl.
+///
+/// Ruhetage sind ausgegraut und nicht antippbar — an ihnen gibt es
+/// ohnehin nichts zu buchen.
 private struct DayPicker: View {
 
     let days: [Date]
+    /// Welche der `days` sind Öffnungstage.
+    let openDays: Set<Date>
     @Binding var selection: Date
 
     var body: some View {
@@ -189,6 +195,7 @@ private struct DayPicker: View {
             HStack(spacing: 8) {
                 ForEach(days, id: \.self) { day in
                     let isSelected = Calendar.current.isDate(day, inSameDayAs: selection)
+                    let isOpen = openDays.contains(day)
 
                     Button {
                         selection = day
@@ -204,13 +211,20 @@ private struct DayPicker: View {
                             isSelected ? Color.accentColor : Color(.secondarySystemBackground),
                             in: RoundedRectangle(cornerRadius: 10)
                         )
-                        .foregroundStyle(isSelected ? .white : .primary)
+                        .foregroundStyle(foreground(isSelected: isSelected, isOpen: isOpen))
                     }
                     .buttonStyle(.plain)
+                    .disabled(!isOpen)
                 }
             }
             .padding(.vertical, 4)
         }
+    }
+
+    private func foreground(isSelected: Bool, isOpen: Bool) -> Color {
+        if isSelected { return .white }
+        // Ruhetage blass, damit der Unterschied ohne Antippen sichtbar ist.
+        return isOpen ? .primary : .secondary.opacity(0.5)
     }
 }
 

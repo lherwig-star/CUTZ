@@ -159,10 +159,26 @@ im Simulator ansehen. Erst danach aufteilen.
 3. Suche und Karte verbinden: Tippt man in der Liste auf einen Shop,
    springt die Karte dorthin
 
-**Lukas**
-1. Bewertungen nach Sternen filtern und sortieren
-2. Im Profil anzeigen, ob gerade geöffnet ist ("Jetzt geöffnet · bis 19:00")
-3. Termin absagen
+**Lukas** — ✅ alle drei erledigt
+1. [x] Bewertungen nach Sternen filtern und sortieren
+2. [x] Im Profil anzeigen, ob gerade geöffnet ist ("Jetzt geöffnet · bis 19:00")
+3. [x] Termin absagen
+4. [x] Ruhetage in der Tagesauswahl ausgrauen (fiel bei 2. nebenbei an)
+
+> ⚠️ **Finn, zwei Änderungen in `Core/` betreffen dich:**
+>
+> **`BarbershopRepository` hat eine Funktion mehr: `cancelBooking`.**
+> Dein `SupabaseBarbershopRepository` muss sie in Phase 2 ebenfalls
+> umsetzen, sonst kompiliert das Projekt nicht.
+>
+> **`Booking` hat ein Feld `status`** (`confirmed` / `cancelled` /
+> `completed`) — genau die Werte, die `schema.sql` schon vorsah.
+> Abgesagte Termine werden markiert, nicht gelöscht. Wichtig beim
+> Berechnen freier Zeiten: Abgesagte dürfen nicht mehr blockieren.
+>
+> Neu in `Core/Models/` ist außerdem `OpeningStatus` — `shop.openingStatus()`
+> liefert "Jetzt geöffnet · bis 19:00". Kannst du in der Suchliste
+> gebrauchen, falls du magst.
 
 ---
 
