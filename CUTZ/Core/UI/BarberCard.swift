@@ -74,20 +74,26 @@ struct BarberCard: View {
 
     /// Entfernung und Preis in einer Zeile — beides sind Zahlen, die man
     /// nebeneinander vergleicht.
+    ///
+    /// Der Text wird vorher zusammengesetzt statt im View-Körper aus
+    /// mehreren `if let` gebaut. Das ist kürzer zu lesen und spart dem
+    /// Compiler Arbeit: Verschachtelte Optionals in einem `HStack`
+    /// treiben die Übersetzungszeit spürbar hoch.
     private var detailLine: some View {
-        HStack(spacing: 6) {
-            if let distanceText {
-                Text(distanceText)
-            }
-            if distanceText != nil && shop.priceFromText != nil {
-                Text("·")
-            }
-            if let priceText = shop.priceFromText {
-                Text(priceText)
-            }
+        Text(detailText)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+    }
+
+    private var detailText: String {
+        var parts: [String] = []
+        if let distanceText {
+            parts.append(distanceText)
         }
-        .font(.caption)
-        .foregroundStyle(.secondary)
+        if let priceText = shop.priceFromText {
+            parts.append(priceText)
+        }
+        return parts.joined(separator: " · ")
     }
 
     @ViewBuilder

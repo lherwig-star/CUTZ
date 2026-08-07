@@ -6,6 +6,18 @@ import SwiftUI
 /// übernimmt sie. Sonst würde die Liste im Hintergrund bei jedem Tippen
 /// zucken — und ein versehentlich gesetzter Filter ließe sich nur durch
 /// erneutes Tippen rückgängig machen.
+///
+/// ── Warum die Bausteine so schlicht getippt sind ───────────
+///
+/// Ein erster Entwurf hatte einen generischen Chip-Baustein, dem man
+/// `[Double?]` oder `[Int?]` samt Beschriftungs-Funktion übergeben
+/// konnte. Das war zwar kürzer, brachte Swifts Typprüfung aber ins
+/// Schwitzen: Optionale Werte, Generics, Ternäroperatoren und
+/// String-Interpolation zusammen sind für den Compiler richtig teuer.
+///
+/// Jetzt ist `Chip` ein ganz gewöhnlicher Baustein mit `String` und
+/// `Bool`, und jeder Abschnitt schreibt seine Möglichkeiten aus. Etwas
+/// länger, dafür sofort verständlich und schnell übersetzt.
 struct FilterSheet: View {
 
     /// Die echten Filter. Werden erst beim Bestätigen überschrieben.
@@ -24,6 +36,12 @@ struct FilterSheet: View {
         self.resultCount = resultCount
         self._draft = State(initialValue: filter.wrappedValue)
     }
+
+    // Auswahlmöglichkeiten. Bewusst OHNE Optional — "Egal" ist überall
+    // ein eigener Chip und steckt nicht als `nil` mit in der Liste.
+    private static let distanceOptions: [Double] = [1, 3, 5, 10]
+    private static let priceOptions: [Int] = [20, 30, 40, 60]
+    private static let ratingOptions: [Double] = [4.0, 4.5, 4.8]
 
     var body: some View {
         NavigationStack {
@@ -62,75 +80,120 @@ struct FilterSheet: View {
 
     private var timingSection: some View {
         section("Wann?") {
-            ChipRow(items: TimingFilter.allCases, isSelected: { $0 == draft.timing }) { option in
-                draft.timing = option
-            } label: { $0.label }
+            ChipStrip {
+                ForEach(TimingFilter.allCases) { option in
+                    Chip(title: option.label, isSelected: draft.timing == option) {
+                        draft.timing = option
+                    }
+                }
+            }
         }
     }
 
     private var serviceSection: some View {
         section("Service") {
-            // Mehrfachauswahl: Wer Fade UND Beard sucht, will beides sehen.
-            ChipRow(
-                items: ServiceCategory.allCases,
-                isSelected: { draft.categories.contains($0) }
-            ) { category in
-                if draft.categories.contains(category) {
-                    draft.categories.remove(category)
-                } else {
-                    draft.categories.insert(category)
+            ChipStrip {
+                // Mehrfachauswahl: Wer Fade UND Beard sucht, will beides sehen.
+                ForEach(ServiceCategory.allCases) { category in
+                    Chip(
+                        title: category.label,
+                        isSelected: draft.categories.contains(category)
+                    ) {
+                        if draft.categories.contains(category) {
+                            draft.categories.remove(category)
+                        } else {
+                            draft.categories.insert(category)
+                        }
+                    }
                 }
-            } label: { $0.label }
+            }
         }
     }
 
     private var distanceSection: some View {
         section("Entfernung") {
-            ChipRow(
-                items: Self.distanceOptions,
-                isSelected: { draft.maxDistanceKm == $0 }
-            ) { option in
-                // Nochmal antippen hebt die Auswahl auf.
-                draft.maxDistanceKm = (draft.maxDistanceKm == option) ? nil : option
-            } label: { option in
-                option == nil ? "Egal" : "bis \(Self.kmText(option))"
+            ChipStrip {
+                Chip(title: "Egal", isSelected: draft.maxDistanceKm == nil) {
+                    draft.maxDistanceKm = nil
+                }
+                ForEach(Self.distanceOptions, id: \.self) { km in
+                    Chip(
+                        title: distanceLabel(km),
+                        isSelected: draft.maxDistanceKm == km
+                    ) {
+                        // Nochmal antippen hebt die Auswahl auf.
+                        draft.maxDistanceKm = (draft.maxDistanceKm == km) ? nil : km
+                    }
+                }
             }
         }
     }
 
     private var priceSection: some View {
         section("Preis") {
-            ChipRow(
-                items: Self.priceOptions,
-                isSelected: { draft.maxPriceEuro == $0 }
-            ) { option in
-                draft.maxPriceEuro = (draft.maxPriceEuro == option) ? nil : option
-            } label: { option in
-                option == nil ? "Egal" : "bis \(option!) €"
+            ChipStrip {
+                Chip(title: "Egal", isSelected: draft.maxPriceEuro == nil) {
+                    draft.maxPriceEuro = nil
+                }
+                ForEach(Self.priceOptions, id: \.self) { euro in
+                    Chip(
+                        title: priceLabel(euro),
+                        isSelected: draft.maxPriceEuro == euro
+                    ) {
+                        draft.maxPriceEuro = (draft.maxPriceEuro == euro) ? nil : euro
+                    }
+                }
             }
         }
     }
 
     private var ratingSection: some View {
         section("Bewertung") {
-            ChipRow(
-                items: Self.ratingOptions,
-                isSelected: { draft.minRating == $0 }
-            ) { option in
-                draft.minRating = (draft.minRating == option) ? nil : option
-            } label: { option in
-                guard let option else { return "Egal" }
-                return "ab \(option.formatted(.number.precision(.fractionLength(1)))) ★"
+            ChipStrip {
+                Chip(title: "Egal", isSelected: draft.minRating == nil) {
+                    draft.minRating = nil
+                }
+                ForEach(Self.ratingOptions, id: \.self) { rating in
+                    Chip(
+                        title: ratingLabel(rating),
+                        isSelected: draft.minRating == rating
+                    ) {
+                        draft.minRating = (draft.minRating == rating) ? nil : rating
+                    }
+                }
             }
         }
     }
 
     private var sortSection: some View {
         section("Sortieren nach") {
-            ChipRow(items: BarberSort.allCases, isSelected: { $0 == draft.sort }) { option in
-                draft.sort = option
-            } label: { $0.label }
+            ChipStrip {
+                ForEach(BarberSort.allCases) { option in
+                    Chip(title: option.label, isSelected: draft.sort == option) {
+                        draft.sort = option
+                    }
+                }
+            }
         }
+    }
+
+    // MARK: - Beschriftungen
+    //
+    // Als eigene Funktionen mit klarem Rückgabetyp. In der View selbst
+    // zusammengebaut wären es verschachtelte Ausdrücke, die der Compiler
+    // erst mühsam auflösen muss.
+
+    private func distanceLabel(_ km: Double) -> String {
+        "bis \(Int(km)) km"
+    }
+
+    private func priceLabel(_ euro: Int) -> String {
+        "bis \(euro) €"
+    }
+
+    private func ratingLabel(_ rating: Double) -> String {
+        let number = rating.formatted(.number.precision(.fractionLength(1)))
+        return "ab \(number) ★"
     }
 
     // MARK: - Bausteine
@@ -155,7 +218,7 @@ struct FilterSheet: View {
         } label: {
             // Die Zahl im Knopf ist der eigentliche Trick: Man sieht schon
             // VOR dem Bestätigen, ob die Auswahl noch etwas übrig lässt.
-            Text(count == 1 ? "1 Barber anzeigen" : "\(count) Barber anzeigen")
+            Text(applyLabel(count))
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(.borderedProminent)
@@ -165,61 +228,58 @@ struct FilterSheet: View {
         .background(.bar)
     }
 
-    // MARK: - Auswahlmöglichkeiten
-
-    // Optional, damit "Egal" als erster Eintrag mit in derselben Reihe steht.
-    static let distanceOptions: [Double?] = [nil, 1, 3, 5, 10]
-    static let priceOptions: [Int?] = [nil, 20, 30, 40, 60]
-    static let ratingOptions: [Double?] = [nil, 4.0, 4.5, 4.8]
-
-    static func kmText(_ km: Double?) -> String {
-        guard let km else { return "" }
-        return km < 1
-            ? "\(Int(km * 1000)) m"
-            : "\(km.formatted(.number.precision(.fractionLength(0)))) km"
+    private func applyLabel(_ count: Int) -> String {
+        count == 1 ? "1 Barber anzeigen" : "\(count) Barber anzeigen"
     }
 }
 
-/// Eine Reihe auswählbarer Chips, die bei Bedarf umbricht.
+/// Eine waagerecht scrollbare Reihe von Chips.
 ///
-/// Eigener Baustein, weil im Filter sechs davon vorkommen. Ohne ihn
-/// wäre die Datei dreimal so lang und dreimal so leicht zu verhauen.
-private struct ChipRow<Item: Hashable>: View {
+/// `FlowLayout` gibt es in SwiftUI nicht fertig. Statt selbst eins zu
+/// bauen, scrollen wir waagerecht — auf dem iPhone ohnehin die
+/// gewohntere Geste und ohne eigene Layout-Rechnerei.
+private struct ChipStrip<Content: View>: View {
 
-    let items: [Item]
-    let isSelected: (Item) -> Bool
-    let onTap: (Item) -> Void
-    let label: (Item) -> String
+    @ViewBuilder let content: Content
 
     var body: some View {
-        // `FlowLayout` gibt es in SwiftUI nicht fertig. Statt selbst eins
-        // zu bauen, nehmen wir waagerechtes Scrollen — das ist auf dem
-        // iPhone ohnehin die gewohntere Geste und kommt ohne eigene
-        // Layout-Rechnerei aus.
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
-                ForEach(items, id: \.self) { item in
-                    let selected = isSelected(item)
-
-                    Button {
-                        withAnimation(.snappy(duration: 0.2)) { onTap(item) }
-                    } label: {
-                        Text(label(item))
-                            .font(.subheadline)
-                            .fontWeight(selected ? .semibold : .regular)
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 9)
-                            .background(
-                                selected ? Color.accentColor : Color(.secondarySystemBackground),
-                                in: Capsule()
-                            )
-                            .foregroundStyle(selected ? Color.white : Color.primary)
-                    }
-                    .buttonStyle(.plain)
-                }
+                content
             }
             .padding(.horizontal, 1)   // damit der Rand nicht abgeschnitten wirkt
         }
+    }
+}
+
+/// Ein einzelner auswählbarer Chip.
+private struct Chip: View {
+
+    let title: String
+    let isSelected: Bool
+    let onTap: () -> Void
+
+    var body: some View {
+        Button {
+            withAnimation(.snappy(duration: 0.2)) { onTap() }
+        } label: {
+            Text(title)
+                .font(.subheadline)
+                .fontWeight(isSelected ? .semibold : .regular)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 9)
+                .background(background, in: Capsule())
+                .foregroundStyle(foreground)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var background: Color {
+        isSelected ? Color.accentColor : Color(.secondarySystemBackground)
+    }
+
+    private var foreground: Color {
+        isSelected ? Color.white : Color.primary
     }
 }
 
