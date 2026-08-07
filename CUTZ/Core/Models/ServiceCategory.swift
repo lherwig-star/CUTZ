@@ -21,10 +21,10 @@ enum ServiceCategory: String, Codable, CaseIterable, Identifiable, Hashable {
 
     var label: String {
         switch self {
-        case .haircut:      return String(localized: "Haircut")
-        case .skinFade:     return String(localized: "Skin Fade")
-        case .hairAndBeard: return String(localized: "Hair + Beard")
-        case .beard:        return String(localized: "Beard")
+        case .haircut:      return AppText.string("Haircut")
+        case .skinFade:     return AppText.string("Skin Fade")
+        case .hairAndBeard: return AppText.string("Hair + Beard")
+        case .beard:        return AppText.string("Beard")
         }
     }
 

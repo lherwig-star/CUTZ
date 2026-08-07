@@ -57,12 +57,18 @@ struct Booking: Identifiable, Codable, Hashable {
     /// z. B. "bei Samir" — oder leer, wenn kein Barber festgelegt wurde.
     var employeeText: String? {
         guard let employeeName else { return nil }
-        return String(format: String(localized: "booking.withEmployee"), employeeName)
+        return AppText.format("booking.withEmployee", employeeName)
     }
 
-    /// z. B. "Fr., 14. Aug. 2026 um 14:30"
+    /// z. B. "Freitag, 14.08. · 14:30"
+    ///
+    /// Früher stand hier `.formatted(date:time:)`. Das richtet sich
+    /// aber nach der Region des Geräts, nicht nach der App-Sprache —
+    /// wer die App auf Arabisch stellt, hätte trotzdem ein deutsches
+    /// Datum gesehen. `AvailabilityText` macht es selbst und folgt
+    /// damit der Einstellung im Profil.
     var startsAtFormatted: String {
-        startsAt.formatted(date: .abbreviated, time: .shortened)
+        AvailabilityText.long(for: startsAt)
     }
 
     /// Liegt der Termin noch in der Zukunft?

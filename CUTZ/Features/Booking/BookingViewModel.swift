@@ -27,10 +27,10 @@ final class BookingViewModel {
 
         var title: String {
             switch self {
-            case .service:  return String(localized: "Was möchtest du?")
-            case .employee: return String(localized: "Wer soll dich schneiden?")
-            case .time:     return String(localized: "Wann passt es dir?")
-            case .summary:  return String(localized: "Passt alles?")
+            case .service:  return AppText.string("Was möchtest du?")
+            case .employee: return AppText.string("Wer soll dich schneiden?")
+            case .time:     return AppText.string("Wann passt es dir?")
+            case .summary:  return AppText.string("Passt alles?")
             }
         }
     }
@@ -224,9 +224,9 @@ final class BookingViewModel {
         let weekday = calendar.component(.weekday, from: selectedDay)
 
         if shop.openingHour(forWeekday: weekday) == nil {
-            return String(localized: "Der Shop hat an diesem Tag geschlossen.")
+            return AppText.string("Der Shop hat an diesem Tag geschlossen.")
         }
-        return String(localized: "An diesem Tag sind keine Termine mehr frei.")
+        return AppText.string("An diesem Tag sind keine Termine mehr frei.")
     }
 
     /// Gesamtpreis der Auswahl — aktuell genau der Servicepreis.

@@ -199,16 +199,16 @@ struct FilterSheet: View {
     // erst mühsam auflösen muss.
 
     private func distanceLabel(_ km: Double) -> String {
-        String(format: String(localized: "filter.upToDistance"), Int(km))
+        AppText.format("filter.upToDistance", Int(km))
     }
 
     private func priceLabel(_ euro: Int) -> String {
-        String(format: String(localized: "filter.upToPrice"), euro)
+        AppText.format("filter.upToPrice", euro)
     }
 
     private func ratingLabel(_ rating: Double) -> String {
-        let number = rating.formatted(.number.precision(.fractionLength(1)))
-        return String(format: String(localized: "filter.fromRating"), number)
+        let number = AppText.number(rating)
+        return AppText.format("filter.fromRating", number)
     }
 
     // MARK: - Bausteine
@@ -245,8 +245,8 @@ struct FilterSheet: View {
 
     private func applyLabel(_ count: Int) -> String {
         count == 1
-            ? String(localized: "filter.showOne")
-            : String(format: String(localized: "filter.showMany"), count)
+            ? AppText.string("filter.showOne")
+            : AppText.format("filter.showMany", count)
     }
 }
 

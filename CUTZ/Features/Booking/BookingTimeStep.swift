@@ -107,7 +107,7 @@ private struct DayChip: View {
             VStack(spacing: 3) {
                 Text(weekdayText)
                     .font(.caption2)
-                Text(day.formatted(.dateTime.day()))
+                Text(dayNumberText)
                     .font(.headline)
             }
             .frame(width: 52, height: 62)
@@ -123,9 +123,25 @@ private struct DayChip: View {
 
     /// "Heute" statt des Wochentags, wenn es heute ist — das liest man
     /// schneller, als den Wochentag mit dem eigenen Kalender abzugleichen.
+    ///
+    /// Beides ging vorher an der Übersetzung vorbei: "Heute" stand als
+    /// deutscher Text im Code, und `.formatted(.dateTime.weekday(…))`
+    /// richtet sich nach der Region des Geräts statt nach der
+    /// App-Sprache. `AvailabilityText` kennt die Wochentagsnamen in
+    /// allen drei Sprachen.
     private var weekdayText: String {
-        if Calendar.current.isDateInToday(day) { return "Heute" }
-        return day.formatted(.dateTime.weekday(.abbreviated))
+        if Calendar.current.isDateInToday(day) {
+            return AppText.string("Heute")
+        }
+        return AvailabilityText.shortWeekday(of: day)
+    }
+
+    /// Nur die Tageszahl: "14".
+    ///
+    /// Von Hand statt über `.formatted()`, weil sonst je nach Region
+    /// noch ein Punkt dahinterstünde.
+    private var dayNumberText: String {
+        String(Calendar.current.component(.day, from: day))
     }
 
     private var foreground: Color {

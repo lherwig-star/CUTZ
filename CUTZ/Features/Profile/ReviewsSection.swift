@@ -77,7 +77,7 @@ struct ReviewsSection: View {
     private var summary: some View {
         if let averageRating {
             HStack(alignment: .center, spacing: 14) {
-                Text(averageRating.formatted(.number.precision(.fractionLength(1))))
+                Text(AppText.number(averageRating))
                     .font(.system(size: 44, weight: .semibold, design: .rounded))
 
                 VStack(alignment: .leading, spacing: 4) {

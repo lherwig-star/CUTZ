@@ -34,27 +34,27 @@ enum OpeningStatus: Equatable {
         switch self {
         case .open(let closesAtMinute):
             return String(
-                format: String(localized: "opening.openUntil"),
+                format: AppText.string("opening.openUntil"),
                 OpeningHour.timeString(fromMinute: closesAtMinute)
             )
 
         case .closed(let opensInDays, let weekday, let opensAtMinute):
             return String(
-                format: String(localized: "opening.closedUntil"),
+                format: AppText.string("opening.closedUntil"),
                 Self.dayText(opensInDays: opensInDays, weekday: weekday),
                 OpeningHour.timeString(fromMinute: opensAtMinute)
             )
 
         case .closedIndefinitely:
-            return String(localized: "opening.closedIndefinitely")
+            return AppText.string("opening.closedIndefinitely")
         }
     }
 
     /// "heute", "morgen" oder der Wochentagsname.
     private static func dayText(opensInDays: Int, weekday: Int) -> String {
         switch opensInDays {
-        case 0: return String(localized: "opening.today")
-        case 1: return String(localized: "opening.tomorrow")
+        case 0: return AppText.string("opening.today")
+        case 1: return AppText.string("opening.tomorrow")
         default:
             // Die ausgeschriebenen Wochentage kommen aus derselben
             // Quelle wie in der Terminübersicht — sonst hieße es an

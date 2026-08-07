@@ -35,25 +35,25 @@ enum AvailabilityText {
     /// ganz andere Abkürzungen.
     static var shortWeekdayNames: [String] {
         [
-            String(localized: "weekday.short.sunday"),
-            String(localized: "weekday.short.monday"),
-            String(localized: "weekday.short.tuesday"),
-            String(localized: "weekday.short.wednesday"),
-            String(localized: "weekday.short.thursday"),
-            String(localized: "weekday.short.friday"),
-            String(localized: "weekday.short.saturday")
+            AppText.string("weekday.short.sunday"),
+            AppText.string("weekday.short.monday"),
+            AppText.string("weekday.short.tuesday"),
+            AppText.string("weekday.short.wednesday"),
+            AppText.string("weekday.short.thursday"),
+            AppText.string("weekday.short.friday"),
+            AppText.string("weekday.short.saturday")
         ]
     }
 
     static var longWeekdayNames: [String] {
         [
-            String(localized: "weekday.long.sunday"),
-            String(localized: "weekday.long.monday"),
-            String(localized: "weekday.long.tuesday"),
-            String(localized: "weekday.long.wednesday"),
-            String(localized: "weekday.long.thursday"),
-            String(localized: "weekday.long.friday"),
-            String(localized: "weekday.long.saturday")
+            AppText.string("weekday.long.sunday"),
+            AppText.string("weekday.long.monday"),
+            AppText.string("weekday.long.tuesday"),
+            AppText.string("weekday.long.wednesday"),
+            AppText.string("weekday.long.thursday"),
+            AppText.string("weekday.long.friday"),
+            AppText.string("weekday.long.saturday")
         ]
     }
 
@@ -132,17 +132,16 @@ enum AvailabilityText {
         return format("date.dayMonth", day, month)
     }
 
-    /// Setzt Werte in einen übersetzten Text mit Platzhaltern ein.
+    /// Kurzschreibweise für `AppText.format`.
     ///
-    /// Eigener Helfer, weil `String(localized:)` und `String(format:)`
-    /// sonst an jeder Stelle doppelt dastünden. Die Reihenfolge der
-    /// Platzhalter darf je Sprache abweichen — deshalb %1$@, %2$@
-    /// statt schlicht %@.
+    /// Steht hier, weil in diesem Typ ein Dutzend Mal hintereinander
+    /// dasselbe eingesetzt wird und `AppText.format(…)` die Zeilen
+    /// unnötig lang machen würde.
     private static func format(_ key: String.LocalizationValue, _ arguments: String...) -> String {
         // Die Umwandlung steht ausdrücklich da: `String(format:arguments:)`
         // erwartet [CVarArg], und darauf sollte man sich nicht stillschweigend
         // verlassen.
-        String(format: String(localized: key), arguments: arguments.map { $0 as CVarArg })
+        String(format: AppText.string(key), arguments: arguments.map { $0 as CVarArg })
     }
 
     // MARK: - Wochentage

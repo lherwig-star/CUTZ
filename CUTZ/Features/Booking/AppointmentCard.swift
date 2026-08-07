@@ -53,7 +53,7 @@ struct NextAppointmentCard: View {
 
             factRow(
                 symbol: "clock",
-                text: String(format: String(localized: "duration.minutes"), booking.durationMinutes)
+                text: AppText.format("duration.minutes", booking.durationMinutes)
             )
         }
     }

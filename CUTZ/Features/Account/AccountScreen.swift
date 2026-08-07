@@ -77,7 +77,12 @@ struct AccountScreen: View {
     }
 
     private var settingsSection: some View {
-        Section("Einstellungen") {
+        // `@Bindable` erzeugt aus dem beobachteten Objekt Bindungen mit
+        // `$`. Der Picker unten braucht das, weil er den Wert nicht nur
+        // liest, sondern auch zurückschreibt.
+        @Bindable var languageStore = appModel.language
+
+        return Section("Einstellungen") {
             Label("Benachrichtigungen", systemImage: "bell")
 
             LabeledContent {
@@ -87,22 +92,29 @@ struct AccountScreen: View {
                 Label("Standort", systemImage: "location")
             }
 
-            LabeledContent {
-                Text(currentLanguageName)
-                    .foregroundStyle(.secondary)
+            // Der Sprachschalter.
+            //
+            // `.navigationLink` heißt: Die Zeile zeigt die aktuelle
+            // Sprache an und führt beim Antippen auf eine kleine Liste
+            // mit allen Möglichkeiten. Das ist der Stil, den iOS in
+            // seinen eigenen Einstellungen verwendet — dadurch muss
+            // niemand raten, was passiert.
+            Picker(selection: $languageStore.current) {
+                ForEach(AppLanguage.allCases) { language in
+                    // `Text(einString)` übersetzt bewusst NICHT: Die
+                    // Sprachnamen sollen in ihrer eigenen Sprache
+                    // dastehen, nicht in der gerade eingestellten.
+                    Text(language.displayName).tag(language)
+                }
             } label: {
                 Label("Sprache", systemImage: "globe")
             }
+            .pickerStyle(.navigationLink)
 
-            // Führt in die iOS-Einstellungen. Sprache und Standortfreigabe
-            // kann eine App nicht selbst umstellen — das macht iOS.
-            //
-            // Seit iOS 13 hat jede App dort einen eigenen Eintrag
-            // "Sprache", in dem man Deutsch, Englisch oder Arabisch
-            // wählen kann, unabhängig von der Systemsprache. Genau
-            // dorthin führt dieser Verweis.
+            // Führt in die iOS-Einstellungen. Die Standortfreigabe kann
+            // eine App nicht selbst umstellen — das macht iOS.
             Link(destination: URL(string: UIApplication.openSettingsURLString)!) {
-                Label("In den iOS-Einstellungen ändern", systemImage: "gear")
+                Label("Standort in den iOS-Einstellungen ändern", systemImage: "gear")
                     .font(.subheadline)
             }
         }
@@ -137,24 +149,11 @@ struct AccountScreen: View {
         }
     }
 
-    /// Die Sprache, in der die App gerade läuft — in dieser Sprache
-    /// benannt ("Deutsch", "English", "العربية").
-    ///
-    /// `preferredLocalizations.first` liefert die Sprache, die iOS für
-    /// CUTZ tatsächlich ausgewählt hat. Das ist nicht dasselbe wie die
-    /// Systemsprache: Wer sein iPhone auf Türkisch hat, sieht CUTZ
-    /// trotzdem auf Deutsch, weil wir kein Türkisch anbieten.
-    private var currentLanguageName: String {
-        let code = Bundle.main.preferredLocalizations.first ?? "de"
-        let locale = Locale(identifier: code)
-        return locale.localizedString(forLanguageCode: code)?.capitalized ?? code
-    }
-
     private var locationStatusText: String {
         switch appModel.location.authorizationStatus {
-        case .authorizedAlways, .authorizedWhenInUse: return String(localized: "Erlaubt")
-        case .denied, .restricted:                    return String(localized: "Nicht erlaubt")
-        default:                                      return String(localized: "Noch nicht gefragt")
+        case .authorizedAlways, .authorizedWhenInUse: return AppText.string("Erlaubt")
+        case .denied, .restricted:                    return AppText.string("Nicht erlaubt")
+        default:                                      return AppText.string("Noch nicht gefragt")
         }
     }
 }

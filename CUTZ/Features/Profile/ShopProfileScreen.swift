@@ -305,7 +305,7 @@ struct ShopProfileScreen: View {
     }
 
     private var ratingText: String {
-        shop.averageRating.formatted(.number.precision(.fractionLength(1)))
+        AppText.number(shop.averageRating)
     }
 
     /// "(231) · 1,2 km · €€" — Entfernung fehlt, wenn kein Standort da ist.
@@ -365,7 +365,7 @@ private struct EmployeeChip: View {
                 Image(systemName: "star.fill")
                     .font(.system(size: 9))
                     .foregroundStyle(.orange)
-                Text(employee.rating.formatted(.number.precision(.fractionLength(1))))
+                Text(AppText.number(employee.rating))
                     .font(.caption2)
             }
         }

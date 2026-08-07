@@ -15,11 +15,11 @@ enum DistanceText {
     /// z. B. "800 m" oder "1,2 km".
     static func short(meters: Double) -> String {
         if meters < 1000 {
-            return String(format: String(localized: "distance.meters"), Int(meters))
+            return AppText.format("distance.meters", Int(meters))
         }
 
         let kilometers = meters / 1000
-        let number = kilometers.formatted(.number.precision(.fractionLength(1)))
-        return String(format: String(localized: "distance.kilometers"), number)
+        let number = AppText.number(kilometers)
+        return AppText.format("distance.kilometers", number)
     }
 }

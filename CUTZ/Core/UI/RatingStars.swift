@@ -20,7 +20,7 @@ struct RatingStars: View {
             }
 
             if showsNumber {
-                Text(rating.formatted(.number.precision(.fractionLength(1))))
+                Text(AppText.number(rating))
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundStyle(.primary)
@@ -50,10 +50,16 @@ struct RatingStars: View {
         }
     }
 
+    /// Was VoiceOver vorliest.
+    ///
+    /// Wird zusammengesetzt und ist deshalb ein berechneter Text —
+    /// also `AppText`, nicht `Text("…")`. Vorher stand hier deutscher
+    /// Text fest verdrahtet: Blinde Nutzer hätten die App auf Englisch
+    /// gestellt und trotzdem "Bewertung 4,7 von 5" gehört.
     private var accessibilityText: String {
-        let base = "Bewertung \(rating.formatted(.number.precision(.fractionLength(1)))) von 5"
+        let base = AppText.format("rating.outOfFive", AppText.number(rating))
         guard let reviewCount else { return base }
-        return base + ", \(reviewCount) Bewertungen"
+        return base + AppText.format("rating.reviewCountSuffix", reviewCount)
     }
 }
 

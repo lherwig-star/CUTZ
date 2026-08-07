@@ -203,23 +203,23 @@ struct BookingFlowScreen: View {
         switch viewModel.step {
         case .service:
             return viewModel.selectedService == nil
-                ? String(localized: "Service wählen")
-                : String(localized: "Weiter")
+                ? AppText.string("Service wählen")
+                : AppText.string("Weiter")
         case .employee:
-            return String(localized: "Weiter")
+            return AppText.string("Weiter")
         case .time:
             guard let slot = viewModel.selectedSlot else {
-                return String(localized: "Uhrzeit wählen")
+                return AppText.string("Uhrzeit wählen")
             }
             return String(
-                format: String(localized: "booking.continueAt"),
+                format: AppText.string("booking.continueAt"),
                 AvailabilityText.timeText(for: slot)
             )
         case .summary:
             guard let price = viewModel.totalPriceText else {
-                return String(localized: "Termin buchen")
+                return AppText.string("Termin buchen")
             }
-            return String(format: String(localized: "booking.confirmWithPrice"), price)
+            return AppText.format("booking.confirmWithPrice", price)
         }
     }
 }

@@ -206,7 +206,8 @@
 "Einstellungen" = "الإعدادات";
 "Benachrichtigungen" = "الإشعارات";
 "Sprache" = "اللغة";
-"In den iOS-Einstellungen ändern" = "التغيير في إعدادات iOS";
+"Systemsprache" = "لغة النظام";
+"Standort in den iOS-Einstellungen ändern" = "تغيير الموقع في إعدادات iOS";
 "Erlaubt" = "مسموح";
 "Nicht erlaubt" = "غير مسموح";
 "Noch nicht gefragt" = "لم يُطلب بعد";
@@ -220,3 +221,7 @@
 /* ── Fehlermeldungen ── */
 "Dieser Termin existiert nicht mehr." = "لم يعد هذا الموعد موجودًا.";
 "Absagen fehlgeschlagen" = "فشل الإلغاء";
+
+/* ── VoiceOver ── */
+"rating.outOfFive" = "التقييم %@ من 5";
+"rating.reviewCountSuffix" = "، %lld تقييمًا";

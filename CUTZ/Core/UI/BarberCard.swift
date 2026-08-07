@@ -62,7 +62,7 @@ struct BarberCard: View {
                 .font(.caption2)
                 .foregroundStyle(.orange)
 
-            Text(shop.averageRating.formatted(.number.precision(.fractionLength(1))))
+            Text(AppText.number(shop.averageRating))
                 .font(.subheadline)
                 .fontWeight(.semibold)
 

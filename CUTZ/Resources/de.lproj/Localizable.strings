@@ -211,7 +211,8 @@
 "Einstellungen" = "Einstellungen";
 "Benachrichtigungen" = "Benachrichtigungen";
 "Sprache" = "Sprache";
-"In den iOS-Einstellungen ändern" = "In den iOS-Einstellungen ändern";
+"Systemsprache" = "Systemsprache";
+"Standort in den iOS-Einstellungen ändern" = "Standort in den iOS-Einstellungen ändern";
 "Erlaubt" = "Erlaubt";
 "Nicht erlaubt" = "Nicht erlaubt";
 "Noch nicht gefragt" = "Noch nicht gefragt";
@@ -225,3 +226,7 @@
 /* ── Fehlermeldungen ── */
 "Dieser Termin existiert nicht mehr." = "Dieser Termin existiert nicht mehr.";
 "Absagen fehlgeschlagen" = "Absagen fehlgeschlagen";
+
+/* ── VoiceOver ── */
+"rating.outOfFive" = "Bewertung %@ von 5";
+"rating.reviewCountSuffix" = ", %lld Bewertungen";

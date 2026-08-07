@@ -35,6 +35,10 @@ final class AppModel {
     /// Standort des Nutzers, für Entfernungsangaben.
     let location = LocationManager()
 
+    /// Die im Profil gewählte Sprache. Eigene Klasse, weil sie sich
+    /// selbst um das Speichern kümmert — genau wie die Favoriten.
+    let language = LanguageStore()
+
     /// Alle geladenen Shops.
     private(set) var shops: [Barbershop] = []
 

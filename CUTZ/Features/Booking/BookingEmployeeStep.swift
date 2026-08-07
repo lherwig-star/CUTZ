@@ -102,7 +102,7 @@ private struct EmployeeCard: View {
                         Image(systemName: "star.fill")
                             .font(.system(size: 9))
                             .foregroundStyle(.orange)
-                        Text(employee.rating.formatted(.number.precision(.fractionLength(1))))
+                        Text(AppText.number(employee.rating))
                             .font(.caption)
                             .fontWeight(.medium)
                         Text("· \(employee.specialtiesText)")

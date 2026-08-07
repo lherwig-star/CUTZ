@@ -22,7 +22,7 @@ struct BookingSummaryStep: View {
             Divider().padding(.leading, 16)
 
             row(
-                title: String(localized: "Service"),
+                title: AppText.string("Service"),
                 value: service.name,
                 detail: "\(service.priceShort) · \(service.durationFormatted)",
                 symbol: service.category.symbolName,
@@ -32,8 +32,8 @@ struct BookingSummaryStep: View {
             Divider().padding(.leading, 16)
 
             row(
-                title: String(localized: "Barber"),
-                value: employee?.name ?? String(localized: "Egal welcher Barber"),
+                title: AppText.string("Barber"),
+                value: employee?.name ?? AppText.string("Egal welcher Barber"),
                 detail: employee?.specialtiesText,
                 symbol: "person",
                 step: .employee
@@ -42,9 +42,9 @@ struct BookingSummaryStep: View {
             Divider().padding(.leading, 16)
 
             row(
-                title: String(localized: "Termin"),
+                title: AppText.string("Termin"),
                 value: AvailabilityText.long(for: slot),
-                detail: String(format: String(localized: "duration.minutes"), service.durationMinutes),
+                detail: AppText.format("duration.minutes", service.durationMinutes),
                 symbol: "clock",
                 step: .time
             )

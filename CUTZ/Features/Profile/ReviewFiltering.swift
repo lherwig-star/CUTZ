@@ -30,10 +30,10 @@ enum ReviewRatingFilter: CaseIterable, Identifiable {
     /// Beschriftung im Auswahlmenü.
     var label: String {
         switch self {
-        case .all:       String(localized: "Alle")
-        case .threePlus: String(localized: "Ab 3 Sternen")
-        case .fourPlus:  String(localized: "Ab 4 Sternen")
-        case .fiveOnly:  String(localized: "Nur 5 Sterne")
+        case .all:       AppText.string("Alle")
+        case .threePlus: AppText.string("Ab 3 Sternen")
+        case .fourPlus:  AppText.string("Ab 4 Sternen")
+        case .fiveOnly:  AppText.string("Nur 5 Sterne")
         }
     }
 
@@ -65,9 +65,9 @@ enum ReviewSort: CaseIterable, Identifiable {
 
     var label: String {
         switch self {
-        case .newest:     String(localized: "Neueste zuerst")
-        case .bestFirst:  String(localized: "Beste zuerst")
-        case .worstFirst: String(localized: "Schlechteste zuerst")
+        case .newest:     AppText.string("Neueste zuerst")
+        case .bestFirst:  AppText.string("Beste zuerst")
+        case .worstFirst: AppText.string("Schlechteste zuerst")
         }
     }
 }

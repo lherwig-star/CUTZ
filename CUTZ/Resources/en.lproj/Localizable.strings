@@ -198,7 +198,8 @@
 "Einstellungen" = "Settings";
 "Benachrichtigungen" = "Notifications";
 "Sprache" = "Language";
-"In den iOS-Einstellungen ändern" = "Change in iOS settings";
+"Systemsprache" = "System language";
+"Standort in den iOS-Einstellungen ändern" = "Change location access in iOS settings";
 "Erlaubt" = "Allowed";
 "Nicht erlaubt" = "Not allowed";
 "Noch nicht gefragt" = "Not asked yet";
@@ -212,3 +213,7 @@
 /* ── Errors ── */
 "Dieser Termin existiert nicht mehr." = "This appointment no longer exists.";
 "Absagen fehlgeschlagen" = "Cancellation failed";
+
+/* ── VoiceOver ── */
+"rating.outOfFive" = "Rated %@ out of 5";
+"rating.reviewCountSuffix" = ", %lld reviews";

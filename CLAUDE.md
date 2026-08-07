@@ -70,10 +70,31 @@ Drei Fallstricke:
    eine Hilfsfunktion Text entgegen, muss der Parameter
    `LocalizedStringKey` heißen, nicht `String`.
 2. **Berechnete Texte** (in Aufzählungen, `if`-Zweigen, Rückgabewerten)
-   brauchen `String(localized: "…")`.
+   brauchen `AppText.string("…")` bzw. `AppText.format("…", wert)`.
+   **Nicht** Apples `String(localized:)` — das ignoriert den
+   Sprachschalter. Siehe unten.
 3. **Ändert man einen deutschen Text**, ändert sich der Schlüssel — dann
    greifen `en` und `ar` nicht mehr und englische Nutzer sehen Deutsch.
    Beide Dateien mitziehen. `LocalizationTests` fängt das ab.
+
+**Die Sprache wird in der App umgestellt, nicht in den iOS-Einstellungen.**
+Im Profil gibt es dafür eine Zeile (`AccountScreen`, Abschnitt
+Einstellungen). Gespeichert wird sie im `LanguageStore`, angewendet in
+`CutzApp` über `.environment(\.locale, …)` und
+`.environment(\.layoutDirection, …)`.
+
+Daraus folgt die Faustregel für neuen Text:
+
+| Was du schreibst | Was zu tun ist |
+|---|---|
+| `Text("Termin buchen")` in einer View | nichts — SwiftUI folgt der `locale` |
+| ein String, der berechnet und zurückgegeben wird | `AppText.string("…")` |
+| dasselbe mit Werten darin | `AppText.format("…", wert)` |
+| eine Zahl mit Nachkommastelle | `AppText.number(wert)` |
+
+`String(localized:)` von Apple steht nur noch an genau einer Stelle im
+Projekt: in `AppText` selbst. Taucht es woanders auf, folgt dieser Text
+dem iPhone statt dem Schalter im Profil.
 
 Für Arabisch dreht iOS das Layout automatisch. Deshalb überall
 `leading`/`trailing` statt `left`/`right`, und `chevron.forward`
