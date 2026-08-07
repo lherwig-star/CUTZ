@@ -80,12 +80,27 @@ struct FilterSheet: View {
 
     private var timingSection: some View {
         section("Wann?") {
-            ChipStrip {
-                ForEach(TimingFilter.allCases) { option in
-                    Chip(title: option.label, isSelected: draft.timing == option) {
-                        draft.timing = option
+            VStack(alignment: .leading, spacing: 12) {
+                // Derselbe Schalter wie der "Sofort"-Knopf über der Liste.
+                // Er muss hier auftauchen, sonst könnte man draußen etwas
+                // eingestellt haben, wovon das Filtermenü nichts weiß.
+                Toggle(isOn: $draft.onlyAvailableNow) {
+                    Label("Nur sofort verfügbar", systemImage: "bolt.fill")
+                        .font(.subheadline)
+                }
+                .tint(.green)
+
+                ChipStrip {
+                    ForEach(TimingFilter.allCases) { option in
+                        Chip(title: option.label, isSelected: draft.timing == option) {
+                            draft.timing = option
+                        }
                     }
                 }
+                // Bei "sofort" ist der Zeitfilter darunter bedeutungslos —
+                // ausgrauen statt verstecken, damit klar ist, warum.
+                .disabled(draft.onlyAvailableNow)
+                .opacity(draft.onlyAvailableNow ? 0.4 : 1)
             }
         }
     }

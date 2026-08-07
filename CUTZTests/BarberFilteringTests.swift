@@ -79,6 +79,74 @@ final class BarberFilteringTests: XCTestCase {
         XCTAssertEqual(filter.activeCount, 1)
     }
 
+    // MARK: - Sofort verfügbar
+
+    func testAvailableNowKeepsOnlyShopsWithinTheWindow() {
+        let soon = makeShop(name: "Gleich", rating: 4.0, priceCents: 2000)
+        let later = makeShop(name: "Spaeter heute", rating: 4.0, priceCents: 2000)
+
+        var filter = BarberFilter.none
+        filter.onlyAvailableNow = true
+
+        let result = BarberFiltering.apply(
+            to: [soon, later],
+            filter: filter,
+            nextSlots: [
+                // 12:00 ist "jetzt" — in 90 Minuten liegt im Fenster.
+                soon.id: now.addingTimeInterval(90 * 60),
+                // Sechs Stunden später ist heute, aber nicht sofort.
+                later.id: now.addingTimeInterval(6 * 3600)
+            ],
+            distances: [:],
+            now: now, calendar: calendar
+        )
+
+        XCTAssertEqual(result.map(\.name), ["Gleich"])
+    }
+
+    func testAvailableNowIncludesTheExactBoundary() {
+        // Genau am Rand des Fensters muss noch durchkommen — sonst wäre
+        // es Zufall, ob ein Termin sichtbar ist oder nicht.
+        let shop = makeShop(name: "Genau", rating: 4.0, priceCents: 2000)
+        let window = TimeInterval(BarberFilter.instantWindowMinutes * 60)
+
+        var filter = BarberFilter.none
+        filter.onlyAvailableNow = true
+
+        let result = BarberFiltering.apply(
+            to: [shop], filter: filter,
+            nextSlots: [shop.id: now.addingTimeInterval(window)],
+            distances: [:], now: now, calendar: calendar
+        )
+
+        XCTAssertEqual(result.count, 1)
+    }
+
+    func testAvailableNowDropsShopsWithoutKnownSlot() {
+        let shop = makeShop(name: "Unbekannt", rating: 4.0, priceCents: 2000)
+
+        var filter = BarberFilter.none
+        filter.onlyAvailableNow = true
+
+        let result = BarberFiltering.apply(
+            to: [shop], filter: filter, nextSlots: [:], distances: [:],
+            now: now, calendar: calendar
+        )
+
+        XCTAssertTrue(
+            result.isEmpty,
+            "Ohne bekannten Termin kann man auch nicht sofort drankommen."
+        )
+    }
+
+    func testAvailableNowCountsAsActiveFilter() {
+        var filter = BarberFilter.none
+        XCTAssertEqual(filter.activeCount, 0)
+
+        filter.onlyAvailableNow = true
+        XCTAssertEqual(filter.activeCount, 1)
+    }
+
     // MARK: - Zeitpunkt
 
     func testTimingTodayKeepsOnlyShopsWithASlotToday() {

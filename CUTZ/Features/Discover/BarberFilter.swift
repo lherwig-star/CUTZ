@@ -62,6 +62,23 @@ enum BarberSort: CaseIterable, Identifiable {
 /// möglichst wenige verlangen soll.
 struct BarberFilter: Equatable {
 
+    /// Wie weit ein Termin höchstens weg sein darf, damit er als
+    /// "sofort" gilt.
+    ///
+    /// Zwei Stunden, weil das die Spanne ist, in der man tatsächlich
+    /// spontan losgeht: "jetzt gleich" heißt nicht in fünf Minuten,
+    /// aber auch nicht heute Abend. Wer heute Abend will, nimmt den
+    /// Zeitfilter "Heute".
+    static let instantWindowMinutes = 120
+
+    /// Nur Barber zeigen, bei denen man praktisch sofort drankommt.
+    ///
+    /// Eigener Schalter statt einer weiteren Stufe bei `timing`: Das
+    /// ist der Fall, für den die App eigentlich gebaut ist — jemand
+    /// braucht JETZT einen Haarschnitt. Dafür soll man nicht erst ein
+    /// Filtermenü öffnen müssen.
+    var onlyAvailableNow = false
+
     var timing: TimingFilter = .any
 
     /// Höchstentfernung in Kilometern. `nil` = egal.
@@ -84,6 +101,7 @@ struct BarberFilter: Equatable {
     /// ordnet nur um. Sonst stünde am Knopf dauerhaft eine 1.
     var activeCount: Int {
         var count = 0
+        if onlyAvailableNow      { count += 1 }
         if timing != .any        { count += 1 }
         if maxDistanceKm != nil  { count += 1 }
         if maxPriceEuro != nil   { count += 1 }
@@ -118,7 +136,8 @@ enum BarberFiltering {
     ) -> [Barbershop] {
 
         let filtered = shops.filter { shop in
-            matchesTiming(shop, filter: filter, nextSlots: nextSlots, now: now, calendar: calendar)
+            matchesAvailableNow(shop, filter: filter, nextSlots: nextSlots, now: now)
+                && matchesTiming(shop, filter: filter, nextSlots: nextSlots, now: now, calendar: calendar)
                 && matchesDistance(shop, filter: filter, distances: distances)
                 && matchesPrice(shop, filter: filter)
                 && matchesRating(shop, filter: filter)
@@ -129,6 +148,25 @@ enum BarberFiltering {
     }
 
     // MARK: - Einzelne Bedingungen
+
+    /// Kommt man bei diesem Shop praktisch sofort dran?
+    ///
+    /// Termine in der Vergangenheit gibt es nicht — `nextSlots` enthält
+    /// nur zukünftige Zeiten. Es reicht also die Obergrenze zu prüfen.
+    private static func matchesAvailableNow(
+        _ shop: Barbershop,
+        filter: BarberFilter,
+        nextSlots: [UUID: Date],
+        now: Date
+    ) -> Bool {
+        guard filter.onlyAvailableNow else { return true }
+        guard let slot = nextSlots[shop.id] else { return false }
+
+        let limit = now.addingTimeInterval(
+            TimeInterval(BarberFilter.instantWindowMinutes * 60)
+        )
+        return slot <= limit
+    }
 
     private static func matchesTiming(
         _ shop: Barbershop,

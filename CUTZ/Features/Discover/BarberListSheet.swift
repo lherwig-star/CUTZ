@@ -1,19 +1,32 @@
 import SwiftUI
 
 /// Wie weit die Liste hochgezogen ist.
+///
+/// Bewusst nur ZWEI Stufen: unten oder ganz oben. Eine mittlere Stufe
+/// gab es anfangs, sie fühlte sich aber unentschieden an — man landete
+/// beim Ziehen ständig dort, obwohl man entweder die Karte sehen oder
+/// die Liste lesen wollte. Zwei klare Zustände sind schneller zu
+/// bedienen als drei ungefähre.
 enum SheetDetent: CaseIterable {
 
     case collapsed
-    case medium
     case expanded
 
     /// Höhe in Punkten, abhängig von der Bildschirmhöhe.
+    ///
+    /// Unten bleibt genau eine Karte sichtbar. Das ist Absicht: Tippt
+    /// man auf der Karte einen Pin an, sieht man den Shop sofort —
+    /// ohne dass die Liste die Karte verdeckt.
     func height(in total: CGFloat) -> CGFloat {
         switch self {
         case .collapsed: return 210
-        case .medium:    return total * 0.52
         case .expanded:  return total * 0.92
         }
+    }
+
+    /// Die jeweils andere Stufe — fürs Antippen des Griffs.
+    var toggled: SheetDetent {
+        self == .collapsed ? .expanded : .collapsed
     }
 }
 
@@ -39,6 +52,12 @@ struct BarberListSheet: View {
 
     let onSelectShop: (Barbershop) -> Void
     let onOpenFilter: () -> Void
+
+    /// Schaltet "jetzt sofort verfügbar" um.
+    let onToggleAvailableNow: () -> Void
+
+    /// Ist der Sofort-Filter gerade an?
+    var isAvailableNowActive = false
 
     /// Wie viele Filter aktiv sind — für das Zahlenabzeichen am Knopf.
     var activeFilterCount: Int = 0
@@ -91,13 +110,15 @@ struct BarberListSheet: View {
                 .frame(width: 40, height: 5)
                 .padding(.top, 8)
 
-            HStack {
-                Text("\(shops.count) Barber in der Nähe")
+            HStack(spacing: 8) {
+                Text("\(shops.count) Barber")
                     .font(.subheadline)
                     .fontWeight(.semibold)
+                    .lineLimit(1)
 
-                Spacer()
+                Spacer(minLength: 0)
 
+                availableNowButton
                 filterButton
             }
             .padding(.horizontal, 16)
@@ -108,12 +129,44 @@ struct BarberListSheet: View {
         .contentShape(Rectangle())
         .gesture(dragGesture(totalHeight: totalHeight))
         .onTapGesture {
-            // Antippen wechselt zwischen klein und mittel. Praktisch,
-            // wenn man nicht ziehen mag.
+            // Antippen klappt auf oder zu. Praktisch, wenn man nicht
+            // ziehen mag.
             withAnimation(.snappy) {
-                detent = detent == .collapsed ? .medium : .collapsed
+                detent = detent.toggled
             }
         }
+    }
+
+    /// "Sofort" — der Knopf für den spontanen Fall.
+    ///
+    /// Steht bewusst NEBEN dem Filter und nicht darin: Wer jetzt gerade
+    /// einen Haarschnitt braucht, soll mit einem Antippen die Liste auf
+    /// das eingrenzen, was in den nächsten zwei Stunden geht. Genau
+    /// dafür ist die App da.
+    private var availableNowButton: some View {
+        Button(action: onToggleAvailableNow) {
+            HStack(spacing: 5) {
+                Image(systemName: "bolt.fill")
+                Text("Sofort")
+            }
+            .font(.subheadline)
+            .fontWeight(.medium)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 7)
+            .background(availableNowBackground, in: Capsule())
+            .foregroundStyle(availableNowForeground)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Nur sofort verfügbare Termine")
+        .accessibilityAddTraits(isAvailableNowActive ? .isSelected : [])
+    }
+
+    private var availableNowBackground: Color {
+        isAvailableNowActive ? .green : Color(.secondarySystemGroupedBackground)
+    }
+
+    private var availableNowForeground: Color {
+        isAvailableNowActive ? .white : .primary
     }
 
     private var filterButton: some View {
@@ -194,16 +247,30 @@ struct BarberListSheet: View {
 
     private var emptyState: some View {
         VStack(spacing: 8) {
-            Image(systemName: "magnifyingglass")
+            Image(systemName: emptyStateSymbol)
                 .font(.title)
                 .foregroundStyle(.secondary)
-            Text("Kein Barber passt zu deinen Filtern.")
+            Text(emptyStateText)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }
         .padding(.top, 40)
+        .padding(.horizontal, 24)
         .frame(maxWidth: .infinity)
+    }
+
+    private var emptyStateSymbol: String {
+        isAvailableNowActive ? "bolt.slash" : "magnifyingglass"
+    }
+
+    /// Beim Sofort-Filter ist die leere Liste der häufige Fall — abends
+    /// oder sonntags ist eben nichts mehr frei. Dann muss dastehen,
+    /// woran es liegt, sonst wirkt die App kaputt.
+    private var emptyStateText: String {
+        isAvailableNowActive
+            ? "Gerade ist nirgendwo kurzfristig etwas frei. Schalte „Sofort“ aus, um spätere Termine zu sehen."
+            : "Kein Barber passt zu deinen Filtern."
     }
 
     private func clamp(_ value: CGFloat, min lower: CGFloat, max upper: CGFloat) -> CGFloat {

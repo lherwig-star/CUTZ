@@ -38,6 +38,8 @@ struct DiscoverScreen: View {
                 detent: $detent,
                 onSelectShop: { shopForProfile = $0 },
                 onOpenFilter: { isFilterShown = true },
+                onToggleAvailableNow: toggleAvailableNow,
+                isAvailableNowActive: filter.onlyAvailableNow,
                 activeFilterCount: filter.activeCount
             )
 
@@ -48,13 +50,10 @@ struct DiscoverScreen: View {
             .padding(.top, 8)
         }
 
-        // Tippt man auf der Karte einen Pin an, soll die Liste
-        // mitgehen — sonst sucht man den Shop dort von Hand.
-        .onChange(of: selectedShopID) { _, newValue in
-            if newValue != nil, detent == .collapsed {
-                withAnimation(.snappy) { detent = .medium }
-            }
-        }
+        // Der angetippte Pin wird in der Liste hervorgehoben. Die Liste
+        // bleibt dabei bewusst unten: Sie zeigt eine Karte, und die
+        // Karte darüber bleibt sichtbar. Würde sie aufklappen, verdeckte
+        // sie genau den Pin, den man gerade angetippt hat.
 
         .sheet(isPresented: $isFilterShown) {
             FilterSheet(filter: $filter, resultCount: countResults)
@@ -103,6 +102,19 @@ struct DiscoverScreen: View {
             nextSlots: appModel.nextSlots,
             distances: distances
         )
+    }
+
+    /// Schaltet den Sofort-Filter um.
+    ///
+    /// Die Liste klappt dabei auf, sonst sieht man nur eine einzige
+    /// Karte und weiß nicht, ob der Filter überhaupt etwas gebracht hat.
+    private func toggleAvailableNow() {
+        withAnimation(.snappy) {
+            filter.onlyAvailableNow.toggle()
+            if filter.onlyAvailableNow {
+                detent = .expanded
+            }
+        }
     }
 
     /// Wie viele Shops eine bestimmte Filtereinstellung übrig ließe.
