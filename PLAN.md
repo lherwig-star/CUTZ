@@ -188,6 +188,69 @@ bei jedem Google-Ausfall keine Termine mehr anzeigen kann.
 
 ---
 
+## Die Friseurseite (CUTZ Partner)
+
+Bis Phase 1 war CUTZ eine reine Kunden-App. Jetzt gibt es die andere
+Hälfte — den Bereich, in dem ein Friseur seinen Laden verwaltet.
+
+**Keine zweite App, sondern eine Wahl beim ersten Start.** Getrennte
+Apps (wie Uber und Uber Driver) sind der übliche Weg, kosten aber zwei
+App-Store-Einträge, zwei Freigaben bei jeder Änderung und zwei
+Zertifikate. Wichtiger: Ein Friseur hört von CUTZ meistens durch einen
+Kunden — er lädt dieselbe App und findet die Business-Seite sofort.
+Genau so soll sich das Produkt verbreiten. Deshalb steht im
+Kundenprofil auch ein Hinweis „Bist du Friseur?".
+
+**Anmelden darf sich jeder selbst, freigegeben wird von Hand.** Ohne
+diese Hürde könnte jeder einen fremden Laden für sich beanspruchen und
+dessen Termine verwalten, ohne dass der Inhaber es merkt. Bei einer
+Buchungs-App ist das kein theoretischer Schaden — wer die Termine
+kontrolliert, kontrolliert das Geschäft. Ein Anruf unter der
+hinterlegten Nummer reicht als Prüfung.
+
+### Was steht
+
+- [x] Rollenwahl beim ersten Start, jederzeit umschaltbar
+- [x] Laden anmelden, Wartezustand, Ablehnung
+- [x] **Übersicht** mit maßstäblicher Tagesleiste
+- [x] **Laufkundschaft** direkt in die freie Lücke eintragen
+- [x] **Kalender** mit Sperrzeiten (Pause, Urlaub, früher zu)
+- [x] **Buchungen** durchsuchbar, absagen
+- [x] **Kunden** — leitet sich aus den Buchungen ab, nichts zu pflegen
+- [x] **Profil**: Stammdaten, Öffnungszeiten, Leistungen mit Reihenfolge
+
+### Was fehlt — und warum es fehlt
+
+- [ ] **`shop_members` im Schema.** Es gibt noch kein Konzept „wem
+      gehört dieser Laden". Der Freigabestatus liegt vorerst in
+      `UserDefaults` und ist damit ausdrücklich **keine** Berechtigung,
+      sondern eine Attrappe.
+- [ ] **Die Regel für Buchungen umstellen.** Laut `schema.sql` darf
+      Buchungen nur lesen, wer sie selbst angelegt hat
+      (`auth.uid() = user_id`). Ein Friseur ist nie der Kunde —
+      **„Übersicht" wäre nach dem Umstieg auf Supabase leer.** Das
+      fällt erst auf, wenn die Oberfläche schon steht.
+- [ ] **Sperrzeiten in die Datenbank.** `TimeBlock` gibt es nur im
+      Code. Dazu muss der `SlotCalculator` sie abziehen, sonst wirken
+      sie nur auf der Friseurseite und die Kunden buchen weiter.
+- [ ] **Mehrere Stühle.** Siehe die Warnung bei Phase 2 — für einen
+      Laden mit mehreren Barbern ist die Friseurseite sonst sichtbar
+      kaputt. Das ist damit keine Fußnote mehr, sondern Voraussetzung.
+- [ ] **Bilder hochladen.** Braucht Supabase Storage (Phase 5). Der
+      Abschnitt im Profil sagt das auch, statt einen Knopf anzubieten,
+      der nichts tut.
+- [ ] **Push bei neuer Buchung.** Braucht Server und das
+      kostenpflichtige Apple-Programm.
+- [ ] **Statistiken.** Die Kachel führt noch nirgendwohin. Bewusst:
+      Ohne echte Daten wäre jede Zahl erfunden.
+
+> **Ein Behelf, der wieder verschwinden muss:** Im Wartezustand steht
+> ein Knopf „Zum Ausprobieren selbst freigeben". Ohne ihn käme man nie
+> auf die Friseurseite, weil niemand freigeben kann. Er ist als Behelf
+> beschriftet und fällt mit Phase 2 weg.
+
+---
+
 ## Phase 5 — Ausbau
 
 Erst sinnvoll, wenn die App echte Nutzer hat.
@@ -291,6 +354,12 @@ nie hat jemand die App danach im Simulator gesehen.** Grün heißt hier
       einem Muttersprachler. Vor einer Veröffentlichung drüberlesen
       lassen — vor allem die Anrede, das deutsche „du" lässt sich
       nicht eins zu eins übertragen.
+- [ ] **Die ganze Friseurseite.** Sie ist gebaut und die Tests laufen,
+      aber gesehen hat sie noch niemand. Besonders die Tagesleiste:
+      Die Kacheln sitzen dort maßstäblich an ihrer Uhrzeit, und ob
+      das bei dicht liegenden Terminen noch lesbar ist, zeigt nur der
+      Simulator. Umschalten: Profil → „Bist du Friseur?", dann im
+      Wartezustand „Zum Ausprobieren selbst freigeben".
 
 ---
 

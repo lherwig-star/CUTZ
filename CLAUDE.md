@@ -16,16 +16,35 @@ Zwei Entwickler: **Finn** (Karte, Suche) und **Lukas** (Profil, Buchung).
 ## Aufbau
 
 ```
-CUTZ/App/        Einstieg (CutzApp), Tab-Leiste (RootView), AppModel
-CUTZ/Core/       Gemeinsam: Models, Data (Repository), Services, UI-Bausteine
-CUTZ/Features/   Discover/ · Profile/ · Booking/ · Favorites/ · Account/
+CUTZ/App/        Einstieg (CutzApp), Weiche (RootView), die beiden
+                 Tab-Leisten (CustomerRootView, PartnerRootView), AppModel
+CUTZ/Core/       Gemeinsam: Models, Data (Repositories), Localization,
+                 Services, UI-Bausteine
+CUTZ/Features/   Kunden: Discover/ · Profile/ · Booking/ · Favorites/ · Account/
+                 Friseur: Partner/
+                 Beide:   Onboarding/
 CUTZTests/       Tests zu allem, was ohne Oberfläche prüfbar ist
-supabase/        schema.sql für Phase 2
+supabase/        schema.sql und seed.sql für Phase 2
 ```
 
-Drei Tabs: **Favoriten · Entdecken · Termine.** Entdecken ist der Start.
-Das Nutzerprofil (`Account/`) hängt am Knopf oben rechts, nicht in der
-Tab-Leiste.
+**Die App hat zwei Gesichter.** Beim ersten Start fragt sie, ob man
+Kunde oder Friseur ist (`RoleChoiceScreen`), danach gabelt sich
+`RootView`:
+
+| | Kunde | Friseur |
+|---|---|---|
+| Tabs | Favoriten · **Entdecken** · Termine | **Übersicht** · Kalender · Buchungen · Kunden · Profil |
+| Aussehen | folgt dem Gerät | immer dunkel |
+| Ordner | `Features/<Name>/` | `Features/Partner/` |
+| Daten | `BarbershopRepository` | `ShopRepository` |
+
+Fett = der Start-Tab. Das Nutzerprofil der Kundenseite (`Account/`)
+hängt am Knopf oben rechts, nicht in der Tab-Leiste.
+
+Die Rollenwahl ist **keine Berechtigung** — sie steuert nur, was man
+sieht. Ob jemand wirklich einen Laden verwalten darf, sagt
+`PartnerAccountStatus`: anmelden darf sich jeder selbst, freigegeben
+wird von Hand.
 
 **Wiederverwendbare Bausteine liegen in `Core/UI/`** — `BarberCard`,
 `RatingStars`, `FavoriteButton`, `ShopImage`. Bevor du eine neue Karte
@@ -40,11 +59,18 @@ ausführen. Niemals die `.xcodeproj` von Hand bearbeiten oder committen.
 **Info.plist wird ebenfalls generiert** — aus dem `info:`-Block in
 `project.yml`. Neue Berechtigungen dort eintragen, nicht in der Plist.
 
-**Datenquelle ist ausgetauschbar.** Die App kennt nur das Protokoll
-`BarbershopRepository`. Aktuell liefert `MockBarbershopRepository` Testdaten.
-In Phase 2 kommt `SupabaseBarbershopRepository` dazu — getauscht wird an
-genau einer Zeile in `AppModel`. Diese Trennung bitte nicht aufweichen:
+**Datenquelle ist ausgetauschbar.** Die App kennt nur die Protokolle
+`BarbershopRepository` (Kunden) und `ShopRepository` (Friseure). Aktuell
+liefern `MockBarbershopRepository` und `MockShopRepository` Testdaten.
+In Phase 2 kommen die Supabase-Fassungen dazu — getauscht wird an genau
+zwei Zeilen in `AppModel`. Diese Trennung bitte nicht aufweichen:
 keine Netzwerkaufrufe direkt aus Views.
+
+**Zwei Protokolle und nicht eins.** Die Kundenseite sucht Läden und
+bucht; die Friseurseite sieht fremde Termine, sperrt Zeiten, ändert
+Preise. In Phase 2 sind auch die Berechtigungen gegensätzlich — ein
+Kunde darf nur seine eigenen Buchungen sehen, ein Friseur alle seines
+Ladens. Bitte nichts zusammenlegen.
 
 **Feature-Ordner sind Eigentum.** Beim Arbeiten an einem Feature nach
 Möglichkeit nur den eigenen Ordner anfassen. Änderungen in `Core/` oder
@@ -53,7 +79,12 @@ Möglichkeit nur den eigenen Ordner anfassen. Änderungen in `Core/` oder
 **Logik gehört nicht in Views.** Alles, was man ohne Bildschirm prüfen
 kann, liegt in einem eigenen Typ mit statischen Funktionen und hat
 Tests: `SlotCalculator`, `ReviewFiltering`, `BarberFiltering`,
-`BarberSearch`, `AvailabilityText`, `OpeningStatus`. Views zeigen nur an.
+`BarberSearch`, `AvailabilityText`, `OpeningStatus`, `DaySchedule`,
+`DayTimelineLayout`, `CustomerSummary`. Views zeigen nur an.
+
+**Feature-Ordner sind Eigentum — `Features/Partner/` auch.** Dort liegt
+die ganze Friseurseite. Wer daran arbeitet, sollte die Kundenseite
+möglichst nicht anfassen und umgekehrt.
 
 **Keine Formatierung über `.formatted()` bei Datum und Wochentag.** Das
 richtet sich nach der Region des Geräts, nicht nach der App-Sprache.
@@ -118,7 +149,9 @@ stellen und `./scripts/setup.sh` laufen lassen.
 
 ## Stand
 
-Phase 1 fertig (Testdaten, kein Backend). Fahrplan: `PLAN.md`.
+Phase 1 fertig (Testdaten, kein Backend). Die Friseurseite steht als
+Oberfläche ebenfalls, läuft aber auf derselben Attrappe. Fahrplan:
+`PLAN.md`.
 
 ## Bauen und testen
 
