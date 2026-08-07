@@ -245,9 +245,12 @@ nie hat jemand die App danach im Simulator gesehen.** Grün heißt hier
 - [ ] Sind die Farbverläufe als Bildersatz akzeptabel oder störend?
 - [ ] Ist der Buchungsablauf wirklich in wenigen Sekunden durch?
 - [ ] Stimmen die Abstände auf kleinen Geräten (iPhone SE)?
-- [ ] Sieht die App auf **Arabisch** vernünftig aus? iOS spiegelt das
-      Layout, aber ob alles sitzt, sieht man erst im Simulator.
-      (Einstellungen → CUTZ → Sprache)
+- [ ] Sieht die App auf **Arabisch** vernünftig aus? Das Layout wird
+      gespiegelt, aber ob alles sitzt, sieht man erst im Simulator.
+      Umschalten in der App: Profil → Einstellungen → Sprache.
+- [ ] Wechselt die Sprache wirklich **sofort**, ohne Neustart? Die
+      Tests können nur prüfen, dass die richtigen Texte vorliegen —
+      nicht, dass SwiftUI die Oberfläche danach neu zeichnet.
 - [ ] Die arabische Übersetzung ist Hocharabisch und stammt nicht von
       einem Muttersprachler. Vor einer Veröffentlichung drüberlesen
       lassen — vor allem die Anrede, das deutsche „du" lässt sich
