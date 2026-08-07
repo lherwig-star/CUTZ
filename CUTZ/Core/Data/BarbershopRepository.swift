@@ -41,4 +41,28 @@ protocol BarbershopRepository {
 
     /// Die eigenen Termine laden.
     func fetchBookings() async throws -> [Booking]
+
+    /// Einen Termin absagen.
+    ///
+    /// Der Termin wird NICHT gelöscht, sondern nur auf `cancelled`
+    /// gesetzt. Gründe: Der Nutzer soll noch sehen, dass es ihn gab,
+    /// und der Friseur später ebenfalls. Löschen wäre nicht rückgängig
+    /// zu machen.
+    func cancelBooking(_ booking: Booking) async throws
+}
+
+/// Fehler, die beim Zugriff auf die Daten auftreten können.
+///
+/// `LocalizedError` sorgt dafür, dass `error.localizedDescription`
+/// unseren Text liefert — sonst stünde dort eine kryptische Meldung.
+enum RepositoryError: LocalizedError {
+
+    case bookingNotFound
+
+    var errorDescription: String? {
+        switch self {
+        case .bookingNotFound:
+            return "Dieser Termin existiert nicht mehr."
+        }
+    }
 }

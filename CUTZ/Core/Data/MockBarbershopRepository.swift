@@ -45,8 +45,11 @@ actor MockBarbershopRepository: BarbershopRepository {
         await simulateNetworkDelay()
 
         // Schon vergebene Termine dieses Shops berücksichtigen.
+        //
+        // Abgesagte Termine zählen hier bewusst NICHT mit — sonst bliebe
+        // die Zeit für immer blockiert, obwohl sie wieder frei ist.
         let booked = bookings
-            .filter { $0.shopID == shop.id }
+            .filter { $0.shopID == shop.id && $0.status == .confirmed }
             .map { (start: $0.startsAt, durationMinutes: $0.durationMinutes) }
 
         return SlotCalculator.slots(
@@ -82,5 +85,15 @@ actor MockBarbershopRepository: BarbershopRepository {
     func fetchBookings() async throws -> [Booking] {
         await simulateNetworkDelay()
         return bookings.sorted { $0.startsAt < $1.startsAt }
+    }
+
+    func cancelBooking(_ booking: Booking) async throws {
+        await simulateNetworkDelay()
+
+        guard let index = bookings.firstIndex(where: { $0.id == booking.id }) else {
+            throw RepositoryError.bookingNotFound
+        }
+
+        bookings[index].status = .cancelled
     }
 }

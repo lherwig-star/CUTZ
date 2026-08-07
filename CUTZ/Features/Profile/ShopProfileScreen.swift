@@ -117,6 +117,19 @@ struct ShopProfileScreen: View {
                 .font(.title3)
                 .fontWeight(.semibold)
 
+            // "Jetzt geöffnet · bis 19:00" bzw. "Geschlossen · öffnet morgen 09:00".
+            // Grün nur, wenn wirklich offen — sonst grau.
+            //
+            // `Color.green` und `Color.secondary` müssen beide ausgeschrieben
+            // werden: Ohne den Typnamen sind es zwei verschiedene Typen, und
+            // Swift findet dann keinen gemeinsamen Nenner für die Abfrage.
+            let status = shop.openingStatus()
+            Text(status.text)
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .foregroundStyle(status.isOpen ? Color.green : Color.secondary)
+                .padding(.bottom, 4)
+
             // Wochentage in gewohnter Reihenfolge Mo–So durchgehen.
             // (2 = Montag … 7 = Samstag, dann 1 = Sonntag)
             ForEach([2, 3, 4, 5, 6, 7, 1], id: \.self) { weekday in
