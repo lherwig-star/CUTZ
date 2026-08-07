@@ -9,21 +9,52 @@ Native iOS-App in **Swift / SwiftUI**.
 
 ---
 
+## Der Weg durch die App
+
+Drei Bereiche unten, mehr nicht. **Entdecken** ist der Startbildschirm.
+
+```
+   ❤️ Favoriten        📍 Entdecken        📅 Termine
+                            │
+                    Karte + Suchleiste
+                            │
+                 Liste hochziehen → Barber-Karten
+                            │
+                      Barber-Profil
+                            │
+        Service → Barber → Termin → Bestätigen
+                            │
+                    ✓ Termin gebucht
+```
+
+Das Profil des Nutzers liegt bewusst **nicht** in der Tab-Leiste, sondern
+hinter dem Knopf oben rechts. Dort steht nur, was man selten braucht.
+
 ## Was die App aktuell kann (Phase 1)
 
-| Feature | Status | Wer |
-|---|---|---|
-| Karte mit allen Shops + Standort | ✅ | Finn |
-| Suchliste mit Filter & Sortierung | ✅ | Finn |
-| Shop-Profil mit Leistungen & Öffnungszeiten | ✅ | Lukas |
-| Bewertungen anzeigen | ✅ | Lukas |
-| Terminbuchung + Kalendereintrag | ✅ | Lukas |
-| Echte Daten aus der Cloud | ⏳ Phase 2 | zusammen |
-| Login / eigene Bewertungen schreiben | ⏳ Phase 3 | zusammen |
+| Feature | Status |
+|---|---|
+| Karte mit Preis-Pins und Standort | ✅ |
+| Hochziehbare Barber-Liste mit „nächster Termin" | ✅ |
+| Filter: Zeit, Entfernung, Preis, Bewertung, Service | ✅ |
+| Suche nach Barber, Salon, Ort | ✅ |
+| Barber-Profil mit Arbeiten, Team, Preisen, Bewertungen | ✅ |
+| Buchung in vier Schritten inkl. Barber-Wahl | ✅ |
+| Kalendereintrag | ✅ |
+| Favoriten (überleben den Neustart) | ✅ |
+| Termine: nächster, vergangene, erneut buchen | ✅ |
+| Echte Daten aus der Cloud | ⏳ Phase 2 |
+| Login / eigene Bewertungen schreiben | ⏳ Phase 3 |
 
 > Phase 1 läuft komplett mit **Testdaten** (`CUTZ/Core/Data/MockData.swift`).
 > Kein Server, kein Login, kein Internet nötig. Gebuchte Termine sind nach
-> einem App-Neustart wieder weg — das ist so gewollt.
+> einem App-Neustart wieder weg — das ist so gewollt. Favoriten bleiben,
+> die liegen in den Geräteeinstellungen.
+>
+> **Bilder gibt es noch keine.** Statt grauer Kästen zeichnet `ShopImage`
+> Farbverläufe, die aus der Shop-ID abgeleitet werden — jeder Laden also
+> immer in derselben Farbe. Sobald echte Fotos da sind (Phase 5,
+> Supabase Storage), lädt dieselbe View sie ohne weitere Änderung.
 
 Der komplette Fahrplan steht in **[PLAN.md](PLAN.md)**.
 

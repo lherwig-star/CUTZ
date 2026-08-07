@@ -18,10 +18,18 @@ Zwei Entwickler: **Finn** (Karte, Suche) und **Lukas** (Profil, Buchung).
 ```
 CUTZ/App/        Einstieg (CutzApp), Tab-Leiste (RootView), AppModel
 CUTZ/Core/       Gemeinsam: Models, Data (Repository), Services, UI-Bausteine
-CUTZ/Features/   Map/ + Search/ (Finn) · Profile/ + Booking/ (Lukas)
-CUTZTests/       Tests, aktuell nur SlotCalculator
+CUTZ/Features/   Discover/ · Profile/ · Booking/ · Favorites/ · Account/
+CUTZTests/       Tests zu allem, was ohne Oberfläche prüfbar ist
 supabase/        schema.sql für Phase 2
 ```
+
+Drei Tabs: **Favoriten · Entdecken · Termine.** Entdecken ist der Start.
+Das Nutzerprofil (`Account/`) hängt am Knopf oben rechts, nicht in der
+Tab-Leiste.
+
+**Wiederverwendbare Bausteine liegen in `Core/UI/`** — `BarberCard`,
+`RatingStars`, `FavoriteButton`, `ShopImage`. Bevor du eine neue Karte
+oder Zeile baust: erst dort nachsehen.
 
 ## Wichtige Regeln
 
@@ -41,6 +49,16 @@ keine Netzwerkaufrufe direkt aus Views.
 **Feature-Ordner sind Eigentum.** Beim Arbeiten an einem Feature nach
 Möglichkeit nur den eigenen Ordner anfassen. Änderungen in `Core/` oder
 `App/` betreffen beide Entwickler und sollten explizit erwähnt werden.
+
+**Logik gehört nicht in Views.** Alles, was man ohne Bildschirm prüfen
+kann, liegt in einem eigenen Typ mit statischen Funktionen und hat
+Tests: `SlotCalculator`, `ReviewFiltering`, `BarberFiltering`,
+`BarberSearch`, `AvailabilityText`, `OpeningStatus`. Views zeigen nur an.
+
+**Keine Formatierung über `.formatted()` bei Datum und Wochentag.** Das
+richtet sich nach der Spracheinstellung des Geräts — auf einem englisch
+eingestellten iPhone stünde „Thu" im deutschen Text. Deutsche Namen
+stehen in `AvailabilityText`.
 
 ## Konventionen
 

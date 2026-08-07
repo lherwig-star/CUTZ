@@ -11,11 +11,20 @@ man vorzeigen kann. Nichts wird auf Vorrat gebaut.
 
 ---
 
-## Die drei Kernfunktionen
+## Die drei Bereiche
 
-1. **Karte** — Shops mit Standort, antippbar
-2. **Suche** — dieselben Shops als durchsuchbare Liste
-3. **Profil + Buchung** — Bewertungen sehen, Termin buchen, Kalendereintrag
+1. **Entdecken** — Karte + hochziehbare Barber-Liste, Suche, Filter
+2. **Favoriten** — gemerkte Läden, gleiche Karten wie unter Entdecken
+3. **Termine** — nächster Termin groß, Vergangenes mit „Erneut buchen"
+
+Alles zielt auf einen Ablauf: **Entdecken → Vertrauen → Termin buchen.**
+
+Der Nutzer soll denken „ich brauche einen Haarschnitt" und nicht „ich
+muss jetzt eine Buchungssoftware bedienen". Konkret heißt das: wenige
+Entscheidungen, wenige Screens, große Knöpfe, viel Bild, wenig Text —
+und die Angabe, wann der nächste Termin frei ist, steht schon in der
+Liste. Niemand soll fünf Screens öffnen, um zu merken, dass heute
+nichts mehr geht.
 
 ---
 
@@ -28,15 +37,40 @@ iPhone hat, die sich echt anfühlt. Erst wenn feststeht, wie sie aussehen und
 sich bedienen soll, ist klar, was die Datenbank überhaupt können muss.
 Andersherum baut man meistens am Bedarf vorbei.
 
-- [x] Datenmodelle: `Barbershop`, `BarberService`, `Review`, `Booking`, `OpeningHour`
+- [x] Datenmodelle: `Barbershop`, `BarberService`, `BarberEmployee`, `Review`,
+      `Booking`, `OpeningHour`, `ServiceCategory`
 - [x] `BarbershopRepository` als Protokoll — die Naht zum späteren Backend
-- [x] Karte mit Markern, Standortfreigabe, Vorschaukarte
-- [x] Suchliste mit Textsuche und Sortierung (Bewertung / Entfernung / Preis)
-- [x] Shop-Profil: Leistungen, Öffnungszeiten, Adresse, Route
-- [x] Bewertungen anzeigen
-- [x] Buchung: Leistung → Tag → Uhrzeit → bestätigen
+- [x] Drei Tabs, Entdecken als Start, Profil hinter dem Knopf oben rechts
+- [x] Karte mit Preis-Pins und Standort
+- [x] Hochziehbare Barber-Liste mit `BarberCard`
+- [x] Filter (Zeit, Entfernung, Preis, Bewertung, Service) und Sortierung
+- [x] Suche nach Barber, Salon und Ort
+- [x] Barber-Profil: Arbeiten, Team, Leistungen, Bewertungen, Standort
+- [x] Buchung in vier Schritten inkl. Barber-Wahl und „egal welcher"
 - [x] Kalendereintrag über EventKit
-- [x] Tests für die Terminberechnung
+- [x] Favoriten, gespeichert in `UserDefaults`
+- [x] Termine: nächster groß, Vergangenes mit „Erneut buchen"
+- [x] Account-Bereich (Platzhalter bis Phase 3)
+- [x] Tests für alles, was ohne Oberfläche prüfbar ist
+
+### Bewusste Entscheidungen beim Umbau
+
+**Bilder gibt es noch keine.** `ShopImage` zeichnet Farbverläufe, die
+aus der Shop-ID abgeleitet werden — derselbe Laden also immer in
+derselben Farbe. Sobald echte Fotos vorliegen (Phase 5), lädt dieselbe
+View sie ohne weitere Änderung.
+
+**Die Liste über der Karte ist selbst gebaut**, kein Apple-`.sheet`
+mit `presentationDetents`. Ein dauerhaft geöffnetes Sheet legt sich in
+iOS über die gesamte App und wäre auch in den anderen Tabs sichtbar.
+
+**Gezogen wird nur am Griff der Liste**, nicht an der Liste selbst.
+Beides zu koppeln (Apple-Maps-Verhalten) ist berüchtigt fehleranfällig:
+Man schließt dann versehentlich das Sheet, wenn man scrollen wollte.
+
+**Kein Monatskalender im Buchungsablauf.** Ein Kalenderblatt zeigt vor
+allem Tage, an denen nichts geht. Waagerechte Tagesleiste plus direkt
+sichtbare Uhrzeiten zeigen, was geht.
 
 ---
 
@@ -141,12 +175,25 @@ den ganzen Weg kennen.
 
 | | Finn | Lukas |
 |---|---|---|
-| **Ordner** | `Features/Map/`<br>`Features/Search/` | `Features/Profile/`<br>`Features/Booking/` |
-| **Themen** | MapKit, Standort, Filter, Sortierung | Formulare, EventKit, Bewertungen |
+| **Ordner** | `Features/Discover/` | `Features/Profile/`<br>`Features/Booking/`<br>`Features/Favorites/`<br>`Features/Account/` |
+| **Themen** | MapKit, Standort, Filter, Suche | Buchungsablauf, EventKit, Bewertungen, Favoriten |
 | **Phase 2** | `SupabaseBarbershopRepository` — Shops laden | Buchungen & Bewertungen speichern |
 
 `Core/` und `App/` gehören beiden. Änderungen dort vorher kurz absprechen —
 das sind die einzigen Stellen, an denen ihr euch in die Quere kommen könnt.
+
+> ⚠️ **Der große Umbau hat `Core/` und `App/` deutlich verändert.**
+>
+> - `RootView` hat jetzt drei Tabs (Favoriten, Entdecken, Termine).
+> - `AppModel` hält zusätzlich `favorites`, `location` und `nextSlots`.
+> - `BarbershopRepository` kennt `cancelBooking` und `nextAvailableSlots`;
+>   `createBooking` nimmt einen Mitarbeiter entgegen. **Alle drei müssen
+>   in `SupabaseBarbershopRepository` umgesetzt werden**, sonst
+>   kompiliert das Projekt nicht.
+> - `Booking` hat `status`, `employeeID` und `employeeName`.
+> - `Barbershop` hat `employees` und `portfolioImageURLs`.
+> - `MapScreen`, `SearchScreen` und `ShopRow` sind ersatzlos entfallen —
+>   sie stecken jetzt in `Features/Discover/` und `Core/UI/BarberCard`.
 
 ### Nächste konkrete Schritte
 
@@ -159,26 +206,23 @@ im Simulator ansehen. Erst danach aufteilen.
 3. Suche und Karte verbinden: Tippt man in der Liste auf einen Shop,
    springt die Karte dorthin
 
-**Lukas** — ✅ alle drei erledigt
+**Lukas** — ✅ erledigt
 1. [x] Bewertungen nach Sternen filtern und sortieren
 2. [x] Im Profil anzeigen, ob gerade geöffnet ist ("Jetzt geöffnet · bis 19:00")
 3. [x] Termin absagen
-4. [x] Ruhetage in der Tagesauswahl ausgrauen (fiel bei 2. nebenbei an)
+4. [x] Ruhetage in der Tagesauswahl ausgrauen
 
-> ⚠️ **Finn, zwei Änderungen in `Core/` betreffen dich:**
->
-> **`BarbershopRepository` hat eine Funktion mehr: `cancelBooking`.**
-> Dein `SupabaseBarbershopRepository` muss sie in Phase 2 ebenfalls
-> umsetzen, sonst kompiliert das Projekt nicht.
->
-> **`Booking` hat ein Feld `status`** (`confirmed` / `cancelled` /
-> `completed`) — genau die Werte, die `schema.sql` schon vorsah.
-> Abgesagte Termine werden markiert, nicht gelöscht. Wichtig beim
-> Berechnen freier Zeiten: Abgesagte dürfen nicht mehr blockieren.
->
-> Neu in `Core/Models/` ist außerdem `OpeningStatus` — `shop.openingStatus()`
-> liefert "Jetzt geöffnet · bis 19:00". Kannst du in der Suchliste
-> gebrauchen, falls du magst.
+**Offen für beide — das kann nur am Mac beurteilt werden:**
+
+Der komplette Umbau ist gebaut und die Tests laufen durch, aber **noch
+nie hat jemand die App danach im Simulator gesehen.** Grün heißt hier
+„kompiliert und rechnet richtig", nicht „sieht gut aus". Zu prüfen:
+
+- [ ] Lässt sich die Liste angenehm hochziehen, rasten die Stufen gut?
+- [ ] Ist die Karte unter der Liste noch bedienbar?
+- [ ] Sind die Farbverläufe als Bildersatz akzeptabel oder störend?
+- [ ] Ist der Buchungsablauf wirklich in wenigen Sekunden durch?
+- [ ] Stimmen die Abstände auf kleinen Geräten (iPhone SE)?
 
 ---
 
