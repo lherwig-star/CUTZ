@@ -44,8 +44,16 @@ final class BookingFlowTests: XCTestCase {
         )
     }
 
-    private func makeViewModel(shop: Barbershop) -> BookingViewModel {
-        BookingViewModel(shop: shop, repository: MockBarbershopRepository())
+    private func makeViewModel(
+        shop: Barbershop,
+        repository: BarbershopRepository = MockBarbershopRepository()
+    ) -> BookingViewModel {
+        let viewModel = BookingViewModel(shop: shop, repository: repository)
+        // WICHTIG: Den echten Kalendereintrag ersetzen. EventKit zeigt
+        // einen Erlaubnis-Dialog, den im Testlauf niemand wegklickt —
+        // der Test würde ewig hängen statt fehlzuschlagen.
+        viewModel.addToCalendar = { _ in }
+        return viewModel
     }
 
     // MARK: - Der ganze Weg
@@ -125,7 +133,7 @@ final class BookingFlowTests: XCTestCase {
     func testBookedSlotIsGoneAfterwards() async {
         let shop = makeShop()
         let repository = MockBarbershopRepository()
-        let viewModel = BookingViewModel(shop: shop, repository: repository)
+        let viewModel = makeViewModel(shop: shop, repository: repository)
 
         viewModel.selectedService = shop.services[0]
         await viewModel.goForward()

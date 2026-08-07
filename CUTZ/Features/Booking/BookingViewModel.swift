@@ -73,6 +73,16 @@ final class BookingViewModel {
     let shop: Barbershop
     private let repository: BarbershopRepository
 
+    /// Trägt den Termin in den Kalender ein. Im Betrieb ist das
+    /// `CalendarService.addToCalendar`.
+    ///
+    /// Warum austauschbar? EventKit zeigt beim ersten Zugriff einen
+    /// Erlaubnis-Dialog — und im Testlauf sitzt niemand, der ihn
+    /// wegklickt. Der Test würde ewig warten (genau das hat die CI
+    /// eine halbe Stunde lang aufgehängt). Tests reichen deshalb eine
+    /// leere Funktion herein.
+    var addToCalendar: (Booking) async throws -> Void = CalendarService.addToCalendar
+
     init(shop: Barbershop, repository: BarbershopRepository) {
         self.shop = shop
         self.repository = repository
@@ -163,7 +173,7 @@ final class BookingViewModel {
             // Schlägt er fehl (z. B. Erlaubnis verweigert), bleibt die
             // Buchung trotzdem gültig — wir sagen es nur dazu.
             do {
-                try await CalendarService.addToCalendar(booking)
+                try await addToCalendar(booking)
                 calendarStatus = .added
             } catch {
                 calendarStatus = .failed(error.localizedDescription)
