@@ -274,3 +274,30 @@
 /* ── Friseurseite: Fehlermeldungen ── */
 "Diese Sperrzeit existiert nicht mehr." = "لم تعد فترة الحجب هذه موجودة.";
 "Dieser Laden existiert nicht mehr." = "لم يعد هذا الصالون موجودًا.";
+
+/* ── Friseurseite: Übersicht ── */
+"Profil ansehen" = "عرض الملف الشخصي";
+"Geprüfter Laden" = "صالون موثّق";
+"Statistiken" = "الإحصاءات";
+"Kein Laden verknüpft" = "لا يوجد صالون مرتبط";
+"Trag deinen Laden ein, dann siehst du hier deine Termine." = "سجّل صالونك وستظهر مواعيدك هنا.";
+"An diesem Tag geschlossen" = "مغلق في هذا اليوم";
+"Öffnungszeiten änderst du im Profil." = "يمكنك تغيير ساعات العمل من الملف الشخصي.";
+"Zur Kundenansicht wechseln" = "التبديل إلى واجهة الزبون";
+"Profil bearbeiten" = "تعديل الملف الشخصي";
+"Keine Benachrichtigungen" = "لا توجد إشعارات";
+"Sobald jemand bucht oder absagt, steht es hier." = "بمجرد أن يحجز أحدهم أو يلغي، سيظهر ذلك هنا.";
+"Bestätigt" = "مؤكد";
+"Verfügbar" = "متاح";
+"Termin von Hand eintragen" = "إضافة موعد يدويًا";
+
+/* ── Friseurseite: Laufkundschaft ── */
+"Termin eintragen" = "إضافة موعد";
+"Wer kommt?" = "من سيأتي؟";
+"Leistung" = "الخدمة";
+"Wer schneidet?" = "من سيقص؟";
+"Eintragen" = "إضافة";
+"Zu wenig Zeit" = "الوقت غير كافٍ";
+"In diese Lücke passt keine deiner Leistungen." = "لا تتسع هذه الفجوة لأي من خدماتك.";
+"Beginn" = "يبدأ في";
+"Die freie Lücke geht bis %@." = "تمتد الفجوة المتاحة حتى %@.";

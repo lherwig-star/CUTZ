@@ -266,3 +266,30 @@
 /* ── Friseurseite: Fehlermeldungen ── */
 "Diese Sperrzeit existiert nicht mehr." = "This blocked time no longer exists.";
 "Dieser Laden existiert nicht mehr." = "This shop no longer exists.";
+
+/* ── Friseurseite: Übersicht ── */
+"Profil ansehen" = "View profile";
+"Geprüfter Laden" = "Verified shop";
+"Statistiken" = "Statistics";
+"Kein Laden verknüpft" = "No shop linked";
+"Trag deinen Laden ein, dann siehst du hier deine Termine." = "List your shop and your appointments will show up here.";
+"An diesem Tag geschlossen" = "Closed on this day";
+"Öffnungszeiten änderst du im Profil." = "You can change opening hours in your profile.";
+"Zur Kundenansicht wechseln" = "Switch to customer view";
+"Profil bearbeiten" = "Edit profile";
+"Keine Benachrichtigungen" = "No notifications";
+"Sobald jemand bucht oder absagt, steht es hier." = "As soon as someone books or cancels, it shows up here.";
+"Bestätigt" = "Confirmed";
+"Verfügbar" = "Available";
+"Termin von Hand eintragen" = "Add an appointment manually";
+
+/* ── Friseurseite: Laufkundschaft ── */
+"Termin eintragen" = "Add appointment";
+"Wer kommt?" = "Who's coming?";
+"Leistung" = "Service";
+"Wer schneidet?" = "Who's cutting?";
+"Eintragen" = "Add";
+"Zu wenig Zeit" = "Not enough time";
+"In diese Lücke passt keine deiner Leistungen." = "None of your services fit into this gap.";
+"Beginn" = "Starts at";
+"Die freie Lücke geht bis %@." = "The free gap runs until %@.";

@@ -279,3 +279,30 @@
 /* ── Friseurseite: Fehlermeldungen ── */
 "Diese Sperrzeit existiert nicht mehr." = "Diese Sperrzeit existiert nicht mehr.";
 "Dieser Laden existiert nicht mehr." = "Dieser Laden existiert nicht mehr.";
+
+/* ── Friseurseite: Übersicht ── */
+"Profil ansehen" = "Profil ansehen";
+"Geprüfter Laden" = "Geprüfter Laden";
+"Statistiken" = "Statistiken";
+"Kein Laden verknüpft" = "Kein Laden verknüpft";
+"Trag deinen Laden ein, dann siehst du hier deine Termine." = "Trag deinen Laden ein, dann siehst du hier deine Termine.";
+"An diesem Tag geschlossen" = "An diesem Tag geschlossen";
+"Öffnungszeiten änderst du im Profil." = "Öffnungszeiten änderst du im Profil.";
+"Zur Kundenansicht wechseln" = "Zur Kundenansicht wechseln";
+"Profil bearbeiten" = "Profil bearbeiten";
+"Keine Benachrichtigungen" = "Keine Benachrichtigungen";
+"Sobald jemand bucht oder absagt, steht es hier." = "Sobald jemand bucht oder absagt, steht es hier.";
+"Bestätigt" = "Bestätigt";
+"Verfügbar" = "Verfügbar";
+"Termin von Hand eintragen" = "Termin von Hand eintragen";
+
+/* ── Friseurseite: Laufkundschaft ── */
+"Termin eintragen" = "Termin eintragen";
+"Wer kommt?" = "Wer kommt?";
+"Leistung" = "Leistung";
+"Wer schneidet?" = "Wer schneidet?";
+"Eintragen" = "Eintragen";
+"Zu wenig Zeit" = "Zu wenig Zeit";
+"In diese Lücke passt keine deiner Leistungen." = "In diese Lücke passt keine deiner Leistungen.";
+"Beginn" = "Beginn";
+"Die freie Lücke geht bis %@." = "Die freie Lücke geht bis %@.";
