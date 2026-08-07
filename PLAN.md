@@ -195,6 +195,28 @@ das sind die einzigen Stellen, an denen ihr euch in die Quere kommen könnt.
 > - `MapScreen`, `SearchScreen` und `ShopRow` sind ersatzlos entfallen —
 >   sie stecken jetzt in `Features/Discover/` und `Core/UI/BarberCard`.
 
+> ⚠️ **Die App ist jetzt dreisprachig — das betrifft jeden neuen Text.**
+>
+> - Texte stehen in `CUTZ/Resources/<sprache>.lproj/Localizable.strings`,
+>   je einmal für `de`, `en` und `ar`. Der Schlüssel ist der deutsche
+>   Satz selbst, `Text("Termin buchen")` funktioniert also unverändert.
+> - **Neuer deutscher Text heißt: alle drei Dateien anfassen.** Fehlt
+>   ein Eintrag, zeigt iOS stillschweigend den Schlüssel an — also
+>   deutschen Text in der englischen App. `LocalizationTests` fängt das ab.
+> - `Text(einString)` übersetzt **nicht**, nur `Text("literal")`. Nimmt
+>   eine Hilfsfunktion Text entgegen, muss der Parameter
+>   `LocalizedStringKey` heißen. Berechnete Texte brauchen
+>   `String(localized: "…")`.
+> - Der Testlauf steht fest auf Deutsch (`project.yml`, Schema →
+>   `test` → `language`). Ohne das richtet sich die App nach dem
+>   Rechner, und auf dem englischen Mac bei GitHub wird aus
+>   "Heute 18:30" ein "Today 18:30" — 20 Tests waren deswegen rot.
+> - Neu: `DistanceText` (Entfernung an einer Stelle formatiert) und
+>   `AvailabilityText.shortWeekdayNames` / `longWeekdayNames`.
+> - Für Arabisch dreht iOS das Layout. Deshalb überall
+>   `leading`/`trailing` statt `left`/`right` und `chevron.forward`
+>   statt `chevron.right`.
+
 ### Nächste konkrete Schritte
 
 **Beide zuerst:** Xcode installieren, Projekt zum Laufen bringen, App einmal
@@ -223,6 +245,13 @@ nie hat jemand die App danach im Simulator gesehen.** Grün heißt hier
 - [ ] Sind die Farbverläufe als Bildersatz akzeptabel oder störend?
 - [ ] Ist der Buchungsablauf wirklich in wenigen Sekunden durch?
 - [ ] Stimmen die Abstände auf kleinen Geräten (iPhone SE)?
+- [ ] Sieht die App auf **Arabisch** vernünftig aus? iOS spiegelt das
+      Layout, aber ob alles sitzt, sieht man erst im Simulator.
+      (Einstellungen → CUTZ → Sprache)
+- [ ] Die arabische Übersetzung ist Hocharabisch und stammt nicht von
+      einem Muttersprachler. Vor einer Veröffentlichung drüberlesen
+      lassen — vor allem die Anrede, das deutsche „du" lässt sich
+      nicht eins zu eins übertragen.
 
 ---
 
