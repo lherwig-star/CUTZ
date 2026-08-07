@@ -57,7 +57,7 @@ struct Booking: Identifiable, Codable, Hashable {
     /// z. B. "bei Samir" — oder leer, wenn kein Barber festgelegt wurde.
     var employeeText: String? {
         guard let employeeName else { return nil }
-        return "bei \(employeeName)"
+        return String(format: String(localized: "booking.withEmployee"), employeeName)
     }
 
     /// z. B. "Fr., 14. Aug. 2026 um 14:30"

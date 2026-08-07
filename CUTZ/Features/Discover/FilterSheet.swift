@@ -199,22 +199,22 @@ struct FilterSheet: View {
     // erst mühsam auflösen muss.
 
     private func distanceLabel(_ km: Double) -> String {
-        "bis \(Int(km)) km"
+        String(format: String(localized: "filter.upToDistance"), Int(km))
     }
 
     private func priceLabel(_ euro: Int) -> String {
-        "bis \(euro) €"
+        String(format: String(localized: "filter.upToPrice"), euro)
     }
 
     private func ratingLabel(_ rating: Double) -> String {
         let number = rating.formatted(.number.precision(.fractionLength(1)))
-        return "ab \(number) ★"
+        return String(format: String(localized: "filter.fromRating"), number)
     }
 
     // MARK: - Bausteine
 
     private func section<Content: View>(
-        _ title: String,
+        _ title: LocalizedStringKey,
         @ViewBuilder content: () -> Content
     ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -244,7 +244,9 @@ struct FilterSheet: View {
     }
 
     private func applyLabel(_ count: Int) -> String {
-        count == 1 ? "1 Barber anzeigen" : "\(count) Barber anzeigen"
+        count == 1
+            ? String(localized: "filter.showOne")
+            : String(format: String(localized: "filter.showMany"), count)
     }
 }
 

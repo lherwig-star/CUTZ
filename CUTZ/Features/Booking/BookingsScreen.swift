@@ -111,7 +111,9 @@ struct BookingsScreen: View {
         }
     }
 
-    private func sectionTitle(_ text: String) -> some View {
+    /// `LocalizedStringKey` statt `String` - sonst wuerde SwiftUI den
+    /// Text nicht uebersetzen.
+    private func sectionTitle(_ text: LocalizedStringKey) -> some View {
         Text(text)
             .font(.headline)
             .padding(.top, 4)

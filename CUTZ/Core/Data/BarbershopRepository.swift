@@ -77,7 +77,7 @@ enum RepositoryError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .bookingNotFound:
-            return "Dieser Termin existiert nicht mehr."
+            return String(localized: "Dieser Termin existiert nicht mehr.")
         }
     }
 }

@@ -1,0 +1,227 @@
+/*
+   CUTZ — Deutsch (Ausgangssprache)
+
+   ── Wie das hier funktioniert ─────────────────────────────
+
+   Links steht der SCHLÜSSEL, rechts der angezeigte Text.
+
+   Bei den meisten Einträgen ist der Schlüssel der deutsche Satz selbst.
+   Das ist Absicht: Im Code steht dann einfach Text("Termin buchen"),
+   und SwiftUI schlägt automatisch hier nach. Man muss beim Programmieren
+   also nichts Zusätzliches tun — nur die Übersetzungen in en.lproj und
+   ar.lproj nachziehen.
+
+   ACHTUNG: Ändert man den deutschen Text im Code, ändert sich damit der
+   Schlüssel. Dann greifen die Übersetzungen nicht mehr und englische
+   Nutzer sehen plötzlich Deutsch. In dem Fall auch die anderen beiden
+   Dateien anpassen.
+
+   Wo ein Wert eingesetzt wird, stehen Platzhalter:
+     %@      ein Text
+     %lld    eine ganze Zahl
+     %1$@    der ERSTE Wert — nötig, wenn die Reihenfolge je Sprache
+             abweicht (z. B. Tag/Monat)
+*/
+
+/* ── Wochentage, kurz ── */
+"weekday.short.sunday" = "So";
+"weekday.short.monday" = "Mo";
+"weekday.short.tuesday" = "Di";
+"weekday.short.wednesday" = "Mi";
+"weekday.short.thursday" = "Do";
+"weekday.short.friday" = "Fr";
+"weekday.short.saturday" = "Sa";
+
+/* ── Wochentage, ausgeschrieben ── */
+"weekday.long.sunday" = "Sonntag";
+"weekday.long.monday" = "Montag";
+"weekday.long.tuesday" = "Dienstag";
+"weekday.long.wednesday" = "Mittwoch";
+"weekday.long.thursday" = "Donnerstag";
+"weekday.long.friday" = "Freitag";
+"weekday.long.saturday" = "Samstag";
+
+/* ── Verfügbarkeit ── %1$@ Tag/Zeit, %2$@ Zeit ── */
+"availability.today" = "Heute %@";
+"availability.tomorrow" = "Morgen %@";
+"availability.weekday" = "%1$@ %2$@";
+"availability.date" = "%1$@ %2$@";
+"availability.long.today" = "Heute · %@";
+"availability.long.tomorrow" = "Morgen · %@";
+"availability.long.date" = "%1$@, %2$@ · %3$@";
+
+/* Tag und Monat. %1$@ = Tag, %2$@ = Monat, beide zweistellig. */
+"date.dayMonth" = "%1$@.%2$@.";
+
+/* ── Öffnungszeiten ── */
+"opening.openUntil" = "Jetzt geöffnet · bis %@";
+"opening.closedUntil" = "Geschlossen · öffnet %1$@ %2$@";
+"opening.closedIndefinitely" = "Zurzeit geschlossen";
+"opening.today" = "heute";
+"opening.tomorrow" = "morgen";
+"geschlossen" = "geschlossen";
+
+/* ── Entfernung, Preis, Dauer ── */
+"distance.meters" = "%lld m";
+"distance.kilometers" = "%@ km";
+"price.short" = "%lld €";
+"price.from" = "ab %@";
+"service.duration" = "%lld Min.";
+"duration.minutes" = "%lld Minuten";
+
+/* ── Tab-Leiste ── */
+"Favoriten" = "Favoriten";
+"Entdecken" = "Entdecken";
+"Termine" = "Termine";
+
+/* ── Entdecken ── */
+"Barber oder Ort suchen" = "Barber oder Ort suchen";
+"Suchen" = "Suchen";
+"Profil" = "Profil";
+"Sofort" = "Sofort";
+"Filter" = "Filter";
+"Nur sofort verfügbare Termine" = "Nur sofort verfügbare Termine";
+"Kein Barber passt zu deinen Filtern." = "Kein Barber passt zu deinen Filtern.";
+"Gerade ist nirgendwo kurzfristig etwas frei. Schalte „Sofort“ aus, um spätere Termine zu sehen." = "Gerade ist nirgendwo kurzfristig etwas frei. Schalte „Sofort“ aus, um spätere Termine zu sehen.";
+"%lld Barber" = "%lld Barber";
+
+/* ── Barber-Karte ── */
+"%@ verfügbar" = "%@ verfügbar";
+"Zurzeit kein freier Termin" = "Zurzeit kein freier Termin";
+"· %lld Bewertungen" = "· %lld Bewertungen";
+"Zu Favoriten hinzufügen" = "Zu Favoriten hinzufügen";
+"Aus Favoriten entfernen" = "Aus Favoriten entfernen";
+
+/* ── Filter ── */
+"Zurücksetzen" = "Zurücksetzen";
+"Abbrechen" = "Abbrechen";
+"Wann?" = "Wann?";
+"Service" = "Service";
+"Entfernung" = "Entfernung";
+"Preis" = "Preis";
+"Bewertung" = "Bewertung";
+"Sortieren nach" = "Sortieren nach";
+"Nur sofort verfügbar" = "Nur sofort verfügbar";
+"Egal" = "Egal";
+"Heute" = "Heute";
+"Morgen" = "Morgen";
+"Diese Woche" = "Diese Woche";
+"Empfohlen" = "Empfohlen";
+"filter.upToDistance" = "bis %lld km";
+"filter.upToPrice" = "bis %lld €";
+"filter.fromRating" = "ab %@ ★";
+"filter.showOne" = "1 Barber anzeigen";
+"filter.showMany" = "%lld Barber anzeigen";
+
+/* ── Leistungsarten ── */
+"Haircut" = "Haircut";
+"Skin Fade" = "Skin Fade";
+"Hair + Beard" = "Hair + Beard";
+"Beard" = "Beard";
+
+/* ── Suche ── */
+"Suche" = "Suche";
+"Fertig" = "Fertig";
+"Eingabe löschen" = "Eingabe löschen";
+"Suche nach einem Barber, Salon oder Ort." = "Suche nach einem Barber, Salon oder Ort.";
+
+/* ── Favoriten ── */
+"Noch keine Favoriten" = "Noch keine Favoriten";
+"Tippe bei einem Barber auf das Herz, dann findest du ihn hier wieder." = "Tippe bei einem Barber auf das Herz, dann findest du ihn hier wieder.";
+
+/* ── Shop-Profil ── */
+"Team" = "Team";
+"Arbeiten" = "Arbeiten";
+"Services & Preise" = "Services & Preise";
+"Standort" = "Standort";
+"Navigation" = "Navigation";
+"Anrufen" = "Anrufen";
+"Termin buchen" = "Termin buchen";
+"Schließen" = "Schließen";
+
+/* ── Bewertungen ── */
+"Bewertungen" = "Bewertungen";
+"Noch keine Bewertungen." = "Noch keine Bewertungen.";
+"Keine Bewertung passt zu diesem Filter." = "Keine Bewertung passt zu diesem Filter.";
+"%lld von %lld Bewertungen" = "%lld von %lld Bewertungen";
+"%lld Bewertungen" = "%lld Bewertungen";
+"Sortieren" = "Sortieren";
+"Filtern" = "Filtern";
+"Sortieren und filtern" = "Sortieren und filtern";
+"Bewertungen sortieren und filtern" = "Bewertungen sortieren und filtern";
+"Alle" = "Alle";
+"Ab 3 Sternen" = "Ab 3 Sternen";
+"Ab 4 Sternen" = "Ab 4 Sternen";
+"Nur 5 Sterne" = "Nur 5 Sterne";
+"Neueste zuerst" = "Neueste zuerst";
+"Beste zuerst" = "Beste zuerst";
+"Schlechteste zuerst" = "Schlechteste zuerst";
+
+/* ── Buchungsablauf ── */
+"Was möchtest du?" = "Was möchtest du?";
+"Wer soll dich schneiden?" = "Wer soll dich schneiden?";
+"Wann passt es dir?" = "Wann passt es dir?";
+"Passt alles?" = "Passt alles?";
+"Schnellster Termin" = "Schnellster Termin";
+"Egal welcher Barber" = "Egal welcher Barber";
+"Oder direkt jemanden wählen" = "Oder direkt jemanden wählen";
+"Zurück" = "Zurück";
+"Weiter" = "Weiter";
+"Service wählen" = "Service wählen";
+"Uhrzeit wählen" = "Uhrzeit wählen";
+"booking.continueAt" = "Weiter · %@";
+"booking.confirmWithPrice" = "Termin buchen · %@";
+"booking.withEmployee" = "bei %@";
+"Der Shop hat an diesem Tag geschlossen." = "Der Shop hat an diesem Tag geschlossen.";
+"An diesem Tag sind keine Termine mehr frei." = "An diesem Tag sind keine Termine mehr frei.";
+"Barber" = "Barber";
+"Termin" = "Termin";
+"Gesamt" = "Gesamt";
+"Antippen, um %@ zu ändern" = "Antippen, um %@ zu ändern";
+
+/* ── Bestätigung ── */
+"Termin gebucht" = "Termin gebucht";
+"In deinen Kalender eingetragen" = "In deinen Kalender eingetragen";
+"Nicht im Kalender gespeichert" = "Nicht im Kalender gespeichert";
+"Navigation starten" = "Navigation starten";
+
+/* ── Terminübersicht ── */
+"Nächster Termin" = "Nächster Termin";
+"Weitere Termine" = "Weitere Termine";
+"Vergangen" = "Vergangen";
+"Noch keine Termine" = "Noch keine Termine";
+"Such dir unter Entdecken einen Barber und buche deinen ersten Termin." = "Such dir unter Entdecken einen Barber und buche deinen ersten Termin.";
+"Umbuchen" = "Umbuchen";
+"Stornieren" = "Stornieren";
+"Erneut buchen" = "Erneut buchen";
+"Termin stornieren?" = "Termin stornieren?";
+"Termin stornieren" = "Termin stornieren";
+"Behalten" = "Behalten";
+"· Abgesagt" = "· Abgesagt";
+"%@ bei %@\nam %@" = "%@ bei %@\nam %@";
+
+/* ── Profil ── */
+"Noch nicht angemeldet" = "Noch nicht angemeldet";
+"Mit einem Konto siehst du deine Termine auf allen Geräten." = "Mit einem Konto siehst du deine Termine auf allen Geräten.";
+"Anmelden" = "Anmelden";
+"Account" = "Account";
+"Name" = "Name";
+"E-Mail" = "E-Mail";
+"Telefon" = "Telefon";
+"Einstellungen" = "Einstellungen";
+"Benachrichtigungen" = "Benachrichtigungen";
+"Sprache" = "Sprache";
+"In den iOS-Einstellungen ändern" = "In den iOS-Einstellungen ändern";
+"Erlaubt" = "Erlaubt";
+"Nicht erlaubt" = "Nicht erlaubt";
+"Noch nicht gefragt" = "Noch nicht gefragt";
+"Support" = "Support";
+"Hilfe" = "Hilfe";
+"Problem melden" = "Problem melden";
+"Datenschutz" = "Datenschutz";
+"Impressum" = "Impressum";
+"CUTZ · Version 0.1.0" = "CUTZ · Version 0.1.0";
+
+/* ── Fehlermeldungen ── */
+"Dieser Termin existiert nicht mehr." = "Dieser Termin existiert nicht mehr.";
+"Absagen fehlgeschlagen" = "Absagen fehlgeschlagen";

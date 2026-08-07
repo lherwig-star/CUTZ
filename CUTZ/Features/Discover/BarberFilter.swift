@@ -16,10 +16,10 @@ enum TimingFilter: CaseIterable, Identifiable {
 
     var label: String {
         switch self {
-        case .any:      return "Egal"
-        case .today:    return "Heute"
-        case .tomorrow: return "Morgen"
-        case .thisWeek: return "Diese Woche"
+        case .any:      return String(localized: "Egal")
+        case .today:    return String(localized: "Heute")
+        case .tomorrow: return String(localized: "Morgen")
+        case .thisWeek: return String(localized: "Diese Woche")
         }
     }
 
@@ -47,10 +47,10 @@ enum BarberSort: CaseIterable, Identifiable {
 
     var label: String {
         switch self {
-        case .recommended: return "Empfohlen"
-        case .distance:    return "Entfernung"
-        case .rating:      return "Bewertung"
-        case .price:       return "Preis"
+        case .recommended: return String(localized: "Empfohlen")
+        case .distance:    return String(localized: "Entfernung")
+        case .rating:      return String(localized: "Bewertung")
+        case .price:       return String(localized: "Preis")
         }
     }
 }

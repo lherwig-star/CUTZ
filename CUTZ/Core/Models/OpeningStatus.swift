@@ -33,27 +33,36 @@ enum OpeningStatus: Equatable {
     var text: String {
         switch self {
         case .open(let closesAtMinute):
-            return "Jetzt geöffnet · bis \(OpeningHour.timeString(fromMinute: closesAtMinute))"
+            return String(
+                format: String(localized: "opening.openUntil"),
+                OpeningHour.timeString(fromMinute: closesAtMinute)
+            )
 
         case .closed(let opensInDays, let weekday, let opensAtMinute):
-            let tag = Self.dayText(opensInDays: opensInDays, weekday: weekday)
-            return "Geschlossen · öffnet \(tag) \(OpeningHour.timeString(fromMinute: opensAtMinute))"
+            return String(
+                format: String(localized: "opening.closedUntil"),
+                Self.dayText(opensInDays: opensInDays, weekday: weekday),
+                OpeningHour.timeString(fromMinute: opensAtMinute)
+            )
 
         case .closedIndefinitely:
-            return "Zurzeit geschlossen"
+            return String(localized: "opening.closedIndefinitely")
         }
     }
 
     /// "heute", "morgen" oder der Wochentagsname.
     private static func dayText(opensInDays: Int, weekday: Int) -> String {
         switch opensInDays {
-        case 0: return "heute"
-        case 1: return "morgen"
+        case 0: return String(localized: "opening.today")
+        case 1: return String(localized: "opening.tomorrow")
         default:
-            let symbols = Calendar.current.weekdaySymbols
+            // Die ausgeschriebenen Wochentage kommen aus derselben
+            // Quelle wie in der Terminübersicht — sonst hieße es an
+            // einer Stelle "Donnerstag" und an der anderen "Thursday".
+            let names = AvailabilityText.longWeekdayNames
             let index = weekday - 1
-            guard symbols.indices.contains(index) else { return "" }
-            return symbols[index]
+            guard names.indices.contains(index) else { return "" }
+            return names[index]
         }
     }
 }

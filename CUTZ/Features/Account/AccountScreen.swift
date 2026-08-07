@@ -79,6 +79,7 @@ struct AccountScreen: View {
     private var settingsSection: some View {
         Section("Einstellungen") {
             Label("Benachrichtigungen", systemImage: "bell")
+
             LabeledContent {
                 Text(locationStatusText)
                     .foregroundStyle(.secondary)
@@ -86,8 +87,20 @@ struct AccountScreen: View {
                 Label("Standort", systemImage: "location")
             }
 
-            // Führt in die iOS-Einstellungen. Standortfreigabe kann eine
-            // App nicht selbst ändern — nur der Nutzer im System.
+            LabeledContent {
+                Text(currentLanguageName)
+                    .foregroundStyle(.secondary)
+            } label: {
+                Label("Sprache", systemImage: "globe")
+            }
+
+            // Führt in die iOS-Einstellungen. Sprache und Standortfreigabe
+            // kann eine App nicht selbst umstellen — das macht iOS.
+            //
+            // Seit iOS 13 hat jede App dort einen eigenen Eintrag
+            // "Sprache", in dem man Deutsch, Englisch oder Arabisch
+            // wählen kann, unabhängig von der Systemsprache. Genau
+            // dorthin führt dieser Verweis.
             Link(destination: URL(string: UIApplication.openSettingsURLString)!) {
                 Label("In den iOS-Einstellungen ändern", systemImage: "gear")
                     .font(.subheadline)
@@ -115,7 +128,7 @@ struct AccountScreen: View {
 
     // MARK: - Helfer
 
-    private func placeholderRow(_ title: String, value: String, symbol: String) -> some View {
+    private func placeholderRow(_ title: LocalizedStringKey, value: String, symbol: String) -> some View {
         LabeledContent {
             Text(value)
                 .foregroundStyle(.secondary)
@@ -124,11 +137,24 @@ struct AccountScreen: View {
         }
     }
 
+    /// Die Sprache, in der die App gerade läuft — in dieser Sprache
+    /// benannt ("Deutsch", "English", "العربية").
+    ///
+    /// `preferredLocalizations.first` liefert die Sprache, die iOS für
+    /// CUTZ tatsächlich ausgewählt hat. Das ist nicht dasselbe wie die
+    /// Systemsprache: Wer sein iPhone auf Türkisch hat, sieht CUTZ
+    /// trotzdem auf Deutsch, weil wir kein Türkisch anbieten.
+    private var currentLanguageName: String {
+        let code = Bundle.main.preferredLocalizations.first ?? "de"
+        let locale = Locale(identifier: code)
+        return locale.localizedString(forLanguageCode: code)?.capitalized ?? code
+    }
+
     private var locationStatusText: String {
         switch appModel.location.authorizationStatus {
-        case .authorizedAlways, .authorizedWhenInUse: return "Erlaubt"
-        case .denied, .restricted:                    return "Nicht erlaubt"
-        default:                                      return "Noch nicht gefragt"
+        case .authorizedAlways, .authorizedWhenInUse: return String(localized: "Erlaubt")
+        case .denied, .restricted:                    return String(localized: "Nicht erlaubt")
+        default:                                      return String(localized: "Noch nicht gefragt")
         }
     }
 }

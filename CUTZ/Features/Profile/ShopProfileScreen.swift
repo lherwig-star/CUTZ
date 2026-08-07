@@ -292,7 +292,9 @@ struct ShopProfileScreen: View {
 
     // MARK: - Helfer
 
-    private func sectionTitle(_ text: String) -> some View {
+    /// `LocalizedStringKey` statt `String`: Nur so uebersetzt SwiftUI
+    /// den Text. Bei `Text(einString)` bliebe er wie er ist.
+    private func sectionTitle(_ text: LocalizedStringKey) -> some View {
         Text(text)
             .font(.title3)
             .fontWeight(.semibold)
@@ -318,8 +320,7 @@ struct ShopProfileScreen: View {
 
     private var distanceText: String? {
         guard let meters = appModel.distance(to: shop) else { return nil }
-        if meters < 1000 { return "\(Int(meters)) m" }
-        return "\((meters / 1000).formatted(.number.precision(.fractionLength(1)))) km"
+        return DistanceText.short(meters: meters)
     }
 
     private func loadReviews() async {
@@ -331,10 +332,12 @@ struct ShopProfileScreen: View {
     }
 
     private func weekdayName(_ weekday: Int) -> String {
-        let symbols = Calendar.current.weekdaySymbols
+        // Aus derselben Quelle wie ueberall sonst, damit nicht an
+        // einer Stelle "Donnerstag" und an der anderen "Thursday" steht.
+        let names = AvailabilityText.longWeekdayNames
         let index = weekday - 1
-        guard symbols.indices.contains(index) else { return "" }
-        return symbols[index]
+        guard names.indices.contains(index) else { return "" }
+        return names[index]
     }
 }
 

@@ -30,12 +30,13 @@ struct BarberService: Identifiable, Codable, Hashable {
     /// z. B. "28,00 €" — mit korrektem deutschen Komma.
     var priceFormatted: String {
         let euros = Double(priceCents) / 100
-        return euros.formatted(.currency(code: "EUR").locale(Locale(identifier: "de_DE")))
+        // Waehrung bleibt Euro, die Schreibweise folgt der App-Sprache.
+        return euros.formatted(.currency(code: "EUR"))
     }
 
     /// z. B. "30 Min."
     var durationFormatted: String {
-        "\(durationMinutes) Min."
+        String(format: String(localized: "service.duration"), durationMinutes)
     }
 
     /// Kurzform ohne Nachkommastellen für Karten: "25 €".
@@ -43,6 +44,6 @@ struct BarberService: Identifiable, Codable, Hashable {
     /// In der Liste zählt schnelle Erfassbarkeit — "25 €" liest sich
     /// nebenbei, "25,00 €" muss man lesen.
     var priceShort: String {
-        "\(priceCents / 100) €"
+        String(format: String(localized: "price.short"), priceCents / 100)
     }
 }

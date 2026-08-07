@@ -269,8 +269,8 @@ struct BarberListSheet: View {
     /// woran es liegt, sonst wirkt die App kaputt.
     private var emptyStateText: String {
         isAvailableNowActive
-            ? "Gerade ist nirgendwo kurzfristig etwas frei. Schalte „Sofort“ aus, um spätere Termine zu sehen."
-            : "Kein Barber passt zu deinen Filtern."
+            ? String(localized: "Gerade ist nirgendwo kurzfristig etwas frei. Schalte „Sofort“ aus, um spätere Termine zu sehen.")
+            : String(localized: "Kein Barber passt zu deinen Filtern.")
     }
 
     private func clamp(_ value: CGFloat, min lower: CGFloat, max upper: CGFloat) -> CGFloat {

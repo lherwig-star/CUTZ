@@ -118,11 +118,7 @@ struct BarberCard: View {
     /// Unter 1 km in Metern, darüber in Kilometern.
     private var distanceText: String? {
         guard let distanceInMeters else { return nil }
-        if distanceInMeters < 1000 {
-            return "\(Int(distanceInMeters)) m"
-        }
-        let km = distanceInMeters / 1000
-        return "\(km.formatted(.number.precision(.fractionLength(1)))) km"
+        return DistanceText.short(meters: distanceInMeters)
     }
 }
 

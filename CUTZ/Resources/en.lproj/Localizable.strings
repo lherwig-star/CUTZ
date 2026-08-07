@@ -1,0 +1,214 @@
+/*
+   CUTZ — English
+
+   The key on the left is the German source text. Only the right-hand
+   side is translated. See de.lproj/Localizable.strings for how this
+   works.
+
+   If someone changes the German text in the code, the key here stops
+   matching and English users will suddenly see German. Keep both files
+   in sync.
+*/
+
+/* ── Weekdays, short ── */
+"weekday.short.sunday" = "Sun";
+"weekday.short.monday" = "Mon";
+"weekday.short.tuesday" = "Tue";
+"weekday.short.wednesday" = "Wed";
+"weekday.short.thursday" = "Thu";
+"weekday.short.friday" = "Fri";
+"weekday.short.saturday" = "Sat";
+
+/* ── Weekdays, full ── */
+"weekday.long.sunday" = "Sunday";
+"weekday.long.monday" = "Monday";
+"weekday.long.tuesday" = "Tuesday";
+"weekday.long.wednesday" = "Wednesday";
+"weekday.long.thursday" = "Thursday";
+"weekday.long.friday" = "Friday";
+"weekday.long.saturday" = "Saturday";
+
+/* ── Availability ── */
+"availability.today" = "Today %@";
+"availability.tomorrow" = "Tomorrow %@";
+"availability.weekday" = "%1$@ %2$@";
+"availability.date" = "%1$@ %2$@";
+"availability.long.today" = "Today · %@";
+"availability.long.tomorrow" = "Tomorrow · %@";
+"availability.long.date" = "%1$@, %2$@ · %3$@";
+
+/* Month before day in English. %1$@ = day, %2$@ = month. */
+"date.dayMonth" = "%2$@/%1$@";
+
+/* ── Opening hours ── */
+"opening.openUntil" = "Open now · until %@";
+"opening.closedUntil" = "Closed · opens %1$@ %2$@";
+"opening.closedIndefinitely" = "Currently closed";
+"opening.today" = "today";
+"opening.tomorrow" = "tomorrow";
+"geschlossen" = "closed";
+
+/* ── Distance, price, duration ── */
+"distance.meters" = "%lld m";
+"distance.kilometers" = "%@ km";
+"price.short" = "€%lld";
+"price.from" = "from %@";
+"service.duration" = "%lld min";
+"duration.minutes" = "%lld minutes";
+
+/* ── Tab bar ── */
+"Favoriten" = "Favourites";
+"Entdecken" = "Discover";
+"Termine" = "Appointments";
+
+/* ── Discover ── */
+"Barber oder Ort suchen" = "Search barber or place";
+"Suchen" = "Search";
+"Profil" = "Profile";
+"Sofort" = "Now";
+"Filter" = "Filters";
+"Nur sofort verfügbare Termine" = "Only appointments available right now";
+"Kein Barber passt zu deinen Filtern." = "No barber matches your filters.";
+"Gerade ist nirgendwo kurzfristig etwas frei. Schalte „Sofort“ aus, um spätere Termine zu sehen." = "Nothing is available at short notice right now. Turn off “Now” to see later appointments.";
+"%lld Barber" = "%lld barbers";
+
+/* ── Barber card ── */
+"%@ verfügbar" = "%@ available";
+"Zurzeit kein freier Termin" = "No appointment available";
+"· %lld Bewertungen" = "· %lld reviews";
+"Zu Favoriten hinzufügen" = "Add to favourites";
+"Aus Favoriten entfernen" = "Remove from favourites";
+
+/* ── Filters ── */
+"Zurücksetzen" = "Reset";
+"Abbrechen" = "Cancel";
+"Wann?" = "When?";
+"Service" = "Service";
+"Entfernung" = "Distance";
+"Preis" = "Price";
+"Bewertung" = "Rating";
+"Sortieren nach" = "Sort by";
+"Nur sofort verfügbar" = "Available right now";
+"Egal" = "Any";
+"Heute" = "Today";
+"Morgen" = "Tomorrow";
+"Diese Woche" = "This week";
+"Empfohlen" = "Recommended";
+"filter.upToDistance" = "up to %lld km";
+"filter.upToPrice" = "up to €%lld";
+"filter.fromRating" = "%@ ★ and up";
+"filter.showOne" = "Show 1 barber";
+"filter.showMany" = "Show %lld barbers";
+
+/* ── Service categories — industry terms, kept as they are ── */
+"Haircut" = "Haircut";
+"Skin Fade" = "Skin Fade";
+"Hair + Beard" = "Hair + Beard";
+"Beard" = "Beard";
+
+/* ── Search ── */
+"Suche" = "Search";
+"Fertig" = "Done";
+"Eingabe löschen" = "Clear text";
+"Suche nach einem Barber, Salon oder Ort." = "Search for a barber, salon or place.";
+
+/* ── Favourites ── */
+"Noch keine Favoriten" = "No favourites yet";
+"Tippe bei einem Barber auf das Herz, dann findest du ihn hier wieder." = "Tap the heart on a barber and you will find them here.";
+
+/* ── Shop profile ── */
+"Team" = "Team";
+"Arbeiten" = "Work";
+"Services & Preise" = "Services & prices";
+"Standort" = "Location";
+"Navigation" = "Directions";
+"Anrufen" = "Call";
+"Termin buchen" = "Book appointment";
+"Schließen" = "Close";
+
+/* ── Reviews ── */
+"Bewertungen" = "Reviews";
+"Noch keine Bewertungen." = "No reviews yet.";
+"Keine Bewertung passt zu diesem Filter." = "No review matches this filter.";
+"%lld von %lld Bewertungen" = "%1$lld of %2$lld reviews";
+"%lld Bewertungen" = "%lld reviews";
+"Sortieren" = "Sort";
+"Filtern" = "Filter";
+"Sortieren und filtern" = "Sort and filter";
+"Bewertungen sortieren und filtern" = "Sort and filter reviews";
+"Alle" = "All";
+"Ab 3 Sternen" = "3 stars and up";
+"Ab 4 Sternen" = "4 stars and up";
+"Nur 5 Sterne" = "5 stars only";
+"Neueste zuerst" = "Newest first";
+"Beste zuerst" = "Best first";
+"Schlechteste zuerst" = "Worst first";
+
+/* ── Booking flow ── */
+"Was möchtest du?" = "What do you want?";
+"Wer soll dich schneiden?" = "Who should cut your hair?";
+"Wann passt es dir?" = "When suits you?";
+"Passt alles?" = "Everything correct?";
+"Schnellster Termin" = "Earliest appointment";
+"Egal welcher Barber" = "Any barber";
+"Oder direkt jemanden wählen" = "Or pick someone directly";
+"Zurück" = "Back";
+"Weiter" = "Continue";
+"Service wählen" = "Choose a service";
+"Uhrzeit wählen" = "Choose a time";
+"booking.continueAt" = "Continue · %@";
+"booking.confirmWithPrice" = "Book appointment · %@";
+"booking.withEmployee" = "with %@";
+"Der Shop hat an diesem Tag geschlossen." = "The shop is closed on this day.";
+"An diesem Tag sind keine Termine mehr frei." = "No appointments left on this day.";
+"Barber" = "Barber";
+"Termin" = "Appointment";
+"Gesamt" = "Total";
+"Antippen, um %@ zu ändern" = "Tap to change %@";
+
+/* ── Confirmation ── */
+"Termin gebucht" = "Appointment booked";
+"In deinen Kalender eingetragen" = "Added to your calendar";
+"Nicht im Kalender gespeichert" = "Not saved to calendar";
+"Navigation starten" = "Start directions";
+
+/* ── Appointments ── */
+"Nächster Termin" = "Next appointment";
+"Weitere Termine" = "Further appointments";
+"Vergangen" = "Past";
+"Noch keine Termine" = "No appointments yet";
+"Such dir unter Entdecken einen Barber und buche deinen ersten Termin." = "Find a barber under Discover and book your first appointment.";
+"Umbuchen" = "Reschedule";
+"Stornieren" = "Cancel";
+"Erneut buchen" = "Book again";
+"Termin stornieren?" = "Cancel appointment?";
+"Termin stornieren" = "Cancel appointment";
+"Behalten" = "Keep";
+"· Abgesagt" = "· Cancelled";
+"%@ bei %@\nam %@" = "%1$@ at %2$@\non %3$@";
+
+/* ── Profile ── */
+"Noch nicht angemeldet" = "Not signed in";
+"Mit einem Konto siehst du deine Termine auf allen Geräten." = "With an account you can see your appointments on all devices.";
+"Anmelden" = "Sign in";
+"Account" = "Account";
+"Name" = "Name";
+"E-Mail" = "Email";
+"Telefon" = "Phone";
+"Einstellungen" = "Settings";
+"Benachrichtigungen" = "Notifications";
+"Sprache" = "Language";
+"In den iOS-Einstellungen ändern" = "Change in iOS settings";
+"Erlaubt" = "Allowed";
+"Nicht erlaubt" = "Not allowed";
+"Noch nicht gefragt" = "Not asked yet";
+"Support" = "Support";
+"Hilfe" = "Help";
+"Problem melden" = "Report a problem";
+"Datenschutz" = "Privacy";
+"Impressum" = "Legal notice";
+"CUTZ · Version 0.1.0" = "CUTZ · Version 0.1.0";
+
+/* ── Errors ── */
+"Dieser Termin existiert nicht mehr." = "This appointment no longer exists.";
+"Absagen fehlgeschlagen" = "Cancellation failed";

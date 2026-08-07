@@ -21,6 +21,9 @@ options:
     iOS: "17.0"
   createIntermediateGroups: true
   groupSortPosition: top
+  # Deutsch ist die Ausgangssprache: In den Sprachdateien stehen die
+  # deutschen Sätze als Schlüssel, übersetzt wird nur die rechte Seite.
+  developmentLanguage: de
 
 # Globale Build-Einstellungen für alle Targets
 settings:
@@ -62,6 +65,15 @@ targets:
         CFBundleDisplayName: CUTZ
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+
+        # Die Sprachen, die CUTZ anbietet. Nur was hier steht, taucht in
+        # den iOS-Einstellungen unter "Sprache" bei der App auf.
+        # Texte liegen in CUTZ/Resources/<sprache>.lproj/
+        CFBundleDevelopmentRegion: de
+        CFBundleLocalizations:
+          - de
+          - en
+          - ar
         UILaunchScreen:
           UIColorName: ""
         UISupportedInterfaceOrientations:

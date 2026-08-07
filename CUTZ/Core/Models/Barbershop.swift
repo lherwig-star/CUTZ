@@ -93,7 +93,7 @@ struct Barbershop: Identifiable, Codable, Hashable {
     /// "ab 25 €" für die Barber-Karte. `nil`, wenn es nichts zu buchen gibt.
     var priceFromText: String? {
         guard let cheapestService else { return nil }
-        return "ab \(cheapestService.priceShort)"
+        return String(format: String(localized: "price.from"), cheapestService.priceShort)
     }
 
     /// Der kürzeste Service.

@@ -51,7 +51,10 @@ struct NextAppointmentCard: View {
                 factRow(symbol: "person", text: employeeText)
             }
 
-            factRow(symbol: "clock", text: "\(booking.durationMinutes) Minuten")
+            factRow(
+                symbol: "clock",
+                text: String(format: String(localized: "duration.minutes"), booking.durationMinutes)
+            )
         }
     }
 

@@ -161,7 +161,7 @@ struct BookingFlowScreen: View {
             Button {
                 withAnimation(.snappy) { viewModel.goBack() }
             } label: {
-                Label("Zurück", systemImage: "chevron.left")
+                Label("Zurück", systemImage: "chevron.backward")
             }
         }
     }
@@ -202,15 +202,24 @@ struct BookingFlowScreen: View {
     private func buttonTitle(_ viewModel: BookingViewModel) -> String {
         switch viewModel.step {
         case .service:
-            return viewModel.selectedService == nil ? "Service wählen" : "Weiter"
+            return viewModel.selectedService == nil
+                ? String(localized: "Service wählen")
+                : String(localized: "Weiter")
         case .employee:
-            return "Weiter"
+            return String(localized: "Weiter")
         case .time:
-            guard let slot = viewModel.selectedSlot else { return "Uhrzeit wählen" }
-            return "Weiter · \(AvailabilityText.timeText(for: slot))"
+            guard let slot = viewModel.selectedSlot else {
+                return String(localized: "Uhrzeit wählen")
+            }
+            return String(
+                format: String(localized: "booking.continueAt"),
+                AvailabilityText.timeText(for: slot)
+            )
         case .summary:
-            guard let price = viewModel.totalPriceText else { return "Termin buchen" }
-            return "Termin buchen · \(price)"
+            guard let price = viewModel.totalPriceText else {
+                return String(localized: "Termin buchen")
+            }
+            return String(format: String(localized: "booking.confirmWithPrice"), price)
         }
     }
 }

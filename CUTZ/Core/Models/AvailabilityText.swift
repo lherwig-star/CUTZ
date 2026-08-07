@@ -17,25 +17,45 @@ import Foundation
 /// ── Warum alles von Hand formatiert wird ──────────────────
 ///
 /// Naheliegend wäre `date.formatted(.dateTime.weekday(.abbreviated))`.
-/// Das richtet sich aber nach der Spracheinstellung des GERÄTS: Auf
-/// einem englisch eingestellten iPhone stünde dann "Thu" und "08/20"
-/// mitten im deutschen Text — und im Testlauf auf GitHub fiel genau
-/// das auf.
+/// Das richtet sich aber nach der REGION des Geräts, nicht nach der
+/// gewählten App-Sprache. Wer sein iPhone auf Deutschland eingestellt
+/// hat, CUTZ aber auf Englisch nutzt, bekäme deutsche Wochentage im
+/// englischen Text.
 ///
-/// CUTZ ist eine deutschsprachige App (siehe CLAUDE.md, Locale de_DE).
-/// Deshalb schreiben wir die Wochentage selbst hin. Das ist zugleich
-/// vorhersagbar: Dieselbe Eingabe ergibt immer dieselbe Ausgabe,
-/// unabhängig davon, wo der Code läuft.
+/// Deshalb liegen die Namen als übersetzbare Texte vor. Vorteil
+/// nebenbei: Dieselbe Eingabe ergibt in derselben Sprache immer
+/// dieselbe Ausgabe — das lässt sich testen.
 enum AvailabilityText {
 
     /// Kurzform: "Mo", "Di" …  Index 0 = Sonntag, passend zu Apples
     /// Wochentagszählung (1 = Sonntag), von der wir 1 abziehen.
-    static let shortWeekdayNames = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
+    ///
+    /// Die Schlüssel tragen ein Präfix, weil "Mo" allein mehrdeutig
+    /// wäre — im Arabischen und Englischen stehen an derselben Stelle
+    /// ganz andere Abkürzungen.
+    static var shortWeekdayNames: [String] {
+        [
+            String(localized: "weekday.short.sunday"),
+            String(localized: "weekday.short.monday"),
+            String(localized: "weekday.short.tuesday"),
+            String(localized: "weekday.short.wednesday"),
+            String(localized: "weekday.short.thursday"),
+            String(localized: "weekday.short.friday"),
+            String(localized: "weekday.short.saturday")
+        ]
+    }
 
-    static let longWeekdayNames = [
-        "Sonntag", "Montag", "Dienstag", "Mittwoch",
-        "Donnerstag", "Freitag", "Samstag"
-    ]
+    static var longWeekdayNames: [String] {
+        [
+            String(localized: "weekday.long.sunday"),
+            String(localized: "weekday.long.monday"),
+            String(localized: "weekday.long.tuesday"),
+            String(localized: "weekday.long.wednesday"),
+            String(localized: "weekday.long.thursday"),
+            String(localized: "weekday.long.friday"),
+            String(localized: "weekday.long.saturday")
+        ]
+    }
 
     /// Kurzform für Karten und Listen.
     ///
@@ -50,21 +70,21 @@ enum AvailabilityText {
         let time = timeText(for: date, calendar: calendar)
 
         if calendar.isDate(date, inSameDayAs: now) {
-            return "Heute \(time)"
+            return format("availability.today", time)
         }
 
         if let tomorrow = calendar.date(byAdding: .day, value: 1, to: now),
            calendar.isDate(date, inSameDayAs: tomorrow) {
-            return "Morgen \(time)"
+            return format("availability.tomorrow", time)
         }
 
         // Innerhalb der nächsten Woche reicht der Wochentag — "Do 09:30"
         // liest sich schneller als ein Datum.
         if daysBetween(now, date, calendar: calendar) < 7 {
-            return "\(shortWeekday(of: date, calendar: calendar)) \(time)"
+            return format("availability.weekday", shortWeekday(of: date, calendar: calendar), time)
         }
 
-        return "\(dayAndMonth(of: date, calendar: calendar)) \(time)"
+        return format("availability.date", dayAndMonth(of: date, calendar: calendar), time)
     }
 
     /// Volle Angabe für die Terminübersicht:
@@ -77,15 +97,19 @@ enum AvailabilityText {
         let time = timeText(for: date, calendar: calendar)
 
         if calendar.isDate(date, inSameDayAs: now) {
-            return "Heute · \(time)"
+            return format("availability.long.today", time)
         }
         if let tomorrow = calendar.date(byAdding: .day, value: 1, to: now),
            calendar.isDate(date, inSameDayAs: tomorrow) {
-            return "Morgen · \(time)"
+            return format("availability.long.tomorrow", time)
         }
 
-        let weekday = longWeekday(of: date, calendar: calendar)
-        return "\(weekday), \(dayAndMonth(of: date, calendar: calendar)) · \(time)"
+        return format(
+            "availability.long.date",
+            longWeekday(of: date, calendar: calendar),
+            dayAndMonth(of: date, calendar: calendar),
+            time
+        )
     }
 
     /// Nur die Uhrzeit, immer zweistellig: "09:30".
@@ -97,10 +121,28 @@ enum AvailabilityText {
         return String(format: "%02d:%02d", parts.hour ?? 0, parts.minute ?? 0)
     }
 
-    /// "20.08."
+    /// "20.08." auf Deutsch, "08/20" auf Englisch.
+    ///
+    /// Reihenfolge und Trennzeichen stehen in den Sprachdateien —
+    /// Tag und Monat werden als %1$@ und %2$@ eingesetzt.
     static func dayAndMonth(of date: Date, calendar: Calendar = .current) -> String {
         let parts = calendar.dateComponents([.day, .month], from: date)
-        return String(format: "%02d.%02d.", parts.day ?? 0, parts.month ?? 0)
+        let day = String(format: "%02d", parts.day ?? 0)
+        let month = String(format: "%02d", parts.month ?? 0)
+        return format("date.dayMonth", day, month)
+    }
+
+    /// Setzt Werte in einen übersetzten Text mit Platzhaltern ein.
+    ///
+    /// Eigener Helfer, weil `String(localized:)` und `String(format:)`
+    /// sonst an jeder Stelle doppelt dastünden. Die Reihenfolge der
+    /// Platzhalter darf je Sprache abweichen — deshalb %1$@, %2$@
+    /// statt schlicht %@.
+    private static func format(_ key: String.LocalizationValue, _ arguments: String...) -> String {
+        // Die Umwandlung steht ausdrücklich da: `String(format:arguments:)`
+        // erwartet [CVarArg], und darauf sollte man sich nicht stillschweigend
+        // verlassen.
+        String(format: String(localized: key), arguments: arguments.map { $0 as CVarArg })
     }
 
     // MARK: - Wochentage

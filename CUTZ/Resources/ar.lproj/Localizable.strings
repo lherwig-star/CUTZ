@@ -1,0 +1,222 @@
+/*
+   CUTZ — العربية (Arabisch)
+
+   Der Schlüssel links ist der deutsche Ausgangstext, übersetzt wird
+   nur die rechte Seite. Siehe de.lproj/Localizable.strings.
+
+   ── Hinweise für später ───────────────────────────────────
+
+   Arabisch läuft von rechts nach links. iOS dreht das Layout dafür
+   automatisch um, sobald diese Sprache aktiv ist — dafür muss im Code
+   `leading`/`trailing` stehen statt `left`/`right`. Das ist im Projekt
+   überall so gemacht, und die Pfeilsymbole heißen `chevron.forward`
+   bzw. `chevron.backward` statt `.right`/`.left`, damit sie mitdrehen.
+
+   Diese Übersetzung ist als Hocharabisch (MSA) gehalten. Vor einer
+   Veröffentlichung sollte ein Muttersprachler drübersehen — vor allem
+   bei der Anrede: Im Deutschen duzen wir, das lässt sich nicht
+   eins zu eins übertragen.
+*/
+
+/* ── Wochentage, kurz ── */
+"weekday.short.sunday" = "أحد";
+"weekday.short.monday" = "إثن";
+"weekday.short.tuesday" = "ثلا";
+"weekday.short.wednesday" = "أرب";
+"weekday.short.thursday" = "خمي";
+"weekday.short.friday" = "جمع";
+"weekday.short.saturday" = "سبت";
+
+/* ── Wochentage, ausgeschrieben ── */
+"weekday.long.sunday" = "الأحد";
+"weekday.long.monday" = "الإثنين";
+"weekday.long.tuesday" = "الثلاثاء";
+"weekday.long.wednesday" = "الأربعاء";
+"weekday.long.thursday" = "الخميس";
+"weekday.long.friday" = "الجمعة";
+"weekday.long.saturday" = "السبت";
+
+/* ── Verfügbarkeit ── */
+"availability.today" = "اليوم %@";
+"availability.tomorrow" = "غدًا %@";
+"availability.weekday" = "%1$@ %2$@";
+"availability.date" = "%1$@ %2$@";
+"availability.long.today" = "اليوم · %@";
+"availability.long.tomorrow" = "غدًا · %@";
+"availability.long.date" = "%1$@، %2$@ · %3$@";
+
+/* Tag vor Monat, mit Schrägstrich. */
+"date.dayMonth" = "%1$@/%2$@";
+
+/* ── Öffnungszeiten ── */
+"opening.openUntil" = "مفتوح الآن · حتى %@";
+"opening.closedUntil" = "مغلق · يفتح %1$@ %2$@";
+"opening.closedIndefinitely" = "مغلق حاليًا";
+"opening.today" = "اليوم";
+"opening.tomorrow" = "غدًا";
+"geschlossen" = "مغلق";
+
+/* ── Entfernung, Preis, Dauer ── */
+"distance.meters" = "%lld م";
+"distance.kilometers" = "%@ كم";
+"price.short" = "%lld €";
+"price.from" = "ابتداءً من %@";
+"service.duration" = "%lld د.";
+"duration.minutes" = "%lld دقيقة";
+
+/* ── Tab-Leiste ── */
+"Favoriten" = "المفضلة";
+"Entdecken" = "استكشف";
+"Termine" = "المواعيد";
+
+/* ── Entdecken ── */
+"Barber oder Ort suchen" = "ابحث عن حلاق أو مكان";
+"Suchen" = "بحث";
+"Profil" = "الملف الشخصي";
+"Sofort" = "فورًا";
+"Filter" = "تصفية";
+"Nur sofort verfügbare Termine" = "المواعيد المتاحة فورًا فقط";
+"Kein Barber passt zu deinen Filtern." = "لا يوجد حلاق يطابق عوامل التصفية.";
+"Gerade ist nirgendwo kurzfristig etwas frei. Schalte „Sofort“ aus, um spätere Termine zu sehen." = "لا يوجد موعد متاح في وقت قريب. أوقف «فورًا» لعرض مواعيد لاحقة.";
+"%lld Barber" = "%lld حلاق";
+
+/* ── Barber-Karte ── */
+"%@ verfügbar" = "متاح %@";
+"Zurzeit kein freier Termin" = "لا يوجد موعد متاح";
+"· %lld Bewertungen" = "· %lld تقييمًا";
+"Zu Favoriten hinzufügen" = "إضافة إلى المفضلة";
+"Aus Favoriten entfernen" = "إزالة من المفضلة";
+
+/* ── Filter ── */
+"Zurücksetzen" = "إعادة تعيين";
+"Abbrechen" = "إلغاء";
+"Wann?" = "متى؟";
+"Service" = "الخدمة";
+"Entfernung" = "المسافة";
+"Preis" = "السعر";
+"Bewertung" = "التقييم";
+"Sortieren nach" = "الترتيب حسب";
+"Nur sofort verfügbar" = "المتاح فورًا فقط";
+"Egal" = "الكل";
+"Heute" = "اليوم";
+"Morgen" = "غدًا";
+"Diese Woche" = "هذا الأسبوع";
+"Empfohlen" = "موصى به";
+"filter.upToDistance" = "حتى %lld كم";
+"filter.upToPrice" = "حتى %lld €";
+"filter.fromRating" = "%@ ★ فأعلى";
+"filter.showOne" = "عرض حلاق واحد";
+"filter.showMany" = "عرض %lld حلاق";
+
+/* ── Leistungsarten — Fachbegriffe, im Arabischen ebenfalls üblich ── */
+"Haircut" = "قص الشعر";
+"Skin Fade" = "سكِن فيد";
+"Hair + Beard" = "شعر + لحية";
+"Beard" = "لحية";
+
+/* ── Suche ── */
+"Suche" = "البحث";
+"Fertig" = "تم";
+"Eingabe löschen" = "مسح النص";
+"Suche nach einem Barber, Salon oder Ort." = "ابحث عن حلاق أو صالون أو مكان.";
+
+/* ── Favoriten ── */
+"Noch keine Favoriten" = "لا توجد مفضلات بعد";
+"Tippe bei einem Barber auf das Herz, dann findest du ihn hier wieder." = "اضغط على القلب لدى أي حلاق وستجده هنا.";
+
+/* ── Shop-Profil ── */
+"Team" = "الفريق";
+"Arbeiten" = "الأعمال";
+"Services & Preise" = "الخدمات والأسعار";
+"Standort" = "الموقع";
+"Navigation" = "الاتجاهات";
+"Anrufen" = "اتصال";
+"Termin buchen" = "احجز موعدًا";
+"Schließen" = "إغلاق";
+
+/* ── Bewertungen ── */
+"Bewertungen" = "التقييمات";
+"Noch keine Bewertungen." = "لا توجد تقييمات بعد.";
+"Keine Bewertung passt zu diesem Filter." = "لا يوجد تقييم يطابق هذه التصفية.";
+"%lld von %lld Bewertungen" = "%1$lld من %2$lld تقييمًا";
+"%lld Bewertungen" = "%lld تقييمًا";
+"Sortieren" = "ترتيب";
+"Filtern" = "تصفية";
+"Sortieren und filtern" = "الترتيب والتصفية";
+"Bewertungen sortieren und filtern" = "ترتيب وتصفية التقييمات";
+"Alle" = "الكل";
+"Ab 3 Sternen" = "3 نجوم فأعلى";
+"Ab 4 Sternen" = "4 نجوم فأعلى";
+"Nur 5 Sterne" = "5 نجوم فقط";
+"Neueste zuerst" = "الأحدث أولًا";
+"Beste zuerst" = "الأفضل أولًا";
+"Schlechteste zuerst" = "الأسوأ أولًا";
+
+/* ── Buchungsablauf ── */
+"Was möchtest du?" = "ماذا تريد؟";
+"Wer soll dich schneiden?" = "من سيقص شعرك؟";
+"Wann passt es dir?" = "ما الوقت المناسب لك؟";
+"Passt alles?" = "هل كل شيء صحيح؟";
+"Schnellster Termin" = "أقرب موعد";
+"Egal welcher Barber" = "أي حلاق";
+"Oder direkt jemanden wählen" = "أو اختر شخصًا مباشرة";
+"Zurück" = "رجوع";
+"Weiter" = "متابعة";
+"Service wählen" = "اختر خدمة";
+"Uhrzeit wählen" = "اختر وقتًا";
+"booking.continueAt" = "متابعة · %@";
+"booking.confirmWithPrice" = "احجز موعدًا · %@";
+"booking.withEmployee" = "مع %@";
+"Der Shop hat an diesem Tag geschlossen." = "الصالون مغلق في هذا اليوم.";
+"An diesem Tag sind keine Termine mehr frei." = "لا توجد مواعيد متاحة في هذا اليوم.";
+"Barber" = "الحلاق";
+"Termin" = "الموعد";
+"Gesamt" = "الإجمالي";
+"Antippen, um %@ zu ändern" = "اضغط لتغيير %@";
+
+/* ── Bestätigung ── */
+"Termin gebucht" = "تم حجز الموعد";
+"In deinen Kalender eingetragen" = "تمت الإضافة إلى تقويمك";
+"Nicht im Kalender gespeichert" = "لم يُحفظ في التقويم";
+"Navigation starten" = "ابدأ الاتجاهات";
+
+/* ── Terminübersicht ── */
+"Nächster Termin" = "الموعد القادم";
+"Weitere Termine" = "مواعيد أخرى";
+"Vergangen" = "السابقة";
+"Noch keine Termine" = "لا توجد مواعيد بعد";
+"Such dir unter Entdecken einen Barber und buche deinen ersten Termin." = "ابحث عن حلاق في «استكشف» واحجز موعدك الأول.";
+"Umbuchen" = "تغيير الموعد";
+"Stornieren" = "إلغاء";
+"Erneut buchen" = "احجز مرة أخرى";
+"Termin stornieren?" = "إلغاء الموعد؟";
+"Termin stornieren" = "إلغاء الموعد";
+"Behalten" = "الاحتفاظ به";
+"· Abgesagt" = "· ملغى";
+"%@ bei %@\nam %@" = "%1$@ لدى %2$@\nفي %3$@";
+
+/* ── Profil ── */
+"Noch nicht angemeldet" = "لم تسجّل الدخول بعد";
+"Mit einem Konto siehst du deine Termine auf allen Geräten." = "بحساب واحد ترى مواعيدك على جميع أجهزتك.";
+"Anmelden" = "تسجيل الدخول";
+"Account" = "الحساب";
+"Name" = "الاسم";
+"E-Mail" = "البريد الإلكتروني";
+"Telefon" = "الهاتف";
+"Einstellungen" = "الإعدادات";
+"Benachrichtigungen" = "الإشعارات";
+"Sprache" = "اللغة";
+"In den iOS-Einstellungen ändern" = "التغيير في إعدادات iOS";
+"Erlaubt" = "مسموح";
+"Nicht erlaubt" = "غير مسموح";
+"Noch nicht gefragt" = "لم يُطلب بعد";
+"Support" = "الدعم";
+"Hilfe" = "المساعدة";
+"Problem melden" = "الإبلاغ عن مشكلة";
+"Datenschutz" = "الخصوصية";
+"Impressum" = "بيانات الناشر";
+"CUTZ · Version 0.1.0" = "CUTZ · الإصدار 0.1.0";
+
+/* ── Fehlermeldungen ── */
+"Dieser Termin existiert nicht mehr." = "لم يعد هذا الموعد موجودًا.";
+"Absagen fehlgeschlagen" = "فشل الإلغاء";

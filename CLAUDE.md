@@ -56,9 +56,28 @@ Tests: `SlotCalculator`, `ReviewFiltering`, `BarberFiltering`,
 `BarberSearch`, `AvailabilityText`, `OpeningStatus`. Views zeigen nur an.
 
 **Keine Formatierung über `.formatted()` bei Datum und Wochentag.** Das
-richtet sich nach der Spracheinstellung des Geräts — auf einem englisch
-eingestellten iPhone stünde „Thu" im deutschen Text. Deutsche Namen
-stehen in `AvailabilityText`.
+richtet sich nach der Region des Geräts, nicht nach der App-Sprache.
+Die Namen stehen als übersetzbare Texte in `AvailabilityText`.
+
+**Die App spricht Deutsch, Englisch und Arabisch.** Texte liegen in
+`CUTZ/Resources/<sprache>.lproj/Localizable.strings`. Der Schlüssel ist
+der deutsche Satz selbst — `Text("Termin buchen")` funktioniert also
+ohne Zutun.
+
+Drei Fallstricke:
+
+1. **`Text(einString)` übersetzt NICHT**, nur `Text("literal")`. Nimmt
+   eine Hilfsfunktion Text entgegen, muss der Parameter
+   `LocalizedStringKey` heißen, nicht `String`.
+2. **Berechnete Texte** (in Aufzählungen, `if`-Zweigen, Rückgabewerten)
+   brauchen `String(localized: "…")`.
+3. **Ändert man einen deutschen Text**, ändert sich der Schlüssel — dann
+   greifen `en` und `ar` nicht mehr und englische Nutzer sehen Deutsch.
+   Beide Dateien mitziehen. `LocalizationTests` fängt das ab.
+
+Für Arabisch dreht iOS das Layout automatisch. Deshalb überall
+`leading`/`trailing` statt `left`/`right`, und `chevron.forward`
+statt `chevron.right` — nur die spiegeln mit.
 
 ## Konventionen
 
