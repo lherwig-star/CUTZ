@@ -83,7 +83,8 @@ final class LocalizationTests: XCTestCase {
             "CUTZ · Version 0.1.0",
             "availability.weekday", "availability.date",          // nur Platzhalter
             "availability.long.date", "distance.meters",
-            "distance.kilometers", "price.short"
+            "distance.kilometers", "price.short",
+            "profile.characterCount"
         ]
 
         let english = try strings(for: "en")

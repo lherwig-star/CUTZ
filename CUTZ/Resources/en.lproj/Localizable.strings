@@ -293,3 +293,37 @@
 "In diese Lücke passt keine deiner Leistungen." = "None of your services fit into this gap.";
 "Beginn" = "Starts at";
 "Die freie Lücke geht bis %@." = "The free gap runs until %@.";
+
+/* ── Friseurseite: Profil bearbeiten ── */
+"Speichern" = "Save";
+"Adresse" = "Address";
+"Kontakt" = "Contact";
+"Beschreibung" = "Description";
+"Was macht deinen Laden aus?" = "What makes your shop special?";
+"Steht auf der Kundenseite unter deinem Namen." = "Shown under your name on the customer side.";
+"Bilder" = "Photos";
+"Noch keine Bilder" = "No photos yet";
+"Fotos hochladen geht, sobald der Bildspeicher steht." = "Uploading photos will work once image storage is set up.";
+/* Zeichenzähler: erste Zahl ist die aktuelle Länge, zweite das Maximum. */
+"profile.characterCount" = "%1$lld/%2$lld";
+
+/* ── Friseurseite: Öffnungszeiten ── */
+"Öffnungszeiten" = "Opening hours";
+"Geöffnet" = "Open";
+"Öffnet" = "Opens";
+"Schließt" = "Closes";
+"Die Schließzeit muss nach der Öffnungszeit liegen." = "The closing time must be after the opening time.";
+"Ausnahmen wie Urlaub oder ein früherer Feierabend trägst du im Kalender ein." = "Exceptions like holidays or an early finish go in the calendar.";
+
+/* ── Friseurseite: Leistungen ── */
+"Services verwalten" = "Manage services";
+"Noch keine Leistungen" = "No services yet";
+"Ohne mindestens eine Leistung kann niemand bei dir buchen." = "Without at least one service, nobody can book with you.";
+"Halte eine Zeile gedrückt, um sie zu verschieben. Ganz oben steht, was am häufigsten gebucht wird." = "Press and hold a row to move it. Put what gets booked most at the top.";
+"Neuen Service hinzufügen" = "Add a new service";
+"Neue Leistung" = "New service";
+"Leistung bearbeiten" = "Edit service";
+"z. B. Herrenhaarschnitt" = "e.g. Men's haircut";
+"Art" = "Type";
+"Dauer" = "Duration";
+"Die Dauer bestimmt, wie viel Zeit im Kalender blockiert wird." = "The duration decides how much time is blocked in the calendar.";

@@ -53,11 +53,7 @@ struct PartnerOverviewScreen: View {
     // MARK: - Inhalt
 
     private func content(shop: Barbershop) -> some View {
-        // `@Bindable` erzeugt aus dem beobachteten Objekt Bindungen mit
-        // `$` — der Wochenstreifen schreibt den gewählten Tag zurück.
-        @Bindable var model = partnerModel
-
-        return ScrollView {
+        ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 PartnerShopHeader(
                     shop: shop,
@@ -73,15 +69,24 @@ struct PartnerOverviewScreen: View {
                     onSettings: {}
                 )
 
-                calendarCard(shop: shop, model: model)
+                calendarCard(shop: shop)
             }
             .padding(.horizontal, 18)
             .padding(.bottom, 24)
         }
     }
 
-    private func calendarCard(shop: Barbershop, model: PartnerModel) -> some View {
-        VStack(alignment: .leading, spacing: 14) {
+    private func calendarCard(shop: Barbershop) -> some View {
+        // `@Bindable` erzeugt aus dem beobachteten Objekt Bindungen mit
+        // `$` — der Wochenstreifen schreibt den gewählten Tag zurück.
+        //
+        // Muss GENAU HIER stehen, wo `$model` benutzt wird. Reicht man
+        // das Objekt stattdessen als gewöhnlichen Parameter durch, ist
+        // es drüben nur noch ein normaler Wert und `$` gibt es nicht
+        // mehr — genau daran ist der erste Anlauf gescheitert.
+        @Bindable var model = partnerModel
+
+        return VStack(alignment: .leading, spacing: 14) {
             HStack {
                 Text("Kalender")
                     .font(.headline)

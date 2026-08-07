@@ -306,3 +306,37 @@
 "In diese Lücke passt keine deiner Leistungen." = "In diese Lücke passt keine deiner Leistungen.";
 "Beginn" = "Beginn";
 "Die freie Lücke geht bis %@." = "Die freie Lücke geht bis %@.";
+
+/* ── Friseurseite: Profil bearbeiten ── */
+"Speichern" = "Speichern";
+"Adresse" = "Adresse";
+"Kontakt" = "Kontakt";
+"Beschreibung" = "Beschreibung";
+"Was macht deinen Laden aus?" = "Was macht deinen Laden aus?";
+"Steht auf der Kundenseite unter deinem Namen." = "Steht auf der Kundenseite unter deinem Namen.";
+"Bilder" = "Bilder";
+"Noch keine Bilder" = "Noch keine Bilder";
+"Fotos hochladen geht, sobald der Bildspeicher steht." = "Fotos hochladen geht, sobald der Bildspeicher steht.";
+/* Zeichenzähler: erste Zahl ist die aktuelle Länge, zweite das Maximum. */
+"profile.characterCount" = "%1$lld/%2$lld";
+
+/* ── Friseurseite: Öffnungszeiten ── */
+"Öffnungszeiten" = "Öffnungszeiten";
+"Geöffnet" = "Geöffnet";
+"Öffnet" = "Öffnet";
+"Schließt" = "Schließt";
+"Die Schließzeit muss nach der Öffnungszeit liegen." = "Die Schließzeit muss nach der Öffnungszeit liegen.";
+"Ausnahmen wie Urlaub oder ein früherer Feierabend trägst du im Kalender ein." = "Ausnahmen wie Urlaub oder ein früherer Feierabend trägst du im Kalender ein.";
+
+/* ── Friseurseite: Leistungen ── */
+"Services verwalten" = "Services verwalten";
+"Noch keine Leistungen" = "Noch keine Leistungen";
+"Ohne mindestens eine Leistung kann niemand bei dir buchen." = "Ohne mindestens eine Leistung kann niemand bei dir buchen.";
+"Halte eine Zeile gedrückt, um sie zu verschieben. Ganz oben steht, was am häufigsten gebucht wird." = "Halte eine Zeile gedrückt, um sie zu verschieben. Ganz oben steht, was am häufigsten gebucht wird.";
+"Neuen Service hinzufügen" = "Neuen Service hinzufügen";
+"Neue Leistung" = "Neue Leistung";
+"Leistung bearbeiten" = "Leistung bearbeiten";
+"z. B. Herrenhaarschnitt" = "z. B. Herrenhaarschnitt";
+"Art" = "Art";
+"Dauer" = "Dauer";
+"Die Dauer bestimmt, wie viel Zeit im Kalender blockiert wird." = "Die Dauer bestimmt, wie viel Zeit im Kalender blockiert wird.";

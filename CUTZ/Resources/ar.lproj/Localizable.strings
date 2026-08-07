@@ -301,3 +301,37 @@
 "In diese Lücke passt keine deiner Leistungen." = "لا تتسع هذه الفجوة لأي من خدماتك.";
 "Beginn" = "يبدأ في";
 "Die freie Lücke geht bis %@." = "تمتد الفجوة المتاحة حتى %@.";
+
+/* ── Friseurseite: Profil bearbeiten ── */
+"Speichern" = "حفظ";
+"Adresse" = "العنوان";
+"Kontakt" = "التواصل";
+"Beschreibung" = "الوصف";
+"Was macht deinen Laden aus?" = "ما الذي يميّز صالونك؟";
+"Steht auf der Kundenseite unter deinem Namen." = "يظهر تحت اسمك في واجهة الزبون.";
+"Bilder" = "الصور";
+"Noch keine Bilder" = "لا توجد صور بعد";
+"Fotos hochladen geht, sobald der Bildspeicher steht." = "سيصبح رفع الصور ممكنًا بمجرد تجهيز مساحة التخزين.";
+/* Zeichenzähler: erste Zahl ist die aktuelle Länge, zweite das Maximum. */
+"profile.characterCount" = "%1$lld/%2$lld";
+
+/* ── Friseurseite: Öffnungszeiten ── */
+"Öffnungszeiten" = "ساعات العمل";
+"Geöffnet" = "مفتوح";
+"Öffnet" = "يفتح";
+"Schließt" = "يغلق";
+"Die Schließzeit muss nach der Öffnungszeit liegen." = "يجب أن يكون وقت الإغلاق بعد وقت الفتح.";
+"Ausnahmen wie Urlaub oder ein früherer Feierabend trägst du im Kalender ein." = "الاستثناءات مثل الإجازات أو الإغلاق المبكر تُسجَّل في التقويم.";
+
+/* ── Friseurseite: Leistungen ── */
+"Services verwalten" = "إدارة الخدمات";
+"Noch keine Leistungen" = "لا توجد خدمات بعد";
+"Ohne mindestens eine Leistung kann niemand bei dir buchen." = "بدون خدمة واحدة على الأقل لا يمكن لأحد الحجز لديك.";
+"Halte eine Zeile gedrückt, um sie zu verschieben. Ganz oben steht, was am häufigsten gebucht wird." = "اضغط مطوّلًا على أي صف لتحريكه. ضع الأكثر حجزًا في الأعلى.";
+"Neuen Service hinzufügen" = "إضافة خدمة جديدة";
+"Neue Leistung" = "خدمة جديدة";
+"Leistung bearbeiten" = "تعديل الخدمة";
+"z. B. Herrenhaarschnitt" = "مثال: قص شعر رجالي";
+"Art" = "النوع";
+"Dauer" = "المدة";
+"Die Dauer bestimmt, wie viel Zeit im Kalender blockiert wird." = "المدة تحدد مقدار الوقت المحجوز في التقويم.";
