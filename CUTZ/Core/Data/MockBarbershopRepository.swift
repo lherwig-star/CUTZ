@@ -60,9 +60,56 @@ actor MockBarbershopRepository: BarbershopRepository {
         )
     }
 
+    func nextAvailableSlots() async throws -> [UUID: Date] {
+        await simulateNetworkDelay()
+
+        var result: [UUID: Date] = [:]
+        for shop in shops {
+            if let slot = nextSlot(for: shop) {
+                result[shop.id] = slot
+            }
+        }
+        return result
+    }
+
+    /// Sucht den frühesten freien Termin eines Shops in den nächsten
+    /// 14 Tagen. `nil`, wenn in dem Zeitraum nichts frei ist.
+    ///
+    /// Gerechnet wird mit der KÜRZESTEN Leistung des Shops: Sie passt am
+    /// ehesten in eine Lücke, also ist das Ergebnis wirklich der früheste
+    /// mögliche Termin. Mit einem längeren Service wäre die Angabe zu
+    /// pessimistisch.
+    private func nextSlot(for shop: Barbershop) -> Date? {
+        guard let service = shop.shortestService else { return nil }
+
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+
+        let booked = bookings
+            .filter { $0.shopID == shop.id && $0.status == .confirmed }
+            .map { (start: $0.startsAt, durationMinutes: $0.durationMinutes) }
+
+        for offset in 0..<14 {
+            guard let day = calendar.date(byAdding: .day, value: offset, to: today) else {
+                continue
+            }
+            let slots = SlotCalculator.slots(
+                for: shop,
+                service: service,
+                on: day,
+                bookedSlots: booked
+            )
+            if let first = slots.first {
+                return first
+            }
+        }
+        return nil
+    }
+
     func createBooking(
         shop: Barbershop,
         service: BarberService,
+        employee: BarberEmployee?,
         startsAt: Date
     ) async throws -> Booking {
         await simulateNetworkDelay()
@@ -74,6 +121,8 @@ actor MockBarbershopRepository: BarbershopRepository {
             shopAddress: shop.fullAddress,
             serviceID: service.id,
             serviceName: service.name,
+            employeeID: employee?.id,
+            employeeName: employee?.name,
             startsAt: startsAt,
             durationMinutes: service.durationMinutes
         )

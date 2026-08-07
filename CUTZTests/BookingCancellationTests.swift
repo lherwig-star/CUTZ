@@ -92,7 +92,7 @@ final class BookingCancellationTests: XCTestCase {
         let start = calendar.date(bySettingHour: 10, minute: 0, second: 0, of: futureDay())!
 
         let booking = try await repository.createBooking(
-            shop: shop, service: service, startsAt: start
+            shop: shop, service: service, employee: nil, startsAt: start
         )
 
         try await repository.cancelBooking(booking)
@@ -142,7 +142,7 @@ final class BookingCancellationTests: XCTestCase {
         )
 
         let booking = try await repository.createBooking(
-            shop: shop, service: service, startsAt: start
+            shop: shop, service: service, employee: nil, startsAt: start
         )
 
         // Solange der Termin steht, ist 10:00 vergeben.

@@ -21,6 +21,12 @@ struct BarberService: Identifiable, Codable, Hashable {
     /// kann beim Rechnen nichts verrutschen. Erst bei der Anzeige teilen wir.
     var priceCents: Int
 
+    /// Zu welcher Art Leistung das gehört.
+    ///
+    /// Der Vorgabewert sorgt dafür, dass bestehender Code weiterläuft,
+    /// der die Kategorie gar nicht angibt.
+    var category: ServiceCategory = .haircut
+
     /// z. B. "28,00 €" — mit korrektem deutschen Komma.
     var priceFormatted: String {
         let euros = Double(priceCents) / 100
@@ -30,5 +36,13 @@ struct BarberService: Identifiable, Codable, Hashable {
     /// z. B. "30 Min."
     var durationFormatted: String {
         "\(durationMinutes) Min."
+    }
+
+    /// Kurzform ohne Nachkommastellen für Karten: "25 €".
+    ///
+    /// In der Liste zählt schnelle Erfassbarkeit — "25 €" liest sich
+    /// nebenbei, "25,00 €" muss man lesen.
+    var priceShort: String {
+        "\(priceCents / 100) €"
     }
 }

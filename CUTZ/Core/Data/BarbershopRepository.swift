@@ -32,10 +32,25 @@ protocol BarbershopRepository {
         on day: Date
     ) async throws -> [Date]
 
+    /// Für jeden Shop der nächstmögliche freie Termin.
+    ///
+    /// Warum alle auf einmal statt einzeln pro Shop? Weil die Angabe
+    /// schon in der Liste stehen soll ("Heute 18:30 verfügbar"). Bei
+    /// einem Aufruf pro Shop wären das fünf Anfragen fürs Anzeigen einer
+    /// einzigen Liste — später über echtes Netzwerk spürbar langsam.
+    ///
+    /// Das Ergebnis bildet Shop-ID auf Zeitpunkt ab. Shops ohne freien
+    /// Termin in den nächsten zwei Wochen fehlen schlicht.
+    func nextAvailableSlots() async throws -> [UUID: Date]
+
     /// Einen Termin verbindlich buchen.
+    ///
+    /// `employee` darf `nil` sein — dann hat der Nutzer "egal welcher
+    /// Barber" gewählt und nimmt den schnellsten Termin.
     func createBooking(
         shop: Barbershop,
         service: BarberService,
+        employee: BarberEmployee?,
         startsAt: Date
     ) async throws -> Booking
 

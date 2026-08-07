@@ -17,6 +17,11 @@ final class BookingViewModel {
     // MARK: - Auswahl des Nutzers
 
     var selectedService: BarberService?
+
+    /// Der gewünschte Barber. `nil` heißt "egal welcher" — dann zählt
+    /// nur, wie schnell man drankommt.
+    var selectedEmployee: BarberEmployee?
+
     var selectedDay: Date = .now
     var selectedSlot: Date?
 
@@ -118,6 +123,7 @@ final class BookingViewModel {
             let booking = try await repository.createBooking(
                 shop: shop,
                 service: selectedService,
+                employee: selectedEmployee,
                 startsAt: selectedSlot
             )
             confirmedBooking = booking

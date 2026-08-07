@@ -31,6 +31,12 @@ struct Booking: Identifiable, Codable, Hashable {
     var serviceID: UUID
     var serviceName: String
 
+    /// Wer schneidet. `nil` bedeutet "egal welcher Barber" — dann hat
+    /// der Nutzer bewusst den schnellsten Termin gewählt statt einer
+    /// bestimmten Person.
+    var employeeID: UUID? = nil
+    var employeeName: String? = nil
+
     var startsAt: Date
     var durationMinutes: Int
 
@@ -46,6 +52,12 @@ struct Booking: Identifiable, Codable, Hashable {
     /// Wurde der Termin abgesagt?
     var isCancelled: Bool {
         status == .cancelled
+    }
+
+    /// z. B. "bei Samir" — oder leer, wenn kein Barber festgelegt wurde.
+    var employeeText: String? {
+        guard let employeeName else { return nil }
+        return "bei \(employeeName)"
     }
 
     /// z. B. "Fr., 14. Aug. 2026 um 14:30"

@@ -53,6 +53,17 @@ struct Barbershop: Identifiable, Codable, Hashable {
     var services: [BarberService]
     var openingHours: [OpeningHour]
 
+    /// Die Barber, die hier arbeiten.
+    ///
+    /// Vorgabewert leer, damit bestehender Code und Tests weiterlaufen,
+    /// die noch keine Mitarbeiter angeben.
+    var employees: [BarberEmployee] = []
+
+    /// Beispielarbeiten des Shops. Noch leer — echte Fotos kommen mit
+    /// Supabase Storage (Phase 5). Bis dahin zeichnet die App
+    /// Platzhalter, siehe `ShopImage`.
+    var portfolioImageURLs: [URL] = []
+
     // MARK: - Abgeleitete Werte
     //
     // "computed properties" — sie werden bei jedem Zugriff neu berechnet
@@ -77,6 +88,26 @@ struct Barbershop: Identifiable, Codable, Hashable {
     /// Der günstigste Service — praktisch für "ab 25 €" in der Liste.
     var cheapestService: BarberService? {
         services.min { $0.priceCents < $1.priceCents }
+    }
+
+    /// "ab 25 €" für die Barber-Karte. `nil`, wenn es nichts zu buchen gibt.
+    var priceFromText: String? {
+        guard let cheapestService else { return nil }
+        return "ab \(cheapestService.priceShort)"
+    }
+
+    /// Der kürzeste Service.
+    ///
+    /// Wird gebraucht, um den nächsten freien Termin zu suchen: Je kürzer
+    /// die Leistung, desto eher passt sie noch in eine Lücke. Damit ist
+    /// die Angabe "frühester Termin" auch wirklich die früheste.
+    var shortestService: BarberService? {
+        services.min { $0.durationMinutes < $1.durationMinutes }
+    }
+
+    /// Welche Arten von Leistungen hier angeboten werden — fürs Filtern.
+    var categories: Set<ServiceCategory> {
+        Set(services.map(\.category))
     }
 
     /// Öffnungszeit für einen bestimmten Wochentag, falls vorhanden.
