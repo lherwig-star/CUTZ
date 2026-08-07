@@ -2,32 +2,46 @@ import SwiftUI
 
 /// Die Tab-Leiste unten — das Grundgerüst der App.
 ///
-/// Jeder Tab gehört zu genau einem Feature-Ordner. Wer an einem Feature
-/// arbeitet, fasst nur seinen eigenen Ordner an. Diese Datei ändern wir
-/// nur gemeinsam, wenn ein Tab dazukommt.
+/// Nur drei Bereiche, und zwar genau die drei, die der Nutzungsablauf
+/// braucht: entdecken, gemerkte Läden wiederfinden, Termine ansehen.
+/// Entdecken steht in der Mitte und ist beim Start ausgewählt, weil
+/// dort praktisch alles passiert.
+///
+/// Das Profil gehört bewusst NICHT hierher, sondern hinter den Knopf
+/// oben rechts im Entdecken-Screen. In der Tab-Leiste steht, was man
+/// ständig tut — Einstellungen gehören nicht dazu.
 struct RootView: View {
 
-    /// Holt den `AppModel`, den `CutzApp` weiter oben hineingegeben hat.
     @Environment(AppModel.self) private var appModel
 
+    /// Welcher Tab ist gewählt. Entdecken ist die Vorgabe.
+    @State private var selection: Tab = .discover
+
+    enum Tab {
+        case favorites
+        case discover
+        case appointments
+    }
+
     var body: some View {
-        TabView {
-            // ── Finn ──────────────────────────────────────────
-            MapScreen()
+        TabView(selection: $selection) {
+            FavoritesScreen()
                 .tabItem {
-                    Label("Karte", systemImage: "map")
+                    Label("Favoriten", systemImage: "heart")
                 }
+                .tag(Tab.favorites)
 
-            SearchScreen()
+            DiscoverScreen()
                 .tabItem {
-                    Label("Suche", systemImage: "magnifyingglass")
+                    Label("Entdecken", systemImage: "mappin.and.ellipse")
                 }
+                .tag(Tab.discover)
 
-            // ── Lukas ─────────────────────────────────────────
             BookingsScreen()
                 .tabItem {
                     Label("Termine", systemImage: "calendar")
                 }
+                .tag(Tab.appointments)
         }
         // `.task` startet, sobald die View erscheint, und darf `await`
         // benutzen. Das ist der richtige Ort zum Nachladen von Daten.
