@@ -23,6 +23,7 @@ struct AccountScreen: View {
                 headerSection
                 accountSection
                 settingsSection
+                partnerSection
                 supportSection
                 legalSection
             }
@@ -124,6 +125,46 @@ struct AccountScreen: View {
         Section("Support") {
             Label("Hilfe", systemImage: "questionmark.circle")
             Label("Problem melden", systemImage: "exclamationmark.bubble")
+        }
+    }
+
+    /// Der Weg auf die Friseurseite.
+    ///
+    /// Steht bewusst hier im Kundenprofil und nicht versteckt in den
+    /// Einstellungen. Wer als Friseur von CUTZ hört, hört es meistens
+    /// von einem Kunden — und sucht dann genau hier.
+    ///
+    /// Das ist der billigste Vertriebsweg, den wir haben: Er kostet
+    /// nichts und steht schon da, wenn jemand danach sucht.
+    private var partnerSection: some View {
+        Section {
+            Button {
+                appModel.role.current = .barber
+            } label: {
+                HStack(spacing: 14) {
+                    Image(systemName: "storefront")
+                        .font(.title3)
+                        .frame(width: 28)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Bist du Friseur?")
+                            .font(.headline)
+                        Text("Trag deinen Laden ein und verwalte Termine direkt in CUTZ.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+
+                    Spacer(minLength: 0)
+
+                    Image(systemName: "chevron.forward")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(.tertiary)
+                }
+                .multilineTextAlignment(.leading)
+                .padding(.vertical, 4)
+            }
+            .buttonStyle(.plain)
         }
     }
 

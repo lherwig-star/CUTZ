@@ -39,6 +39,10 @@ final class AppModel {
     /// selbst um das Speichern kümmert — genau wie die Favoriten.
     let language = LanguageStore()
 
+    /// Kunde oder Friseur. Beim allerersten Start noch `nil`, dann
+    /// fragt `RootView` nach.
+    let role = RoleStore()
+
     /// Alle geladenen Shops.
     private(set) var shops: [Barbershop] = []
 

@@ -230,3 +230,23 @@
 /* ── VoiceOver ── */
 "rating.outOfFive" = "Bewertung %@ von 5";
 "rating.reviewCountSuffix" = ", %lld Bewertungen";
+
+/* ── Rollenwahl beim ersten Start ── */
+"Willkommen bei CUTZ" = "Willkommen bei CUTZ";
+"Wie möchtest du CUTZ nutzen?" = "Wie möchtest du CUTZ nutzen?";
+"Ich suche einen Termin" = "Ich suche einen Termin";
+"Barbershops in deiner Nähe finden, vergleichen und direkt buchen." = "Barbershops in deiner Nähe finden, vergleichen und direkt buchen.";
+"Ich bin Friseur" = "Ich bin Friseur";
+"Meinen Laden eintragen, Termine verwalten und neue Kunden gewinnen." = "Meinen Laden eintragen, Termine verwalten und neue Kunden gewinnen.";
+"Das lässt sich später jederzeit im Profil ändern." = "Das lässt sich später jederzeit im Profil ändern.";
+
+/* ── Hinweis im Kundenprofil ── */
+"Bist du Friseur?" = "Bist du Friseur?";
+"Trag deinen Laden ein und verwalte Termine direkt in CUTZ." = "Trag deinen Laden ein und verwalte Termine direkt in CUTZ.";
+
+/* ── Friseurseite: Tab-Leiste ── */
+"Übersicht" = "Übersicht";
+"Kalender" = "Kalender";
+"Buchungen" = "Buchungen";
+"Kunden" = "Kunden";
+"Dieser Bereich wird gerade gebaut." = "Dieser Bereich wird gerade gebaut.";

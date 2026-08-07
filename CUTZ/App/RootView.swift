@@ -1,57 +1,40 @@
 import SwiftUI
 
-/// Die Tab-Leiste unten — das Grundgerüst der App.
+/// Die Weiche zwischen Kunden- und Friseurseite.
 ///
-/// Nur drei Bereiche, und zwar genau die drei, die der Nutzungsablauf
-/// braucht: entdecken, gemerkte Läden wiederfinden, Termine ansehen.
-/// Entdecken steht in der Mitte und ist beim Start ausgewählt, weil
-/// dort praktisch alles passiert.
+/// Drei mögliche Zustände:
 ///
-/// Das Profil gehört bewusst NICHT hierher, sondern hinter den Knopf
-/// oben rechts im Entdecken-Screen. In der Tab-Leiste steht, was man
-/// ständig tut — Einstellungen gehören nicht dazu.
+///   1. Noch nichts gewählt → der Auswahlbildschirm
+///   2. Kunde  → `CustomerRootView` (drei Tabs, wie gehabt)
+///   3. Friseur → `PartnerRootView`  (fünf Tabs, dunkel)
+///
+/// Warum hier und nicht in `CutzApp`? Weil `CutzApp` sich um Umgebung
+/// und Sprache kümmert. Was angezeigt wird, ist eine andere Frage —
+/// und diese hier lässt sich in der Vorschau durchspielen, ohne die
+/// ganze App zu starten.
 struct RootView: View {
 
     @Environment(AppModel.self) private var appModel
 
-    /// Welcher Tab ist gewählt. Entdecken ist die Vorgabe.
-    @State private var selection: Tab = .discover
-
-    enum Tab {
-        case favorites
-        case discover
-        case appointments
-    }
-
     var body: some View {
-        TabView(selection: $selection) {
-            FavoritesScreen()
-                .tabItem {
-                    Label("Favoriten", systemImage: "heart")
-                }
-                .tag(Tab.favorites)
+        // `@Bindable` brauchen wir hier nicht: Wir lesen nur und
+        // schreiben über eine Funktion zurück.
+        switch appModel.role.current {
+        case .none:
+            RoleChoiceScreen { chosen in
+                appModel.role.current = chosen
+            }
 
-            DiscoverScreen()
-                .tabItem {
-                    Label("Entdecken", systemImage: "mappin.and.ellipse")
-                }
-                .tag(Tab.discover)
+        case .customer:
+            CustomerRootView()
 
-            BookingsScreen()
-                .tabItem {
-                    Label("Termine", systemImage: "calendar")
-                }
-                .tag(Tab.appointments)
-        }
-        // `.task` startet, sobald die View erscheint, und darf `await`
-        // benutzen. Das ist der richtige Ort zum Nachladen von Daten.
-        .task {
-            await appModel.loadShops()
+        case .barber:
+            PartnerRootView()
         }
     }
 }
 
-#Preview {
+#Preview("Auswahl") {
     RootView()
         .environment(AppModel())
 }

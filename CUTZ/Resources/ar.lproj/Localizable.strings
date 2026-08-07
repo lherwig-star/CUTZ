@@ -225,3 +225,23 @@
 /* ── VoiceOver ── */
 "rating.outOfFive" = "التقييم %@ من 5";
 "rating.reviewCountSuffix" = "، %lld تقييمًا";
+
+/* ── Rollenwahl beim ersten Start ── */
+"Willkommen bei CUTZ" = "مرحبًا بك في CUTZ";
+"Wie möchtest du CUTZ nutzen?" = "كيف تريد استخدام CUTZ؟";
+"Ich suche einen Termin" = "أبحث عن موعد";
+"Barbershops in deiner Nähe finden, vergleichen und direkt buchen." = "اعثر على صالونات الحلاقة القريبة منك وقارن بينها واحجز مباشرة.";
+"Ich bin Friseur" = "أنا حلاق";
+"Meinen Laden eintragen, Termine verwalten und neue Kunden gewinnen." = "سجّل صالوني وأدر المواعيد واكسب زبائن جدد.";
+"Das lässt sich später jederzeit im Profil ändern." = "يمكنك تغيير ذلك في أي وقت من الملف الشخصي.";
+
+/* ── Hinweis im Kundenprofil ── */
+"Bist du Friseur?" = "هل أنت حلاق؟";
+"Trag deinen Laden ein und verwalte Termine direkt in CUTZ." = "سجّل صالونك وأدر المواعيد داخل CUTZ مباشرة.";
+
+/* ── Friseurseite: Tab-Leiste ── */
+"Übersicht" = "نظرة عامة";
+"Kalender" = "التقويم";
+"Buchungen" = "الحجوزات";
+"Kunden" = "الزبائن";
+"Dieser Bereich wird gerade gebaut." = "هذا القسم قيد الإنشاء.";
