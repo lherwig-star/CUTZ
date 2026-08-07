@@ -79,6 +79,13 @@ Für Arabisch dreht iOS das Layout automatisch. Deshalb überall
 `leading`/`trailing` statt `left`/`right`, und `chevron.forward`
 statt `chevron.right` — nur die spiegeln mit.
 
+**Der Testlauf läuft immer auf Deutsch.** Das steht in `project.yml`
+(`schemes: CUTZ: test: language: de`). Ohne diese Zeile richtet sich
+die App nach dem Rechner — auf dem englischen Mac bei GitHub kommt
+dann "Today 18:30" heraus, während der Test "Heute 18:30" erwartet.
+Zum Ausprobieren der anderen Sprachen dort kurz auf `en` oder `ar`
+stellen und `./scripts/setup.sh` laufen lassen.
+
 ## Konventionen
 
 - Geldbeträge immer als `Int` in **Cent** (`priceCents`), nie `Double`

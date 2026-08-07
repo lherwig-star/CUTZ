@@ -105,9 +105,27 @@ schemes:
       targets:
         CUTZ: all
         CUTZTests: [test]
+    # Sprache und Region stehen fest — sonst richtet sich die App nach
+    # dem Rechner, auf dem sie gerade läuft.
+    #
+    # Das ist kein Schönheitsfehler, sondern hat die Tests reihenweise
+    # rot gemacht: Der Mac bei GitHub ist englisch eingestellt, also
+    # lieferte die App korrekt "Today 18:30" — die Tests erwarten aber
+    # "Heute 18:30". Deutsch ist unsere Ausgangssprache, also prüfen
+    # wir gegen Deutsch.
+    #
+    # Ob die Übersetzungen selbst vollständig sind, prüft davon
+    # unabhängig `LocalizationTests` direkt in den Sprachdateien.
+    #
+    # Zum Ausprobieren der anderen Sprachen in Xcode: hier kurz auf
+    # "en" bzw. "ar" stellen, ./scripts/setup.sh, starten.
     run:
       config: Debug
+      language: de
+      region: DE
     test:
       config: Debug
+      language: de
+      region: DE
       targets:
         - CUTZTests

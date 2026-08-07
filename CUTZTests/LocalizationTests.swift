@@ -9,6 +9,11 @@ import XCTest
 /// Auffallen würde das nur, wenn man zufällig genau diesen Bildschirm
 /// in genau dieser Sprache öffnet.
 ///
+/// Diese Tests lesen die Sprachdateien direkt und sind deshalb
+/// unabhängig davon, in welcher Sprache die App gerade läuft. Alle
+/// anderen Tests prüfen deutschen Text — dafür steht die Sprache des
+/// Testlaufs in `project.yml` fest auf Deutsch.
+///
 /// Ausführen in Xcode mit ⌘U.
 final class LocalizationTests: XCTestCase {
 

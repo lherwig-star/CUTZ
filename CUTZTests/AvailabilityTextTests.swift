@@ -81,10 +81,16 @@ final class AvailabilityTextTests: XCTestCase {
         XCTAssertEqual(text, "20.08. 11:00")
     }
 
-    func testFormattingDoesNotDependOnSystemLanguage() {
-        // Der entscheidende Test: Auf einem englisch eingestellten Gerät
-        // lieferte `.formatted()` früher "Thu" und "08/20" mitten im
-        // deutschen Text. Jetzt schreiben wir die Namen selbst.
+    func testFormattingDoesNotDependOnDeviceRegion() {
+        // Der entscheidende Test: Früher kam der Wochentag aus
+        // `.formatted()`, und das richtet sich nach der REGION des
+        // Geräts — nicht nach der App-Sprache. Auf einem Gerät mit
+        // Region "United States" stand dann "Thu" und "08/20" mitten
+        // im deutschen Text.
+        //
+        // Jetzt kommen die Namen aus den Sprachdateien und folgen
+        // damit der App-Sprache. Die steht im Testlauf auf Deutsch
+        // (siehe project.yml, scheme -> test -> language).
         XCTAssertEqual(
             AvailabilityText.shortWeekday(of: at(dayOffset: 0, hour: 12), calendar: calendar),
             "Mo"
