@@ -37,8 +37,7 @@ jobs:
     # nicht mehr gibt, wartet der Job endlos und wird nach 15 Minuten
     # kommentarlos abgebrochen — ein Fehler, den man kaum als solchen erkennt.
     runs-on: macos-latest
-    # Vorübergehend höher, solange die Übersetzungszeit untersucht wird.
-    timeout-minutes: 45
+    timeout-minutes: 30
 
     steps:
       - name: Code holen
@@ -102,34 +101,13 @@ jobs:
           # Entwickler-Signatur — und GitHub hat auch keine.
           # derivedDataPath: legt die Bauergebnisse an einen bekannten Ort,
           # damit die folgenden Schritte sie finden.
-          # OTHER_SWIFT_FLAGS: DIAGNOSE, vorübergehend.
-          # Der Compiler meldet jeden Ausdruck und Funktionskörper, der
-          # länger als 300 ms zum Typprüfen braucht — mit Datei und Zeile.
           xcodebuild build-for-testing \
             -project CUTZ.xcodeproj \
             -scheme CUTZ \
             -destination "platform=iOS Simulator,name=${{ steps.sim.outputs.name }}" \
             -derivedDataPath build/DerivedData \
             CODE_SIGNING_ALLOWED=NO \
-            OTHER_SWIFT_FLAGS='$(inherited) -Xfrontend -warn-long-expression-type-checking=300 -Xfrontend -warn-long-function-bodies=300' \
-            2>&1 | tee build.log | xcbeautify
-
-      - name: Langsame Ausdrücke auflisten
-        # Läuft auch bei rotem Build — gerade dann ist die Liste nützlich.
-        if: always()
-        shell: bash
-        run: |
-          echo "▸ Ausdrücke über 300 ms:"
-          if [ -f build.log ]; then
-              grep "to type-check" build.log \
-                | sed 's|.*/CUTZ/||' \
-                | sort -u \
-                | head -40
-              echo ""
-              echo "Gesamtzahl: $(grep -c 'to type-check' build.log || echo 0)"
-          else
-              echo "  (keine build.log gefunden)"
-          fi
+            2>&1 | xcbeautify
 
       - name: Tests laufen lassen
         run: |
